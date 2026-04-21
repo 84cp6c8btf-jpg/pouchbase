@@ -7,6 +7,7 @@ import { PriceComparison } from "@/components/PriceComparison";
 import { Zap, Droplets, Ruler, Package } from "lucide-react";
 import type { Metadata } from "next";
 import type { RelationResult } from "@/lib/types";
+import Link from "next/link";
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -54,10 +55,10 @@ export default async function ProductPage({ params }: Props) {
   return (
     <div className="max-w-4xl mx-auto">
       {/* Breadcrumb */}
-      <div className="text-sm text-muted mb-6">
-        <a href="/pouches" className="hover:text-foreground">Pouches</a>
+      <div className="text-sm text-muted mb-6 flex flex-wrap items-center gap-y-1">
+        <Link href="/pouches" className="hover:text-foreground transition-colors">Pouches</Link>
         <span className="mx-2">/</span>
-        <a href={`/brands/${brand?.slug}`} className="hover:text-foreground">{brand?.name}</a>
+        <Link href={`/brands/${brand?.slug}`} className="hover:text-foreground transition-colors">{brand?.name}</Link>
         <span className="mx-2">/</span>
         <span className="text-foreground">{product.name}</span>
       </div>
@@ -105,7 +106,7 @@ export default async function ProductPage({ params }: Props) {
             {product.review_count > 0 ? (
               <div className="space-y-3">
                 <BurnMeter rating={product.avg_burn} size="lg" />
-                <div className="flex gap-6">
+                <div className="grid grid-cols-3 gap-4 max-w-sm">
                   <RatingBadge label="Flavor" value={product.avg_flavor} />
                   <RatingBadge label="Longevity" value={product.avg_longevity} />
                   <RatingBadge label="Overall" value={product.avg_overall} />

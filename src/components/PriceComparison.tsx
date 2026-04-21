@@ -58,7 +58,7 @@ export function PriceComparison({ productId, pouchesPerCan }: PriceComparisonPro
               href={price.affiliate_url || price.shops?.website_url || "#"}
               target="_blank"
               rel="noopener noreferrer"
-              className={`flex items-center justify-between p-4 rounded-xl border transition-colors ${
+              className={`flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 rounded-xl border transition-colors ${
                 isCheapest
                   ? "border-accent/50 bg-accent/5 hover:bg-accent/10"
                   : "border-border hover:bg-card-hover"
@@ -66,7 +66,7 @@ export function PriceComparison({ productId, pouchesPerCan }: PriceComparisonPro
             >
               <div className="flex items-center gap-3">
                 <div>
-                  <p className="font-semibold flex items-center gap-2">
+                  <p className="font-semibold flex flex-wrap items-center gap-2">
                     {price.shops?.name}
                     {isCheapest && (
                       <span className="text-xs bg-accent/20 text-accent px-2 py-0.5 rounded-full font-medium">
@@ -80,7 +80,7 @@ export function PriceComparison({ productId, pouchesPerCan }: PriceComparisonPro
                 </div>
               </div>
 
-              <div className="flex items-center gap-3">
+              <div className="flex items-center justify-between sm:justify-end gap-3 w-full sm:w-auto">
                 <span className={`text-lg font-bold ${isCheapest ? "text-accent" : ""}`}>
                   {price.currency} {price.price.toFixed(2)}
                 </span>

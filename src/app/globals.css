@@ -12,7 +12,10 @@
 }
 
 body {
-  background: var(--background);
+  background:
+    radial-gradient(circle at top, rgba(249, 115, 22, 0.12), transparent 30%),
+    radial-gradient(circle at bottom right, rgba(249, 115, 22, 0.06), transparent 28%),
+    var(--background);
   color: var(--foreground);
   font-family: "Inter", system-ui, -apple-system, sans-serif;
 }

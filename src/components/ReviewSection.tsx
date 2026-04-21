@@ -77,7 +77,7 @@ export function ReviewSection({ productId }: ReviewSectionProps) {
 
   return (
     <div className="bg-card border border-border rounded-2xl p-6">
-      <div className="flex items-center justify-between mb-6">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
         <h2 className="text-xl font-bold flex items-center gap-2">
           <MessageSquare className="w-5 h-5 text-accent" />
           Reviews ({reviews.length})
@@ -162,10 +162,10 @@ export function ReviewSection({ productId }: ReviewSectionProps) {
             className="w-full bg-zinc-800 border border-border rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-accent resize-none h-24"
           />
 
-          <div className="flex gap-3">
-            <button
-              type="submit"
-              disabled={submitting}
+              <div className="flex flex-wrap gap-3">
+                <button
+                  type="submit"
+                  disabled={submitting}
               className="bg-accent hover:bg-accent-hover text-black font-semibold px-6 py-2 rounded-lg transition-colors text-sm disabled:opacity-50"
             >
               {submitting ? "Submitting..." : "Submit Review"}
@@ -192,8 +192,8 @@ export function ReviewSection({ productId }: ReviewSectionProps) {
         <div className="space-y-4">
           {reviews.map((review) => (
             <div key={review.id} className="border border-border rounded-xl p-4">
-              <div className="flex items-start justify-between mb-3">
-                <div className="flex items-center gap-2">
+              <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3 mb-3">
+                <div className="flex flex-wrap items-center gap-2">
                   <User className="w-5 h-5 text-muted" />
                   <span className="font-medium text-sm">
                     {review.profiles?.display_name || "Anonymous"}
@@ -205,7 +205,7 @@ export function ReviewSection({ productId }: ReviewSectionProps) {
                 <BurnMeter rating={review.burn_rating} size="sm" showLabel={false} />
               </div>
 
-              <div className="flex gap-4 mb-3">
+              <div className="flex flex-wrap gap-4 mb-3">
                 <RatingBadge label="Flavor" value={review.flavor_rating} size="sm" />
                 <RatingBadge label="Longevity" value={review.longevity_rating} size="sm" />
                 <RatingBadge label="Overall" value={review.overall_rating} size="sm" />
