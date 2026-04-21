@@ -2,10 +2,45 @@
 
 import Link from "next/link";
 import { Flame, Search, Menu, X } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { supabase } from "@/lib/supabase";
+import { usePathname } from "next/navigation";
 
 export function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [userEmail, setUserEmail] = useState<string | null>(null);
+  const [signingOut, setSigningOut] = useState(false);
+  const pathname = usePathname();
+  const loginHref = useMemo(() => {
+    const next = pathname && pathname !== "/login" ? pathname : "/";
+    return `/login?next=${encodeURIComponent(next)}`;
+  }, [pathname]);
+
+  useEffect(() => {
+    async function loadUser() {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      setUserEmail(user?.email ?? null);
+    }
+
+    loadUser();
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUserEmail(session?.user?.email ?? null);
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
+
+  async function handleSignOut() {
+    setSigningOut(true);
+    await supabase.auth.signOut();
+    setMobileOpen(false);
+    setSigningOut(false);
+  }
 
   return (
     <header className="border-b border-border bg-card/80 backdrop-blur-sm sticky top-0 z-50">
@@ -58,12 +93,26 @@ export function Header() {
             >
               <Search className="w-5 h-5" />
             </Link>
-            <Link
-              href="/login"
-              className="bg-accent hover:bg-accent-hover text-black font-semibold px-4 py-2 rounded-lg transition-colors text-sm"
-            >
-              Sign In
-            </Link>
+            {userEmail ? (
+              <div className="flex items-center gap-3">
+                <span className="text-xs text-muted max-w-40 truncate">{userEmail}</span>
+                <button
+                  type="button"
+                  onClick={handleSignOut}
+                  disabled={signingOut}
+                  className="bg-accent hover:bg-accent-hover text-black font-semibold px-4 py-2 rounded-lg transition-colors text-sm disabled:opacity-60"
+                >
+                  {signingOut ? "Signing Out..." : "Sign Out"}
+                </button>
+              </div>
+            ) : (
+              <Link
+                href={loginHref}
+                className="bg-accent hover:bg-accent-hover text-black font-semibold px-4 py-2 rounded-lg transition-colors text-sm"
+              >
+                Sign In
+              </Link>
+            )}
           </div>
 
           {/* Mobile Menu Button */}
@@ -90,13 +139,24 @@ export function Header() {
             <Link href="/highest-burn" className="text-muted hover:text-foreground py-2 flex items-center gap-1" onClick={() => setMobileOpen(false)}>
               <Flame className="w-4 h-4 text-accent" /> Highest Burn
             </Link>
-            <Link
-              href="/login"
-              className="bg-accent hover:bg-accent-hover text-black font-semibold px-4 py-2 rounded-lg transition-colors text-sm text-center mt-2"
-              onClick={() => setMobileOpen(false)}
-            >
-              Sign In
-            </Link>
+            {userEmail ? (
+              <button
+                type="button"
+                onClick={handleSignOut}
+                disabled={signingOut}
+                className="bg-accent hover:bg-accent-hover text-black font-semibold px-4 py-2 rounded-lg transition-colors text-sm text-center mt-2 disabled:opacity-60"
+              >
+                {signingOut ? "Signing Out..." : "Sign Out"}
+              </button>
+            ) : (
+              <Link
+                href={loginHref}
+                className="bg-accent hover:bg-accent-hover text-black font-semibold px-4 py-2 rounded-lg transition-colors text-sm text-center mt-2"
+                onClick={() => setMobileOpen(false)}
+              >
+                Sign In
+              </Link>
+            )}
           </nav>
         )}
       </div>

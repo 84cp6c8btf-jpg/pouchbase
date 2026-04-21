@@ -6,6 +6,8 @@ import { Review } from "@/lib/types";
 import { BurnMeter } from "./BurnMeter";
 import { RatingBadge } from "./RatingBadge";
 import { MessageSquare, User, Flame } from "lucide-react";
+import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
 
 interface ReviewSectionProps {
   productId: string;
@@ -16,6 +18,8 @@ export function ReviewSection({ productId }: ReviewSectionProps) {
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
   const [user, setUser] = useState<{ id: string } | null>(null);
+  const [statusMessage, setStatusMessage] = useState<string | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   // Review form state
   const [burn, setBurn] = useState(5);
@@ -24,52 +28,86 @@ export function ReviewSection({ productId }: ReviewSectionProps) {
   const [overall, setOverall] = useState(5);
   const [text, setText] = useState("");
   const [submitting, setSubmitting] = useState(false);
+  const router = useRouter();
+  const pathname = usePathname();
+  const loginHref = `/login?next=${encodeURIComponent(pathname || `/pouches/${productId}`)}`;
+  const existingReview = user ? reviews.find((review) => review.user_id === user.id) || null : null;
+
+  async function fetchReviews() {
+    const { data } = await supabase
+      .from("reviews")
+      .select("*, profiles(display_name)")
+      .eq("product_id", productId)
+      .order("created_at", { ascending: false });
+    setReviews((data as typeof reviews) || []);
+    setLoading(false);
+  }
 
   useEffect(() => {
-    async function fetchReviews() {
-      const { data } = await supabase
-        .from("reviews")
-        .select("*, profiles(display_name)")
-        .eq("product_id", productId)
-        .order("created_at", { ascending: false });
-      setReviews((data as typeof reviews) || []);
-      setLoading(false);
-    }
-
-    async function checkUser() {
-      const { data: { user } } = await supabase.auth.getUser();
+    async function init() {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
       setUser(user ? { id: user.id } : null);
+      await fetchReviews();
     }
 
-    fetchReviews();
-    checkUser();
+    init();
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user ? { id: session.user.id } : null);
+    });
+
+    return () => subscription.unsubscribe();
   }, [productId]);
+
+  useEffect(() => {
+    if (existingReview) {
+      setBurn(existingReview.burn_rating);
+      setFlavor(existingReview.flavor_rating);
+      setLongevity(existingReview.longevity_rating);
+      setOverall(existingReview.overall_rating);
+      setText(existingReview.review_text || "");
+    } else {
+      setBurn(5);
+      setFlavor(5);
+      setLongevity(5);
+      setOverall(5);
+      setText("");
+    }
+  }, [existingReview]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!user) return;
     setSubmitting(true);
+    setErrorMessage(null);
+    setStatusMessage(null);
 
-    const { error } = await supabase.from("reviews").insert({
-      product_id: productId,
-      user_id: user.id,
-      burn_rating: burn,
-      flavor_rating: flavor,
-      longevity_rating: longevity,
-      overall_rating: overall,
-      review_text: text || null,
-    });
+    const { error } = await supabase.from("reviews").upsert(
+      {
+        product_id: productId,
+        user_id: user.id,
+        burn_rating: burn,
+        flavor_rating: flavor,
+        longevity_rating: longevity,
+        overall_rating: overall,
+        review_text: text || null,
+      },
+      {
+        onConflict: "product_id,user_id",
+      }
+    );
 
     if (!error) {
-      // Refresh reviews
-      const { data } = await supabase
-        .from("reviews")
-        .select("*, profiles(display_name)")
-        .eq("product_id", productId)
-        .order("created_at", { ascending: false });
-      setReviews((data as typeof reviews) || []);
+      await fetchReviews();
+      router.refresh();
       setShowForm(false);
-      setText("");
+      setStatusMessage(existingReview ? "Your review was updated." : "Your review was published.");
+    } else {
+      setErrorMessage(error.message);
     }
 
     setSubmitting(false);
@@ -87,17 +125,25 @@ export function ReviewSection({ productId }: ReviewSectionProps) {
             onClick={() => setShowForm(!showForm)}
             className="bg-accent hover:bg-accent-hover text-black font-semibold px-4 py-2 rounded-lg transition-colors text-sm"
           >
-            Write a Review
+            {existingReview ? "Edit Your Review" : "Write a Review"}
           </button>
         ) : (
-          <a
-            href="/login"
+          <Link
+            href={loginHref}
             className="bg-accent hover:bg-accent-hover text-black font-semibold px-4 py-2 rounded-lg transition-colors text-sm"
           >
             Sign In to Review
-          </a>
+          </Link>
         )}
       </div>
+
+      {existingReview && !showForm && (
+        <p className="text-sm text-muted mb-4">
+          You already reviewed this pouch. You can edit your ratings anytime.
+        </p>
+      )}
+      {statusMessage && <p className="text-sm text-green-400 mb-4">{statusMessage}</p>}
+      {errorMessage && <p className="text-sm text-red-400 mb-4">{errorMessage}</p>}
 
       {/* Review Form */}
       {showForm && user && (
@@ -162,13 +208,13 @@ export function ReviewSection({ productId }: ReviewSectionProps) {
             className="w-full bg-zinc-800 border border-border rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-accent resize-none h-24"
           />
 
-              <div className="flex flex-wrap gap-3">
-                <button
-                  type="submit"
-                  disabled={submitting}
+          <div className="flex flex-wrap gap-3">
+            <button
+              type="submit"
+              disabled={submitting}
               className="bg-accent hover:bg-accent-hover text-black font-semibold px-6 py-2 rounded-lg transition-colors text-sm disabled:opacity-50"
             >
-              {submitting ? "Submitting..." : "Submit Review"}
+              {submitting ? "Saving..." : existingReview ? "Update Review" : "Submit Review"}
             </button>
             <button
               type="button"

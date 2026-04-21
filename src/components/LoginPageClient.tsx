@@ -1,14 +1,61 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { supabase } from "@/lib/supabase";
 import { Flame, Mail, CheckCircle2 } from "lucide-react";
+import { useRouter } from "next/navigation";
 
-export function LoginPageClient() {
+interface LoginPageClientProps {
+  returnTo?: string;
+}
+
+function normalizeReturnTo(value?: string) {
+  if (!value || !value.startsWith("/")) return "/";
+  return value;
+}
+
+export function LoginPageClient({ returnTo }: LoginPageClientProps) {
   const [email, setEmail] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [checkingSession, setCheckingSession] = useState(true);
+  const router = useRouter();
+  const nextPath = useMemo(() => normalizeReturnTo(returnTo), [returnTo]);
+
+  useEffect(() => {
+    let mounted = true;
+
+    async function loadSession() {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+
+      if (!mounted) return;
+      if (user) {
+        router.replace(nextPath);
+        router.refresh();
+        return;
+      }
+      setCheckingSession(false);
+    }
+
+    loadSession();
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (session?.user) {
+        router.replace(nextPath);
+        router.refresh();
+      }
+    });
+
+    return () => {
+      mounted = false;
+      subscription.unsubscribe();
+    };
+  }, [nextPath, router]);
 
   async function handleGoogleSignIn() {
     setSubmitting(true);
@@ -17,7 +64,7 @@ export function LoginPageClient() {
     const { error } = await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
-        redirectTo: `${window.location.origin}/`,
+        redirectTo: `${window.location.origin}/login?next=${encodeURIComponent(nextPath)}`,
       },
     });
 
@@ -36,7 +83,7 @@ export function LoginPageClient() {
     const { error } = await supabase.auth.signInWithOtp({
       email,
       options: {
-        emailRedirectTo: `${window.location.origin}/`,
+        emailRedirectTo: `${window.location.origin}/login?next=${encodeURIComponent(nextPath)}`,
       },
     });
 
@@ -48,6 +95,16 @@ export function LoginPageClient() {
     }
 
     setSubmitting(false);
+  }
+
+  if (checkingSession) {
+    return (
+      <div className="max-w-2xl mx-auto bg-card border border-border rounded-3xl p-8 sm:p-10 text-center">
+        <p className="text-sm uppercase tracking-[0.2em] text-accent mb-3">PouchBase Account</p>
+        <h1 className="text-3xl font-bold mb-3">Checking your sign-in session...</h1>
+        <p className="text-muted">If you just used a magic link or Google, we’ll send you back automatically.</p>
+      </div>
+    );
   }
 
   return (
@@ -78,6 +135,11 @@ export function LoginPageClient() {
       <section className="bg-card border border-border rounded-3xl p-6 sm:p-8">
         <h2 className="text-2xl font-bold mb-2">Sign In</h2>
         <p className="text-sm text-muted mb-6">Use Google or get a secure magic link by email.</p>
+        {nextPath !== "/" && (
+          <p className="text-xs text-muted mb-4">
+            You’ll be sent back to <span className="text-foreground">{nextPath}</span> after sign-in.
+          </p>
+        )}
 
         <div className="space-y-4">
           <button

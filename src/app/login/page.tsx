@@ -10,6 +10,12 @@ export const metadata: Metadata = {
   },
 };
 
-export default function LoginPage() {
-  return <LoginPageClient />;
+interface Props {
+  searchParams: Promise<{ next?: string }>;
+}
+
+export default async function LoginPage({ searchParams }: Props) {
+  const params = await searchParams;
+
+  return <LoginPageClient returnTo={params.next} />;
 }
