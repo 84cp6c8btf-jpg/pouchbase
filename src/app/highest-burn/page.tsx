@@ -33,6 +33,7 @@ export default async function HighestBurnPage() {
         <p className="text-muted max-w-3xl">
           The pouches with the fiercest lip sting and most intense burn, ranked by community burn score.
         </p>
+        <p className="text-sm text-muted mt-4">{hottestProducts.length} products currently ranked.</p>
       </section>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">

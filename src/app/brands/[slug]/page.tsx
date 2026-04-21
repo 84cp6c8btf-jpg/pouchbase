@@ -58,7 +58,7 @@ export default async function BrandDetailPage({ params }: Props) {
 
   return (
     <div className="space-y-8">
-      <div className="text-sm text-muted">
+      <div className="text-sm text-muted flex flex-wrap items-center gap-y-1">
         <Link href="/brands" className="hover:text-foreground transition-colors">
           Brands
         </Link>
@@ -116,7 +116,7 @@ export default async function BrandDetailPage({ params }: Props) {
 
       {brandProducts.length > 0 ? (
         <section>
-          <div className="flex items-center justify-between mb-6">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
             <h2 className="text-2xl font-bold">All {brand.name} Pouches</h2>
             <Link href="/pouches" className="text-sm text-accent hover:text-accent-hover">
               Browse all pouches

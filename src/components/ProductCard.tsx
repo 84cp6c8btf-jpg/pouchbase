@@ -21,7 +21,7 @@ export function ProductCard({ product }: ProductCardProps) {
         <p className="text-xs text-muted uppercase tracking-wide">
           {brand?.name}
         </p>
-        <h3 className="text-lg font-semibold group-hover:text-accent transition-colors truncate">
+        <h3 className="text-lg font-semibold group-hover:text-accent transition-colors leading-tight min-h-[3.25rem] line-clamp-2">
           {product.name}
         </h3>
       </div>
@@ -51,13 +51,13 @@ export function ProductCard({ product }: ProductCardProps) {
 
       {/* Ratings Row */}
       {product.review_count > 0 && (
-        <div className="flex items-center justify-between border-t border-border pt-3">
+        <div className="flex flex-col gap-3 border-t border-border pt-3 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex gap-4">
             <RatingBadge label="Flavor" value={product.avg_flavor} size="sm" />
             <RatingBadge label="Longevity" value={product.avg_longevity} size="sm" />
             <RatingBadge label="Overall" value={product.avg_overall} size="sm" />
           </div>
-          <div className="flex items-center gap-1 text-xs text-muted">
+          <div className="flex items-center gap-1 text-xs text-muted sm:self-auto self-end">
             <MessageSquare className="w-3 h-3" />
             {product.review_count}
           </div>

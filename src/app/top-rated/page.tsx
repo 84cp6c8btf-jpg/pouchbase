@@ -33,6 +33,7 @@ export default async function TopRatedPage() {
         <p className="text-muted max-w-3xl">
           The best-reviewed nicotine pouches on PouchBase, ranked by overall score and backed by real review data.
         </p>
+        <p className="text-sm text-muted mt-4">{rankedProducts.length} products currently ranked.</p>
       </section>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">

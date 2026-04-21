@@ -52,7 +52,7 @@ export function LoginPageClient() {
 
   return (
     <div className="max-w-5xl mx-auto grid grid-cols-1 lg:grid-cols-[1.1fr_0.9fr] gap-6">
-      <section className="bg-card border border-border rounded-3xl p-8 sm:p-10">
+      <section className="bg-card border border-border rounded-3xl p-6 sm:p-8 lg:p-10">
         <div className="inline-flex items-center gap-2 text-accent mb-4">
           <Flame className="w-5 h-5" />
           <span className="text-sm uppercase tracking-[0.2em]">PouchBase Account</span>
@@ -75,7 +75,7 @@ export function LoginPageClient() {
         </div>
       </section>
 
-      <section className="bg-card border border-border rounded-3xl p-8">
+      <section className="bg-card border border-border rounded-3xl p-6 sm:p-8">
         <h2 className="text-2xl font-bold mb-2">Sign In</h2>
         <p className="text-sm text-muted mb-6">Use Google or get a secure magic link by email.</p>
 

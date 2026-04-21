@@ -69,7 +69,7 @@ export default async function BrandsPage() {
               {brand.description || `${brand.name} on PouchBase.`}
             </p>
 
-            <div className="flex items-center justify-between text-sm border-t border-border pt-4">
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between text-sm border-t border-border pt-4">
               <span className="inline-flex items-center gap-2 text-foreground font-medium">
                 <Layers className="w-4 h-4 text-accent" />
                 {brand.productCount} pouch{brand.productCount !== 1 ? "es" : ""}
