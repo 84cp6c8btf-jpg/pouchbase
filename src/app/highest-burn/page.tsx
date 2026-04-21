@@ -36,11 +36,18 @@ export default async function HighestBurnPage() {
         <p className="text-sm text-muted mt-4">{hottestProducts.length} products currently ranked.</p>
       </section>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        {hottestProducts.map((product) => (
-          <ProductCard key={product.id} product={product} />
-        ))}
-      </div>
+      {hottestProducts.length > 0 ? (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {hottestProducts.map((product) => (
+            <ProductCard key={product.id} product={product} />
+          ))}
+        </div>
+      ) : (
+        <section className="bg-card border border-border rounded-2xl p-8 text-center">
+          <p className="text-lg font-semibold mb-2">No burn leaders yet</p>
+          <p className="text-muted">Add reviews and burn scores will start shaping this leaderboard.</p>
+        </section>
+      )}
     </div>
   );
 }

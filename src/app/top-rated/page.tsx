@@ -36,11 +36,18 @@ export default async function TopRatedPage() {
         <p className="text-sm text-muted mt-4">{rankedProducts.length} products currently ranked.</p>
       </section>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        {rankedProducts.map((product) => (
-          <ProductCard key={product.id} product={product} />
-        ))}
-      </div>
+      {rankedProducts.length > 0 ? (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {rankedProducts.map((product) => (
+            <ProductCard key={product.id} product={product} />
+          ))}
+        </div>
+      ) : (
+        <section className="bg-card border border-border rounded-2xl p-8 text-center">
+          <p className="text-lg font-semibold mb-2">No ranked products yet</p>
+          <p className="text-muted">Once reviews come in, the highest-rated pouches will appear here.</p>
+        </section>
+      )}
     </div>
   );
 }

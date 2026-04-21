@@ -4,6 +4,7 @@ import "./globals.css";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { getSiteUrl, SITE_DESCRIPTION, SITE_NAME } from "@/lib/site";
+import { AgeGate } from "@/components/AgeGate";
 
 const inter = Inter({ subsets: ["latin"] });
 const siteUrl = getSiteUrl();
@@ -49,9 +50,10 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return (
+      return (
     <html lang="en" className={`${inter.className} antialiased`}>
       <body className="bg-background text-foreground min-h-screen flex flex-col">
+        <AgeGate />
         <Header />
         <main className="flex-1 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-8">
           {children}
