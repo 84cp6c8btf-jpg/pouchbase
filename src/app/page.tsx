@@ -2,6 +2,13 @@ import Link from "next/link";
 import { Flame, Search, Star, Zap, ArrowRight, MessageSquare, Tag } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import { ProductCard } from "@/components/ProductCard";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  alternates: {
+    canonical: "/",
+  },
+};
 
 export const revalidate = 60; // revalidate every minute
 

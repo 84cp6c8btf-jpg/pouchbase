@@ -1,3 +1,13 @@
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "About PouchBase",
+  description: "Learn what PouchBase is building and why independent nicotine pouch reviews matter.",
+  alternates: {
+    canonical: "/about",
+  },
+};
+
 export default function AboutPage() {
   return (
     <div className="max-w-4xl mx-auto space-y-6">

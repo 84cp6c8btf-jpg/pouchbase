@@ -1,8 +1,16 @@
 import Link from "next/link";
 import { supabase } from "@/lib/supabase";
 import { Layers, ArrowRight, Globe } from "lucide-react";
+import type { Metadata } from "next";
 
 export const revalidate = 60;
+export const metadata: Metadata = {
+  title: "Nicotine Pouch Brands — PouchBase",
+  description: "Browse nicotine pouch brands, compare catalogs, and discover what each brand is known for.",
+  alternates: {
+    canonical: "/brands",
+  },
+};
 
 type BrandRow = {
   id: string;

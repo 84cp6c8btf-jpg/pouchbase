@@ -22,6 +22,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: `${brand.name} Nicotine Pouches — PouchBase`,
     description: brand.description || `Browse ${brand.name} nicotine pouches, ratings, burn scores, and pricing.`,
+    alternates: {
+      canonical: `/brands/${slug}`,
+    },
   };
 }
 

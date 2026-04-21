@@ -3,13 +3,15 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
+import { getSiteUrl, SITE_DESCRIPTION, SITE_NAME } from "@/lib/site";
 
 const inter = Inter({ subsets: ["latin"] });
+const siteUrl = getSiteUrl();
 
 export const metadata: Metadata = {
-  title: "PouchBase — Rate, Review & Compare Nicotine Pouches",
-  description:
-    "The independent encyclopedia for nicotine pouches. Compare prices, read real reviews, and find the perfect pouch with our burn rating system.",
+  metadataBase: new URL(siteUrl),
+  title: `${SITE_NAME} — Rate, Review & Compare Nicotine Pouches`,
+  description: SITE_DESCRIPTION,
   keywords: [
     "nicotine pouches",
     "snus",
@@ -20,11 +22,25 @@ export const metadata: Metadata = {
     "pouch comparison",
     "burn rating",
   ],
+  alternates: {
+    canonical: "/",
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
   openGraph: {
-    title: "PouchBase — Rate, Review & Compare Nicotine Pouches",
-    description:
-      "The independent encyclopedia for nicotine pouches. Real reviews. Real burn ratings. Best prices.",
+    title: `${SITE_NAME} — Rate, Review & Compare Nicotine Pouches`,
+    description: "The independent encyclopedia for nicotine pouches. Real reviews. Real burn ratings. Best prices.",
+    url: "/",
+    siteName: SITE_NAME,
     type: "website",
+    locale: "en_US",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: `${SITE_NAME} — Rate, Review & Compare Nicotine Pouches`,
+    description: SITE_DESCRIPTION,
   },
 };
 

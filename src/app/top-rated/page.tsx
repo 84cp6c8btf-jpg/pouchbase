@@ -1,8 +1,16 @@
 import { supabase } from "@/lib/supabase";
 import { ProductCard } from "@/components/ProductCard";
 import { Star } from "lucide-react";
+import type { Metadata } from "next";
 
 export const revalidate = 60;
+export const metadata: Metadata = {
+  title: "Top Rated Nicotine Pouches — PouchBase",
+  description: "See the best-reviewed nicotine pouches ranked by overall score.",
+  alternates: {
+    canonical: "/top-rated",
+  },
+};
 
 export default async function TopRatedPage() {
   const { data: products } = await supabase

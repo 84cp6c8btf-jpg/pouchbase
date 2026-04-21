@@ -34,6 +34,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: `${brandName} ${product.name} Review — PouchBase`,
     description: `Read real reviews of ${brandName} ${product.name} (${product.flavor}, ${product.strength_mg}mg). Burn rating, flavor score, and price comparison. Rated ${product.avg_overall}/10 by the community.`,
+    alternates: {
+      canonical: `/pouches/${slug}`,
+    },
   };
 }
 

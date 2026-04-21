@@ -1,8 +1,16 @@
 import { supabase } from "@/lib/supabase";
 import { ProductCard } from "@/components/ProductCard";
 import { Flame } from "lucide-react";
+import type { Metadata } from "next";
 
 export const revalidate = 60;
+export const metadata: Metadata = {
+  title: "Highest Burn Nicotine Pouches — PouchBase",
+  description: "Discover the nicotine pouches with the highest community burn scores.",
+  alternates: {
+    canonical: "/highest-burn",
+  },
+};
 
 export default async function HighestBurnPage() {
   const { data: products } = await supabase
