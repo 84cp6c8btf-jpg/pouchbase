@@ -1,7 +1,18 @@
 import Link from "next/link";
-import { Flame, Search, Star, Zap, ArrowRight, MessageSquare, Tag } from "lucide-react";
+import {
+  ArrowRight,
+  Flame,
+  Layers,
+  MessageSquare,
+  Search,
+  Sparkles,
+  Star,
+  Tag,
+} from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import { ProductCard } from "@/components/ProductCard";
+import { ProductArtwork } from "@/components/ProductArtwork";
+import { BurnMeter } from "@/components/BurnMeter";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -10,7 +21,7 @@ export const metadata: Metadata = {
   },
 };
 
-export const revalidate = 60; // revalidate every minute
+export const revalidate = 60;
 
 async function getTopProducts() {
   const { data } = await supabase
@@ -41,12 +52,34 @@ async function getStats() {
   const { count: brandCount } = await supabase
     .from("brands")
     .select("*", { count: "exact", head: true });
+
   return {
     products: productCount || 0,
     reviews: reviewCount || 0,
     brands: brandCount || 0,
   };
 }
+
+const EDITORIAL_LINKS = [
+  {
+    href: "/top-rated",
+    title: "Top Rated",
+    description: "Start with the community favorites that already feel proven.",
+    icon: Star,
+  },
+  {
+    href: "/highest-burn",
+    title: "Burn Index",
+    description: "Track the pouches that actually bite back on the lip.",
+    icon: Flame,
+  },
+  {
+    href: "/brands",
+    title: "Brand Atlas",
+    description: "Map the catalogs behind the category instead of shopping blind.",
+    icon: Tag,
+  },
+];
 
 export default async function Home() {
   const [topProducts, highestBurn, stats] = await Promise.all([
@@ -55,131 +88,201 @@ export default async function Home() {
     getStats(),
   ]);
 
+  const featuredProduct = topProducts[0];
+  const featuredBrand = Array.isArray(featuredProduct?.brands)
+    ? featuredProduct.brands[0]
+    : featuredProduct?.brands;
+  const burnLeader = highestBurn[0];
+  const burnBrand = Array.isArray(burnLeader?.brands) ? burnLeader.brands[0] : burnLeader?.brands;
+
   return (
-    <div className="space-y-14 sm:space-y-16">
-      {/* Hero */}
-      <section className="relative overflow-hidden rounded-[2rem] border border-border bg-card/60 px-6 py-12 sm:px-10 sm:py-16">
-        <div className="absolute inset-x-0 top-0 h-32 bg-[radial-gradient(circle_at_top,_rgba(249,115,22,0.18),_transparent_60%)]" />
-        <div className="relative text-center">
-          <div className="inline-flex items-center gap-2 rounded-full border border-accent/30 bg-accent/10 px-4 py-1.5 text-xs font-medium uppercase tracking-[0.2em] text-accent mb-6">
-            <Flame className="w-3.5 h-3.5" />
-            Independent Pouch Database
+    <div className="space-y-14 pb-6 sm:space-y-18">
+      <section className="pb-editorial-panel px-5 py-6 sm:px-8 sm:py-8 lg:px-10 lg:py-10">
+        <div className="pb-grid-backdrop absolute inset-0 opacity-80" />
+        <div className="relative grid gap-8 lg:grid-cols-[1.15fr_0.85fr] lg:items-end">
+          <div className="max-w-3xl">
+            <div className="pb-kicker mb-6">
+              <Flame className="h-3.5 w-3.5" />
+              Independent Pouch Encyclopedia
+            </div>
+            <h1 className="font-display text-[clamp(3.5rem,8vw,7.5rem)] font-bold leading-[0.9] tracking-[-0.07em] text-white">
+              Flavor-led discovery.
+              <span className="mt-2 block text-accent">Authority-first structure.</span>
+            </h1>
+            <p className="mt-6 max-w-2xl text-lg leading-8 text-white/66 sm:text-xl">
+              PouchBase is built like a review index, not a merch shop: structured ratings, a
+              signature burn metric, real user signal, and side-by-side price context for adults
+              comparing nicotine pouches seriously.
+            </p>
+            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+              <Link
+                href="/pouches"
+                className="inline-flex items-center justify-center gap-2 rounded-full bg-accent px-7 py-3.5 text-sm font-semibold text-black transition hover:bg-accent-hover"
+              >
+                <Search className="h-[1.125rem] w-[1.125rem]" />
+                Browse Pouches
+              </Link>
+              <Link
+                href="/highest-burn"
+                className="inline-flex items-center justify-center gap-2 rounded-full border border-white/12 bg-white/[0.03] px-7 py-3.5 text-sm font-semibold text-white transition hover:border-accent/35 hover:bg-accent/8"
+              >
+                <Flame className="h-[1.125rem] w-[1.125rem] text-accent" />
+                Explore Burn Index
+              </Link>
+            </div>
+            <div className="mt-8 flex flex-wrap gap-2.5">
+              <span className="pb-chip-soft">Structured community scores</span>
+              <span className="pb-chip-soft">Flavor-first browsing</span>
+              <span className="pb-chip-soft">Independent price comparison</span>
+            </div>
           </div>
-          <div className="flex items-center justify-center gap-3 mb-6">
-            <Flame className="w-12 h-12 text-accent" />
-          </div>
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight mb-4">
-            Rate. Review. <span className="text-accent">Compare.</span>
-          </h1>
-          <p className="text-base sm:text-lg text-muted max-w-2xl mx-auto mb-8 leading-relaxed">
-            The independent encyclopedia for nicotine pouches. Real reviews from real users.
-            The only burn rating system on the internet. Find the perfect pouch at the best price.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
-            <Link
-              href="/pouches"
-              className="bg-accent hover:bg-accent-hover text-black font-semibold px-8 py-3 rounded-xl transition-colors flex items-center justify-center gap-2"
-            >
-              <Search className="w-5 h-5" />
-              Browse Pouches
-            </Link>
-            <Link
-              href="/highest-burn"
-              className="border border-accent text-accent hover:bg-accent/10 font-semibold px-8 py-3 rounded-xl transition-colors flex items-center justify-center gap-2"
-            >
-              <Flame className="w-5 h-5" />
-              Highest Burn
-            </Link>
-          </div>
-          <div className="flex flex-wrap justify-center gap-2 sm:gap-3 text-xs sm:text-sm">
-            <span className="rounded-full border border-border bg-zinc-900/70 px-3 py-1.5 text-muted">
-              Community burn ratings
-            </span>
-            <span className="rounded-full border border-border bg-zinc-900/70 px-3 py-1.5 text-muted">
-              Independent price comparison
-            </span>
-            <span className="rounded-full border border-border bg-zinc-900/70 px-3 py-1.5 text-muted">
-              Brand and flavor discovery
-            </span>
+
+          <div className="grid gap-4">
+            {featuredProduct && (
+              <div className="pb-data-panel p-4 sm:p-5">
+                <div className="mb-4 flex items-center justify-between gap-3">
+                  <div>
+                    <div className="text-[0.68rem] uppercase tracking-[0.24em] text-white/42">
+                      Featured Catalog Entry
+                    </div>
+                    <h2 className="mt-1 font-display text-2xl font-bold text-white">
+                      {featuredProduct.name}
+                    </h2>
+                  </div>
+                  <Link
+                    href={`/pouches/${featuredProduct.slug}`}
+                    className="rounded-full border border-white/10 px-3 py-1.5 text-xs text-white/72 transition hover:border-accent/30 hover:text-white"
+                  >
+                    Open
+                  </Link>
+                </div>
+                <div className="grid gap-4 sm:grid-cols-[0.9fr_1.1fr]">
+                  <ProductArtwork
+                    brand={featuredBrand?.name}
+                    brandSlug={featuredBrand?.slug}
+                    name={featuredProduct.name}
+                    flavor={featuredProduct.flavor}
+                    flavorCategory={featuredProduct.flavor_category}
+                    strengthMg={featuredProduct.strength_mg}
+                    format={featuredProduct.format}
+                    imageUrl={featuredProduct.image_url}
+                    size="hero"
+                  />
+                  <div className="flex flex-col justify-between gap-4">
+                    <div className="flex flex-wrap gap-2">
+                      <span className="pb-chip">{featuredBrand?.name}</span>
+                      <span className="pb-chip">{featuredProduct.flavor}</span>
+                      <span className="pb-chip">{featuredProduct.strength_mg}mg</span>
+                    </div>
+                    {featuredProduct.review_count > 0 ? (
+                      <BurnMeter rating={featuredProduct.avg_burn} size="md" />
+                    ) : (
+                      <div className="rounded-2xl border border-dashed border-white/10 px-4 py-3 text-sm text-white/56">
+                        Burn signal starts once reviews come in.
+                      </div>
+                    )}
+                    <div className="grid grid-cols-2 gap-3">
+                      <div className="pb-stat-tile">
+                        <div className="text-[0.66rem] uppercase tracking-[0.22em] text-white/40">
+                          Overall
+                        </div>
+                        <div className="mt-1 font-display text-3xl font-bold text-emerald-200">
+                          {(featuredProduct.avg_overall || 0).toFixed(1)}
+                        </div>
+                      </div>
+                      <div className="pb-stat-tile">
+                        <div className="text-[0.66rem] uppercase tracking-[0.22em] text-white/40">
+                          Reviews
+                        </div>
+                        <div className="mt-1 font-display text-3xl font-bold text-white">
+                          {featuredProduct.review_count}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {burnLeader && (
+              <div className="grid gap-4 sm:grid-cols-2">
+                <div className="pb-data-card p-4">
+                  <div className="mb-2 text-[0.66rem] uppercase tracking-[0.22em] text-white/40">
+                    Current Burn Leader
+                  </div>
+                  <p className="font-display text-[1.65rem] font-bold leading-[1.02]">
+                    {burnLeader.name}
+                  </p>
+                  <p className="mt-2 text-sm text-white/58">
+                    {burnBrand?.name} · {burnLeader.flavor}
+                  </p>
+                </div>
+                <BurnMeter rating={burnLeader.avg_burn} size="md" />
+              </div>
+            )}
           </div>
         </div>
       </section>
 
-      {/* Stats */}
-      <section className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <div className="bg-card border border-border rounded-2xl p-5 text-center">
-          <p className="text-3xl font-bold text-accent">{stats.products}</p>
-          <p className="text-sm text-muted mt-1">Pouches tracked</p>
+      <section className="grid gap-4 md:grid-cols-3">
+        <div className="pb-stat-tile">
+          <div className="mb-2 text-[0.68rem] uppercase tracking-[0.22em] text-white/38">Catalog</div>
+          <div className="font-display text-5xl font-bold text-accent">{stats.products}</div>
+          <p className="mt-2 text-sm text-white/55">Pouches tracked across mainstream and cult brands.</p>
         </div>
-        <div className="bg-card border border-border rounded-2xl p-5 text-center">
-          <p className="text-3xl font-bold text-accent">{stats.reviews}</p>
-          <p className="text-sm text-muted mt-1">Reviews published</p>
+        <div className="pb-stat-tile">
+          <div className="mb-2 text-[0.68rem] uppercase tracking-[0.22em] text-white/38">Signal</div>
+          <div className="font-display text-5xl font-bold text-accent">{stats.reviews}</div>
+          <p className="mt-2 text-sm text-white/55">Published review entries shaping flavor and burn rankings.</p>
         </div>
-        <div className="bg-card border border-border rounded-2xl p-5 text-center">
-          <p className="text-3xl font-bold text-accent">{stats.brands}</p>
-          <p className="text-sm text-muted mt-1">Brands covered</p>
+        <div className="pb-stat-tile">
+          <div className="mb-2 text-[0.68rem] uppercase tracking-[0.22em] text-white/38">Coverage</div>
+          <div className="font-display text-5xl font-bold text-accent">{stats.brands}</div>
+          <p className="mt-2 text-sm text-white/55">Brands covered with structured, comparable product data.</p>
         </div>
       </section>
 
-      {/* Quick Links */}
-      <section className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <Link
-          href="/top-rated"
-          className="bg-card border border-border rounded-2xl p-5 hover:border-accent/50 hover:bg-card-hover transition-all group"
-        >
-          <div className="flex items-center justify-between mb-4">
-            <Star className="w-6 h-6 text-accent" />
-            <ArrowRight className="w-4 h-4 text-muted group-hover:text-accent transition-colors" />
-          </div>
-          <h2 className="text-xl font-semibold mb-2 group-hover:text-accent transition-colors">Find the best-rated picks</h2>
-          <p className="text-sm text-muted">
-            Start with the community favorites ranked by overall score and review confidence.
-          </p>
-        </Link>
-        <Link
-          href="/highest-burn"
-          className="bg-card border border-border rounded-2xl p-5 hover:border-accent/50 hover:bg-card-hover transition-all group"
-        >
-          <div className="flex items-center justify-between mb-4">
-            <Flame className="w-6 h-6 text-accent" />
-            <ArrowRight className="w-4 h-4 text-muted group-hover:text-accent transition-colors" />
-          </div>
-          <h2 className="text-xl font-semibold mb-2 group-hover:text-accent transition-colors">Chase the burn</h2>
-          <p className="text-sm text-muted">
-            Explore the most intense pouches for lip sting, nicotine punch, and full inferno energy.
-          </p>
-        </Link>
-        <Link
-          href="/brands"
-          className="bg-card border border-border rounded-2xl p-5 hover:border-accent/50 hover:bg-card-hover transition-all group"
-        >
-          <div className="flex items-center justify-between mb-4">
-            <Tag className="w-6 h-6 text-accent" />
-            <ArrowRight className="w-4 h-4 text-muted group-hover:text-accent transition-colors" />
-          </div>
-          <h2 className="text-xl font-semibold mb-2 group-hover:text-accent transition-colors">Browse by brand</h2>
-          <p className="text-sm text-muted">
-            Compare the brands behind the pouches, then drill down into each catalog from one hub.
-          </p>
-        </Link>
+      <section className="grid gap-4 lg:grid-cols-3">
+        {EDITORIAL_LINKS.map(({ href, title, description, icon: Icon }) => (
+          <Link
+            key={href}
+            href={href}
+            className="pb-data-card group p-6 transition duration-300 hover:-translate-y-1 hover:border-accent/35"
+          >
+            <div className="mb-5 flex items-center justify-between">
+              <div className="grid h-11 w-11 place-items-center rounded-2xl border border-accent/20 bg-accent/10 text-accent">
+                <Icon className="h-5 w-5" />
+              </div>
+              <ArrowRight className="h-4 w-4 text-white/30 transition group-hover:text-accent" />
+            </div>
+            <h2 className="font-display text-3xl font-bold text-white">{title}</h2>
+            <p className="mt-3 max-w-sm text-sm leading-7 text-white/58">{description}</p>
+          </Link>
+        ))}
       </section>
 
-      {/* Top Rated */}
       {topProducts.length > 0 && (
-        <section>
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-2xl font-bold flex items-center gap-2">
-              <Star className="w-6 h-6 text-accent" />
-              Top Rated
-            </h2>
+        <section className="space-y-6">
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+              <div className="pb-kicker mb-4">
+                <Star className="h-3.5 w-3.5" />
+                Editorial Picks
+              </div>
+              <h2 className="font-display text-4xl font-bold text-white sm:text-5xl">Top Rated right now</h2>
+              <p className="mt-3 max-w-2xl text-white/60">
+                High-confidence favorites with structured scoring, readable cards, and enough signal
+                to compare them properly.
+              </p>
+            </div>
             <Link
               href="/top-rated"
-              className="text-accent hover:text-accent-hover transition-colors text-sm flex items-center gap-1"
+              className="inline-flex items-center gap-2 text-sm font-medium text-white/64 transition hover:text-accent"
             >
-              View all <ArrowRight className="w-4 h-4" />
+              View ranking <ArrowRight className="h-4 w-4" />
             </Link>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
             {topProducts.map((product) => (
               <ProductCard key={product.id} product={product} />
             ))}
@@ -187,70 +290,86 @@ export default async function Home() {
         </section>
       )}
 
-      {/* Highest Burn */}
       {highestBurn.length > 0 && (
-        <section>
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-2xl font-bold flex items-center gap-2">
-              <Flame className="w-6 h-6 text-red-500" />
-              Highest Burn
-            </h2>
+        <section className="space-y-6">
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+              <div className="pb-kicker mb-4">
+                <Flame className="h-3.5 w-3.5" />
+                Signature Metric
+              </div>
+              <h2 className="font-display text-4xl font-bold text-white sm:text-5xl">Burn worth tracking</h2>
+              <p className="mt-3 max-w-2xl text-white/60">
+                The burn rating is our differentiator: not just nicotine strength, but the felt lip
+                sting users actually talk about.
+              </p>
+            </div>
             <Link
               href="/highest-burn"
-              className="text-accent hover:text-accent-hover transition-colors text-sm flex items-center gap-1"
+              className="inline-flex items-center gap-2 text-sm font-medium text-white/64 transition hover:text-accent"
             >
-              View all <ArrowRight className="w-4 h-4" />
+              Open burn index <ArrowRight className="h-4 w-4" />
             </Link>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {highestBurn.map((product) => (
-              <ProductCard key={product.id} product={product} />
-            ))}
+          <div className="grid gap-4 lg:grid-cols-[0.7fr_1.3fr]">
+            <div className="pb-editorial-panel px-6 py-7">
+              <div className="relative">
+                <div className="pb-kicker mb-5">
+                  <Sparkles className="h-3.5 w-3.5" />
+                  Read it fast
+                </div>
+                <h3 className="font-display text-4xl font-bold leading-[0.95] text-white">
+                  Stronger than strength alone.
+                </h3>
+                <p className="mt-4 text-sm leading-7 text-white/58">
+                  Burn captures the feeling users chase or avoid. It gives the catalog a more
+                  culturally honest language than milligrams by themselves.
+                </p>
+              </div>
+            </div>
+            <div className="grid gap-4 md:grid-cols-3">
+              {highestBurn.map((product) => (
+                <ProductCard key={product.id} product={product} />
+              ))}
+            </div>
           </div>
         </section>
       )}
 
-      {/* Why PouchBase */}
-      <section className="grid grid-cols-1 lg:grid-cols-[1.2fr_0.8fr] gap-4">
-        <div className="bg-card border border-border rounded-2xl p-6">
-          <p className="text-sm uppercase tracking-[0.2em] text-accent mb-3">Why It Works</p>
-          <h2 className="text-2xl sm:text-3xl font-bold mb-4">Built to be useful before it gets huge</h2>
-          <p className="text-muted leading-relaxed">
-            PouchBase is designed to make comparison easy: discover brands, sort by rating or burn,
-            and check live-ish price coverage without digging through shop-owned “best pouch” lists.
+      <section className="pb-data-panel grid gap-6 px-6 py-7 sm:px-7 lg:grid-cols-[1fr_0.85fr] lg:items-center">
+        <div>
+          <div className="pb-kicker mb-4">
+            <Layers className="h-3.5 w-3.5" />
+            Why PouchBase
+          </div>
+          <h2 className="font-display text-4xl font-bold text-white sm:text-5xl">
+            Structured enough to trust.
+          </h2>
+          <p className="mt-4 max-w-2xl text-base leading-8 text-white/60">
+            Browse by brand, flavor, burn signal, or review confidence without falling into the
+            usual affiliate-store clutter. It is product discovery with an encyclopedia mindset.
           </p>
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-1 gap-4">
-          <div className="bg-card border border-border rounded-2xl p-5">
-            <Search className="w-5 h-5 text-accent mb-3" />
-            <h3 className="font-semibold mb-1">Discovery first</h3>
-            <p className="text-sm text-muted">Find products fast by brand, flavor, strength, and burn level.</p>
+        <div className="grid gap-3">
+          <div className="pb-data-card p-4">
+            <div className="mb-2 flex items-center gap-2 text-sm font-semibold text-white">
+              <Search className="h-4 w-4 text-accent" />
+              Discovery layer
+            </div>
+            <p className="text-sm leading-7 text-white/56">
+              Filters, flavor worlds, and ranking pages make the catalog easy to scan quickly.
+            </p>
           </div>
-          <div className="bg-card border border-border rounded-2xl p-5">
-            <MessageSquare className="w-5 h-5 text-accent mb-3" />
-            <h3 className="font-semibold mb-1">Review-driven</h3>
-            <p className="text-sm text-muted">Community ratings make the database feel alive and trustworthy.</p>
-          </div>
-          <div className="bg-card border border-border rounded-2xl p-5">
-            <Zap className="w-5 h-5 text-accent mb-3" />
-            <h3 className="font-semibold mb-1">Burn as a metric</h3>
-            <p className="text-sm text-muted">The signature score gives the site its own angle from day one.</p>
+          <div className="pb-data-card p-4">
+            <div className="mb-2 flex items-center gap-2 text-sm font-semibold text-white">
+              <MessageSquare className="h-4 w-4 text-accent" />
+              Review layer
+            </div>
+            <p className="text-sm leading-7 text-white/56">
+              Community posts feed structured product scores instead of loose testimonial clutter.
+            </p>
           </div>
         </div>
-      </section>
-
-      {/* CTA */}
-      <section className="text-center bg-card border border-border rounded-2xl p-8">
-        <h2 className="text-2xl font-bold mb-3">Tried a pouch? Rate it.</h2>
-        <p className="text-muted mb-6">
-          Help the community find the best pouches. Leave a review with your burn, flavor, and longevity ratings.
-        </p>
-        <Link
-          href="/login"
-          className="bg-accent hover:bg-accent-hover text-black font-semibold px-8 py-3 rounded-xl transition-colors inline-block"
-        >
-          Sign Up & Start Rating
-        </Link>
       </section>
     </div>
   );

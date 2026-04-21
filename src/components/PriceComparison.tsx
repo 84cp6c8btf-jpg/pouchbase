@@ -29,23 +29,39 @@ export function PriceComparison({ productId, pouchesPerCan }: PriceComparisonPro
   }, [productId]);
 
   if (loading) {
-    return (
-      <div className="bg-card border border-border rounded-2xl p-6 mb-8 animate-pulse h-32" />
-    );
+    return <div className="pb-data-panel h-72 animate-pulse" />;
   }
 
   if (prices.length === 0) {
-    return null;
+    return (
+      <section className="pb-data-panel p-6 sm:p-7">
+        <div className="mb-5 flex items-center gap-3">
+          <div className="grid h-10 w-10 place-items-center rounded-2xl border border-accent/20 bg-accent/10 text-accent">
+            <Tag className="h-[1.125rem] w-[1.125rem]" />
+          </div>
+          <div>
+            <div className="text-[0.66rem] uppercase tracking-[0.22em] text-white/36">Price Layer</div>
+            <h2 className="font-display text-2xl font-bold text-white">Price Comparison</h2>
+          </div>
+        </div>
+        <div className="rounded-[1.5rem] border border-dashed border-white/10 px-5 py-6 text-sm text-white/56">
+          No live shop prices are available for this product yet.
+        </div>
+      </section>
+    );
   }
 
-  const cheapest = prices[0];
-
   return (
-    <div className="bg-card border border-border rounded-2xl p-6 mb-8">
-      <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
-        <Tag className="w-5 h-5 text-accent" />
-        Price Comparison
-      </h2>
+    <section className="pb-data-panel p-6 sm:p-7">
+      <div className="mb-5 flex items-center gap-3">
+        <div className="grid h-10 w-10 place-items-center rounded-2xl border border-accent/20 bg-accent/10 text-accent">
+          <Tag className="h-[1.125rem] w-[1.125rem]" />
+        </div>
+        <div>
+          <div className="text-[0.66rem] uppercase tracking-[0.22em] text-white/36">Price Layer</div>
+          <h2 className="font-display text-2xl font-bold text-white">Price Comparison</h2>
+        </div>
+      </div>
 
       <div className="space-y-3">
         {prices.map((price, index) => {
@@ -58,42 +74,48 @@ export function PriceComparison({ productId, pouchesPerCan }: PriceComparisonPro
               href={price.affiliate_url || price.shops?.website_url || "#"}
               target="_blank"
               rel="noopener noreferrer"
-              className={`flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 rounded-xl border transition-colors ${
+              className={`block rounded-[1.4rem] border p-4 transition hover:-translate-y-0.5 ${
                 isCheapest
-                  ? "border-accent/50 bg-accent/5 hover:bg-accent/10"
-                  : "border-border hover:bg-card-hover"
+                  ? "border-accent/30 bg-accent/8"
+                  : "border-white/8 bg-white/[0.03] hover:border-white/14"
               }`}
             >
-              <div className="flex items-center gap-3">
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                 <div>
-                  <p className="font-semibold flex flex-wrap items-center gap-2">
-                    {price.shops?.name}
+                  <div className="flex flex-wrap items-center gap-2">
+                    <span className="font-display text-2xl font-bold text-white">{price.shops?.name}</span>
                     {isCheapest && (
-                      <span className="text-xs bg-accent/20 text-accent px-2 py-0.5 rounded-full font-medium">
+                      <span className="rounded-full border border-accent/20 bg-accent/12 px-2.5 py-1 text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-accent">
                         Best Price
                       </span>
                     )}
-                  </p>
-                  <p className="text-xs text-muted">
-                    {price.currency} {pricePerPouch.toFixed(3)}/pouch
+                  </div>
+                  <p className="mt-2 text-sm text-white/56">
+                    {price.currency} {pricePerPouch.toFixed(3)} per pouch
                   </p>
                 </div>
-              </div>
 
-              <div className="flex items-center justify-between sm:justify-end gap-3 w-full sm:w-auto">
-                <span className={`text-lg font-bold ${isCheapest ? "text-accent" : ""}`}>
-                  {price.currency} {price.price.toFixed(2)}
-                </span>
-                <ExternalLink className="w-4 h-4 text-muted" />
+                <div className="flex items-center justify-between gap-4 sm:justify-end">
+                  <div className="text-right">
+                    <div className={`font-display text-4xl font-bold ${isCheapest ? "text-accent" : "text-white"}`}>
+                      {price.currency} {price.price.toFixed(2)}
+                    </div>
+                    <div className="text-xs uppercase tracking-[0.18em] text-white/34">In stock</div>
+                  </div>
+                  <div className="grid h-10 w-10 place-items-center rounded-full border border-white/10 text-white/48">
+                    <ExternalLink className="h-4 w-4" />
+                  </div>
+                </div>
               </div>
             </a>
           );
         })}
       </div>
 
-      <p className="text-xs text-muted mt-4">
-        Prices may vary. We earn a commission from qualifying purchases — this helps keep PouchBase free and independent.
+      <p className="mt-4 text-xs leading-6 text-white/38">
+        Prices can change fast. Some outbound links may be affiliate links, which helps support the
+        directory without turning it into a store.
       </p>
-    </div>
+    </section>
   );
 }

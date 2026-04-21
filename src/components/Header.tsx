@@ -1,10 +1,22 @@
 "use client";
 
 import Link from "next/link";
-import { Flame, Search, Menu, X } from "lucide-react";
+import { Flame, Menu, Search, X } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { supabase } from "@/lib/supabase";
 import { usePathname } from "next/navigation";
+
+const NAV_ITEMS = [
+  { href: "/pouches", label: "Browse Pouches" },
+  { href: "/brands", label: "Brands" },
+  { href: "/top-rated", label: "Top Rated" },
+  { href: "/highest-burn", label: "Highest Burn", highlight: true },
+];
+
+function isActive(pathname: string, href: string) {
+  if (href === "/") return pathname === href;
+  return pathname === href || pathname.startsWith(`${href}/`);
+}
 
 export function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -43,123 +55,123 @@ export function Header() {
   }
 
   return (
-    <header className="border-b border-border bg-card/80 backdrop-blur-sm sticky top-0 z-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
-          {/* Logo */}
-          <Link href="/" className="flex items-center gap-2 group">
-            <Flame className="w-7 h-7 text-accent group-hover:text-accent-hover transition-colors" />
-            <span className="text-xl font-bold tracking-tight">
-              Pouch<span className="text-accent">Base</span>
-            </span>
-          </Link>
-
-          {/* Desktop Nav */}
-          <nav className="hidden md:flex items-center gap-8">
-            <Link
-              href="/pouches"
-              className="text-muted hover:text-foreground transition-colors font-medium"
-            >
-              Browse Pouches
-            </Link>
-            <Link
-              href="/brands"
-              className="text-muted hover:text-foreground transition-colors font-medium"
-            >
-              Brands
-            </Link>
-            <Link
-              href="/top-rated"
-              className="text-muted hover:text-foreground transition-colors font-medium"
-            >
-              Top Rated
-            </Link>
-            <Link
-              href="/highest-burn"
-              className="text-muted hover:text-foreground transition-colors font-medium"
-            >
-              <span className="flex items-center gap-1">
-                <Flame className="w-4 h-4 text-accent" />
-                Highest Burn
-              </span>
-            </Link>
-          </nav>
-
-          {/* Desktop Actions */}
-          <div className="hidden md:flex items-center gap-4">
-            <Link
-              href="/pouches"
-              className="text-muted hover:text-foreground transition-colors"
-            >
-              <Search className="w-5 h-5" />
-            </Link>
-            {userEmail ? (
-              <div className="flex items-center gap-3">
-                <span className="text-xs text-muted max-w-40 truncate">{userEmail}</span>
-                <button
-                  type="button"
-                  onClick={handleSignOut}
-                  disabled={signingOut}
-                  className="bg-accent hover:bg-accent-hover text-black font-semibold px-4 py-2 rounded-lg transition-colors text-sm disabled:opacity-60"
-                >
-                  {signingOut ? "Signing Out..." : "Sign Out"}
-                </button>
-              </div>
-            ) : (
-              <Link
-                href={loginHref}
-                className="bg-accent hover:bg-accent-hover text-black font-semibold px-4 py-2 rounded-lg transition-colors text-sm"
-              >
-                Sign In
-              </Link>
-            )}
+    <header className="sticky top-0 z-50 border-b border-white/6 bg-[rgba(10,11,16,0.82)] backdrop-blur-xl">
+      <div className="mx-auto flex h-[4.5rem] max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
+        <Link href="/" className="group flex items-center gap-3">
+          <div className="grid h-10 w-10 place-items-center rounded-2xl border border-accent/25 bg-accent/10 text-accent shadow-[0_0_24px_rgba(255,122,26,0.16)]">
+            <Flame className="h-5 w-5" />
           </div>
+          <div>
+            <div className="font-display text-[1.4rem] font-bold leading-none tracking-[-0.05em]">
+              Pouch<span className="text-accent">Base</span>
+            </div>
+            <div className="text-[0.62rem] uppercase tracking-[0.28em] text-white/38">
+              Review Index
+            </div>
+          </div>
+        </Link>
 
-          {/* Mobile Menu Button */}
-          <button
-            className="md:hidden text-muted"
-            onClick={() => setMobileOpen(!mobileOpen)}
+        <nav className="hidden items-center gap-2 md:flex">
+          {NAV_ITEMS.map((item) => {
+            const active = isActive(pathname, item.href);
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                className={`rounded-full px-4 py-2.5 text-sm font-medium transition ${
+                  active
+                    ? "bg-white/8 text-white"
+                    : "text-white/58 hover:bg-white/6 hover:text-white"
+                }`}
+              >
+                <span className="inline-flex items-center gap-1.5">
+                  {item.highlight && <Flame className="h-4 w-4 text-accent" />}
+                  {item.label}
+                </span>
+              </Link>
+            );
+          })}
+        </nav>
+
+        <div className="hidden items-center gap-3 md:flex">
+          <Link
+            href="/pouches"
+            className="grid h-10 w-10 place-items-center rounded-full border border-white/8 bg-white/[0.03] text-white/58 transition hover:border-white/16 hover:text-white"
           >
-            {mobileOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-          </button>
+            <Search className="h-[1.125rem] w-[1.125rem]" />
+          </Link>
+          {userEmail ? (
+            <div className="flex items-center gap-3">
+              <span className="max-w-44 truncate text-xs text-white/45">{userEmail}</span>
+              <button
+                type="button"
+                onClick={handleSignOut}
+                disabled={signingOut}
+                className="rounded-full bg-accent px-4 py-2 text-sm font-semibold text-black transition hover:bg-accent-hover disabled:opacity-60"
+              >
+                {signingOut ? "Signing Out..." : "Sign Out"}
+              </button>
+            </div>
+          ) : (
+            <Link
+              href={loginHref}
+              className="rounded-full bg-accent px-5 py-2.5 text-sm font-semibold text-black transition hover:bg-accent-hover"
+            >
+              Sign In
+            </Link>
+          )}
         </div>
 
-        {/* Mobile Nav */}
-        {mobileOpen && (
-          <nav className="md:hidden pb-4 flex flex-col gap-3">
-            <Link href="/pouches" className="text-muted hover:text-foreground py-2" onClick={() => setMobileOpen(false)}>
-              Browse Pouches
-            </Link>
-            <Link href="/brands" className="text-muted hover:text-foreground py-2" onClick={() => setMobileOpen(false)}>
-              Brands
-            </Link>
-            <Link href="/top-rated" className="text-muted hover:text-foreground py-2" onClick={() => setMobileOpen(false)}>
-              Top Rated
-            </Link>
-            <Link href="/highest-burn" className="text-muted hover:text-foreground py-2 flex items-center gap-1" onClick={() => setMobileOpen(false)}>
-              <Flame className="w-4 h-4 text-accent" /> Highest Burn
-            </Link>
+        <button
+          className="grid h-10 w-10 place-items-center rounded-full border border-white/8 bg-white/[0.03] text-white/70 md:hidden"
+          onClick={() => setMobileOpen((open) => !open)}
+        >
+          {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+        </button>
+      </div>
+
+      {mobileOpen && (
+        <div className="border-t border-white/6 bg-[rgba(12,13,18,0.96)] px-4 py-4 md:hidden">
+          <nav className="flex flex-col gap-2">
+            {NAV_ITEMS.map((item) => {
+              const active = isActive(pathname, item.href);
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className={`rounded-2xl px-4 py-3 text-sm transition ${
+                    active ? "bg-white/8 text-white" : "text-white/62"
+                  }`}
+                  onClick={() => setMobileOpen(false)}
+                >
+                  <span className="inline-flex items-center gap-2">
+                    {item.highlight && <Flame className="h-4 w-4 text-accent" />}
+                    {item.label}
+                  </span>
+                </Link>
+              );
+            })}
             {userEmail ? (
               <button
                 type="button"
                 onClick={handleSignOut}
                 disabled={signingOut}
-                className="bg-accent hover:bg-accent-hover text-black font-semibold px-4 py-2 rounded-lg transition-colors text-sm text-center mt-2 disabled:opacity-60"
+                className="mt-2 rounded-2xl bg-accent px-4 py-3 text-sm font-semibold text-black disabled:opacity-60"
               >
                 {signingOut ? "Signing Out..." : "Sign Out"}
               </button>
             ) : (
               <Link
                 href={loginHref}
-                className="bg-accent hover:bg-accent-hover text-black font-semibold px-4 py-2 rounded-lg transition-colors text-sm text-center mt-2"
+                className="mt-2 rounded-2xl bg-accent px-4 py-3 text-center text-sm font-semibold text-black"
                 onClick={() => setMobileOpen(false)}
               >
                 Sign In
               </Link>
             )}
           </nav>
-        )}
-      </div>
+        </div>
+      )}
     </header>
   );
 }

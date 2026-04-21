@@ -5,7 +5,7 @@ import { supabase } from "@/lib/supabase";
 import { Review } from "@/lib/types";
 import { BurnMeter } from "./BurnMeter";
 import { RatingBadge } from "./RatingBadge";
-import { MessageSquare, User, Flame } from "lucide-react";
+import { MessageSquare, Sparkles, User } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 
@@ -20,8 +20,6 @@ export function ReviewSection({ productId }: ReviewSectionProps) {
   const [user, setUser] = useState<{ id: string } | null>(null);
   const [statusMessage, setStatusMessage] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-
-  // Review form state
   const [burn, setBurn] = useState(5);
   const [flavor, setFlavor] = useState(5);
   const [longevity, setLongevity] = useState(5);
@@ -114,23 +112,23 @@ export function ReviewSection({ productId }: ReviewSectionProps) {
   };
 
   return (
-    <div className="bg-card border border-border rounded-2xl p-6">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
-        <h2 className="text-xl font-bold flex items-center gap-2">
-          <MessageSquare className="w-5 h-5 text-accent" />
-          Reviews ({reviews.length})
-        </h2>
+    <section className="pb-data-panel p-6 sm:p-7">
+      <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <div className="mb-2 text-[0.66rem] uppercase tracking-[0.22em] text-white/36">Review Layer</div>
+          <h2 className="font-display text-3xl font-bold text-white">Reviews ({reviews.length})</h2>
+        </div>
         {user ? (
           <button
-            onClick={() => setShowForm(!showForm)}
-            className="bg-accent hover:bg-accent-hover text-black font-semibold px-4 py-2 rounded-lg transition-colors text-sm"
+            onClick={() => setShowForm((open) => !open)}
+            className="rounded-full bg-accent px-5 py-3 text-sm font-semibold text-black transition hover:bg-accent-hover"
           >
             {existingReview ? "Edit Your Review" : "Write a Review"}
           </button>
         ) : (
           <Link
             href={loginHref}
-            className="bg-accent hover:bg-accent-hover text-black font-semibold px-4 py-2 rounded-lg transition-colors text-sm"
+            className="rounded-full bg-accent px-5 py-3 text-center text-sm font-semibold text-black transition hover:bg-accent-hover"
           >
             Sign In to Review
           </Link>
@@ -138,88 +136,65 @@ export function ReviewSection({ productId }: ReviewSectionProps) {
       </div>
 
       {existingReview && !showForm && (
-        <p className="text-sm text-muted mb-4">
-          You already reviewed this pouch. You can edit your ratings anytime.
+        <p className="mb-4 text-sm text-white/54">
+          You already reviewed this pouch. Update it anytime if your opinion changes.
         </p>
       )}
-      {statusMessage && <p className="text-sm text-green-400 mb-4">{statusMessage}</p>}
-      {errorMessage && <p className="text-sm text-red-400 mb-4">{errorMessage}</p>}
+      {statusMessage && <p className="mb-4 text-sm text-emerald-300">{statusMessage}</p>}
+      {errorMessage && <p className="mb-4 text-sm text-red-300">{errorMessage}</p>}
 
-      {/* Review Form */}
       {showForm && user && (
-        <form onSubmit={handleSubmit} className="border border-border rounded-xl p-4 mb-6 space-y-4">
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-            <div>
-              <label className="text-xs text-muted block mb-1 flex items-center gap-1">
-                <Flame className="w-3 h-3 text-accent" /> Burn
+        <form onSubmit={handleSubmit} className="mb-6 rounded-[1.5rem] border border-white/8 bg-white/[0.03] p-4 sm:p-5">
+          <div className="mb-4">
+            <div className="pb-kicker">
+              <Sparkles className="h-3.5 w-3.5" />
+              Structured Review
+            </div>
+          </div>
+
+          <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+            {[
+              { label: "Burn", value: burn, setter: setBurn },
+              { label: "Flavor", value: flavor, setter: setFlavor },
+              { label: "Longevity", value: longevity, setter: setLongevity },
+              { label: "Overall", value: overall, setter: setOverall },
+            ].map((field) => (
+              <label key={field.label} className="rounded-2xl border border-white/8 bg-black/15 p-3.5">
+                <span className="block text-[0.66rem] uppercase tracking-[0.22em] text-white/38">
+                  {field.label}
+                </span>
+                <input
+                  type="range"
+                  min="1"
+                  max="10"
+                  value={field.value}
+                  onChange={(event) => field.setter(Number(event.target.value))}
+                  className="mt-3 w-full accent-orange-500"
+                />
+                <span className="mt-2 block font-display text-3xl font-bold text-white">{field.value}</span>
               </label>
-              <input
-                type="range"
-                min="1"
-                max="10"
-                value={burn}
-                onChange={(e) => setBurn(Number(e.target.value))}
-                className="w-full accent-orange-500"
-              />
-              <span className="text-sm font-bold text-center block">{burn}/10</span>
-            </div>
-            <div>
-              <label className="text-xs text-muted block mb-1">Flavor</label>
-              <input
-                type="range"
-                min="1"
-                max="10"
-                value={flavor}
-                onChange={(e) => setFlavor(Number(e.target.value))}
-                className="w-full accent-orange-500"
-              />
-              <span className="text-sm font-bold text-center block">{flavor}/10</span>
-            </div>
-            <div>
-              <label className="text-xs text-muted block mb-1">Longevity</label>
-              <input
-                type="range"
-                min="1"
-                max="10"
-                value={longevity}
-                onChange={(e) => setLongevity(Number(e.target.value))}
-                className="w-full accent-orange-500"
-              />
-              <span className="text-sm font-bold text-center block">{longevity}/10</span>
-            </div>
-            <div>
-              <label className="text-xs text-muted block mb-1">Overall</label>
-              <input
-                type="range"
-                min="1"
-                max="10"
-                value={overall}
-                onChange={(e) => setOverall(Number(e.target.value))}
-                className="w-full accent-orange-500"
-              />
-              <span className="text-sm font-bold text-center block">{overall}/10</span>
-            </div>
+            ))}
           </div>
 
           <textarea
             value={text}
             onChange={(e) => setText(e.target.value)}
-            placeholder="Share your thoughts on this pouch... (optional)"
-            className="w-full bg-zinc-800 border border-border rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-accent resize-none h-24"
+            placeholder="How did it hit, how long did it last, and would you buy it again?"
+            className="mt-4 h-28 w-full resize-none rounded-[1.3rem] border border-white/10 bg-black/20 px-4 py-3 text-sm text-white outline-none transition focus:border-accent/35"
           />
 
-          <div className="flex flex-wrap gap-3">
+          <div className="mt-4 flex flex-wrap gap-3">
             <button
               type="submit"
               disabled={submitting}
-              className="bg-accent hover:bg-accent-hover text-black font-semibold px-6 py-2 rounded-lg transition-colors text-sm disabled:opacity-50"
+              className="rounded-full bg-accent px-5 py-3 text-sm font-semibold text-black transition hover:bg-accent-hover disabled:opacity-60"
             >
-              {submitting ? "Saving..." : existingReview ? "Update Review" : "Submit Review"}
+              {submitting ? "Saving..." : existingReview ? "Update Review" : "Publish Review"}
             </button>
             <button
               type="button"
               onClick={() => setShowForm(false)}
-              className="text-muted hover:text-foreground text-sm"
+              className="rounded-full border border-white/10 px-5 py-3 text-sm text-white/66 transition hover:text-white"
             >
               Cancel
             </button>
@@ -227,47 +202,62 @@ export function ReviewSection({ productId }: ReviewSectionProps) {
         </form>
       )}
 
-      {/* Reviews List */}
       {loading ? (
         <div className="space-y-4">
-          {[...Array(3)].map((_, i) => (
-            <div key={i} className="h-24 bg-zinc-800 rounded-xl animate-pulse" />
+          {[...Array(3)].map((_, index) => (
+            <div key={index} className="h-36 animate-pulse rounded-[1.5rem] border border-white/6 bg-white/[0.03]" />
           ))}
         </div>
       ) : reviews.length > 0 ? (
         <div className="space-y-4">
           {reviews.map((review) => (
-            <div key={review.id} className="border border-border rounded-xl p-4">
-              <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3 mb-3">
-                <div className="flex flex-wrap items-center gap-2">
-                  <User className="w-5 h-5 text-muted" />
-                  <span className="font-medium text-sm">
-                    {review.profiles?.display_name || "Anonymous"}
-                  </span>
-                  <span className="text-xs text-muted">
-                    {new Date(review.created_at).toLocaleDateString()}
-                  </span>
+            <article key={review.id} className="rounded-[1.5rem] border border-white/8 bg-white/[0.03] p-4 sm:p-5">
+              <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+                <div>
+                  <div className="flex flex-wrap items-center gap-2">
+                    <div className="grid h-9 w-9 place-items-center rounded-full border border-white/10 bg-black/20 text-white/54">
+                      <User className="h-4 w-4" />
+                    </div>
+                    <div>
+                      <div className="font-medium text-white">
+                        {review.profiles?.display_name || "Anonymous"}
+                      </div>
+                      <div className="text-xs uppercase tracking-[0.18em] text-white/34">
+                        {new Date(review.created_at).toLocaleDateString()}
+                      </div>
+                    </div>
+                  </div>
                 </div>
-                <BurnMeter rating={review.burn_rating} size="sm" showLabel={false} />
+                <BurnMeter rating={review.burn_rating} size="sm" />
               </div>
 
-              <div className="flex flex-wrap gap-4 mb-3">
+              <div className="mt-4 grid gap-3 sm:grid-cols-3">
                 <RatingBadge label="Flavor" value={review.flavor_rating} size="sm" />
                 <RatingBadge label="Longevity" value={review.longevity_rating} size="sm" />
                 <RatingBadge label="Overall" value={review.overall_rating} size="sm" />
               </div>
 
               {review.review_text && (
-                <p className="text-sm text-muted">{review.review_text}</p>
+                <p className="mt-4 text-sm leading-7 text-white/60">{review.review_text}</p>
               )}
-            </div>
+            </article>
           ))}
         </div>
       ) : (
-        <p className="text-muted text-center py-8">
-          No reviews yet. Be the first to share your experience with this pouch.
-        </p>
+        <div className="pb-editorial-panel px-6 py-10 text-center">
+          <div className="relative z-10 mx-auto max-w-lg">
+            <div className="pb-kicker mb-5">
+              <MessageSquare className="h-3.5 w-3.5" />
+              Empty Review Layer
+            </div>
+            <h3 className="font-display text-4xl font-bold text-white">No reviews yet.</h3>
+            <p className="mt-4 text-sm leading-7 text-white/58">
+              This entry is ready for the first structured review. Add burn, flavor, longevity, and
+              overall score to start shaping the ranking.
+            </p>
+          </div>
+        </div>
       )}
-    </div>
+    </section>
   );
 }

@@ -1,12 +1,19 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Manrope, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { getSiteUrl, SITE_DESCRIPTION, SITE_NAME } from "@/lib/site";
 import { AgeGate } from "@/components/AgeGate";
 
-const inter = Inter({ subsets: ["latin"] });
+const manrope = Manrope({
+  subsets: ["latin"],
+  variable: "--font-body-ui",
+});
+const spaceGrotesk = Space_Grotesk({
+  subsets: ["latin"],
+  variable: "--font-display-ui",
+});
 const siteUrl = getSiteUrl();
 
 export const metadata: Metadata = {
@@ -50,8 +57,8 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-      return (
-    <html lang="en" className={`${inter.className} antialiased`}>
+  return (
+    <html lang="en" className={`${manrope.variable} ${spaceGrotesk.variable} antialiased`}>
       <body className="bg-background text-foreground min-h-screen flex flex-col">
         <AgeGate />
         <Header />

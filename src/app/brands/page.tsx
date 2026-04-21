@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { supabase } from "@/lib/supabase";
-import { Layers, ArrowRight, Globe } from "lucide-react";
+import { ArrowRight, Globe, Layers } from "lucide-react";
 import type { Metadata } from "next";
 import { BrandArtwork } from "@/components/BrandArtwork";
 
@@ -42,49 +42,60 @@ export default async function BrandsPage() {
 
   return (
     <div className="space-y-8">
-      <section className="bg-card border border-border rounded-2xl p-6 sm:p-8">
-        <p className="text-sm uppercase tracking-[0.2em] text-accent mb-3">Brand Directory</p>
-        <h1 className="text-3xl sm:text-4xl font-bold mb-3">Browse Nicotine Pouch Brands</h1>
-        <p className="text-muted max-w-3xl">
-          Explore the brands behind the most talked-about nicotine pouches, from mainstream mint staples
-          to high-burn cult favorites.
-        </p>
+      <section className="pb-editorial-panel px-6 py-7 sm:px-8 sm:py-8">
+        <div className="relative z-10">
+          <div className="pb-kicker mb-5">
+            <Layers className="h-3.5 w-3.5" />
+            Brand Atlas
+          </div>
+          <h1 className="font-display text-[clamp(2.8rem,6vw,5.6rem)] font-bold leading-[0.92] text-white">
+            Browse the catalogs behind the category.
+          </h1>
+          <p className="mt-4 max-w-3xl text-base leading-8 text-white/60">
+            Compare pouch brands as structured product families, from mainstream mint staples to
+            high-burn cult names and flavor-led experimenters.
+          </p>
+        </div>
       </section>
 
-      <section className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+      <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
         {enrichedBrands.map((brand) => (
           <Link
             key={brand.id}
             href={`/brands/${brand.slug}`}
-            className="bg-card border border-border rounded-2xl p-5 hover:border-accent/50 hover:bg-card-hover transition-all group"
+            className="pb-data-card group p-5 transition duration-300 hover:-translate-y-1 hover:border-accent/35"
           >
-            <div className="flex items-start justify-between gap-4 mb-4">
+            <div className="mb-5 flex items-start justify-between gap-4">
               <div className="flex items-start gap-4">
                 <BrandArtwork name={brand.name} slug={brand.slug} country={brand.country} size="card" />
                 <div>
-                  <p className="text-xs uppercase tracking-[0.2em] text-muted mb-2">{brand.country || "Global"}</p>
-                  <h2 className="text-2xl font-semibold group-hover:text-accent transition-colors">{brand.name}</h2>
+                  <p className="mb-2 text-[0.68rem] uppercase tracking-[0.22em] text-white/40">
+                    {brand.country || "Global"}
+                  </p>
+                  <h2 className="font-display text-[1.9rem] font-bold leading-[1] text-white transition group-hover:text-accent">
+                    {brand.name}
+                  </h2>
                 </div>
               </div>
-              <ArrowRight className="w-5 h-5 text-muted group-hover:text-accent transition-colors shrink-0" />
+              <ArrowRight className="h-[1.125rem] w-[1.125rem] text-white/30 transition group-hover:text-accent" />
             </div>
 
-            <p className="text-sm text-muted mb-5 min-h-12">
+            <p className="min-h-14 text-sm leading-7 text-white/56">
               {brand.description || `${brand.name} on PouchBase.`}
             </p>
 
-            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between text-sm border-t border-border pt-4">
-              <span className="inline-flex items-center gap-2 text-foreground font-medium">
-                <Layers className="w-4 h-4 text-accent" />
+            <div className="mt-5 flex flex-col gap-3 border-t border-white/8 pt-4 text-sm sm:flex-row sm:items-center sm:justify-between">
+              <span className="inline-flex items-center gap-2 font-medium text-white">
+                <Layers className="h-4 w-4 text-accent" />
                 {brand.productCount} pouch{brand.productCount !== 1 ? "es" : ""}
               </span>
               {brand.website_url ? (
-                <span className="inline-flex items-center gap-1 text-muted">
-                  <Globe className="w-4 h-4" />
+                <span className="inline-flex items-center gap-1 text-white/48">
+                  <Globe className="h-4 w-4" />
                   Website
                 </span>
               ) : (
-                <span className="text-muted">Profile</span>
+                <span className="text-white/40">Profile</span>
               )}
             </div>
           </Link>

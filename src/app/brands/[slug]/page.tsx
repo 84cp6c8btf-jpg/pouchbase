@@ -59,82 +59,91 @@ export default async function BrandDetailPage({ params }: Props) {
 
   return (
     <div className="space-y-8">
-      <div className="text-sm text-muted flex flex-wrap items-center gap-y-1">
-        <Link href="/brands" className="hover:text-foreground transition-colors">
+      <div className="flex flex-wrap items-center gap-2 text-sm text-white/42">
+        <Link href="/brands" className="transition hover:text-white">
           Brands
         </Link>
-        <span className="mx-2">/</span>
-        <span className="text-foreground">{brand.name}</span>
+        <span>/</span>
+        <span className="text-white/68">{brand.name}</span>
       </div>
 
-      <section className="bg-card border border-border rounded-2xl p-6 sm:p-8">
-        <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6">
-          <div className="flex flex-col sm:flex-row gap-5 sm:items-center">
-            <BrandArtwork name={brand.name} slug={brand.slug} country={brand.country} size="hero" />
-            <div>
-              <p className="text-sm uppercase tracking-[0.2em] text-accent mb-3">{brand.country || "Global Brand"}</p>
-              <h1 className="text-3xl sm:text-4xl font-bold mb-3">{brand.name}</h1>
-              <p className="text-muted max-w-3xl">
-                {brand.description || `${brand.name} nicotine pouches listed on PouchBase.`}
-              </p>
+      <section className="pb-editorial-panel p-6 sm:p-8">
+        <div className="relative z-10">
+          <div className="grid gap-6 lg:grid-cols-[1fr_0.9fr] lg:items-end">
+            <div className="flex flex-col gap-5 sm:flex-row sm:items-center">
+              <BrandArtwork name={brand.name} slug={brand.slug} country={brand.country} size="hero" />
+              <div>
+                <div className="pb-kicker mb-4">{brand.country || "Global Brand"}</div>
+                <h1 className="font-display text-[clamp(2.8rem,5vw,4.8rem)] font-bold leading-[0.92] text-white">
+                  {brand.name}
+                </h1>
+                <p className="mt-4 max-w-2xl text-base leading-8 text-white/60">
+                  {brand.description || `${brand.name} nicotine pouches listed on PouchBase.`}
+                </p>
+              </div>
             </div>
-          </div>
 
-          {brand.website_url && (
-            <a
-              href={brand.website_url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 text-sm text-accent hover:text-accent-hover"
-            >
-              <Globe className="w-4 h-4" />
-              Visit brand site
-            </a>
-          )}
-        </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-8">
-          <div className="bg-zinc-900/60 rounded-xl border border-border p-4">
-            <p className="text-xs uppercase tracking-wide text-muted mb-2">Products</p>
-            <p className="text-2xl font-bold inline-flex items-center gap-2">
-              <Layers className="w-5 h-5 text-accent" />
-              {brandProducts.length}
-            </p>
-          </div>
-          <div className="bg-zinc-900/60 rounded-xl border border-border p-4">
-            <p className="text-xs uppercase tracking-wide text-muted mb-2">Average Overall</p>
-            <p className="text-2xl font-bold inline-flex items-center gap-2">
-              <Star className="w-5 h-5 text-accent" />
-              {avgOverall ? avgOverall.toFixed(1) : "N/A"}
-            </p>
-          </div>
-          <div className="bg-zinc-900/60 rounded-xl border border-border p-4">
-            <p className="text-xs uppercase tracking-wide text-muted mb-2">Average Burn</p>
-            <p className="text-2xl font-bold inline-flex items-center gap-2">
-              <Flame className="w-5 h-5 text-accent" />
-              {avgBurn ? avgBurn.toFixed(1) : "N/A"}
-            </p>
+            <div className="grid gap-3 sm:grid-cols-3 lg:grid-cols-1">
+              <div className="pb-stat-tile">
+                <div className="text-[0.66rem] uppercase tracking-[0.22em] text-white/38">Products</div>
+                <div className="mt-1 inline-flex items-center gap-2 font-display text-4xl font-bold text-white">
+                  <Layers className="h-5 w-5 text-accent" />
+                  {brandProducts.length}
+                </div>
+              </div>
+              <div className="pb-stat-tile">
+                <div className="text-[0.66rem] uppercase tracking-[0.22em] text-white/38">Average Overall</div>
+                <div className="mt-1 inline-flex items-center gap-2 font-display text-4xl font-bold text-emerald-200">
+                  <Star className="h-5 w-5 text-accent" />
+                  {avgOverall ? avgOverall.toFixed(1) : "N/A"}
+                </div>
+              </div>
+              <div className="pb-stat-tile">
+                <div className="text-[0.66rem] uppercase tracking-[0.22em] text-white/38">Average Burn</div>
+                <div className="mt-1 inline-flex items-center gap-2 font-display text-4xl font-bold text-white">
+                  <Flame className="h-5 w-5 text-accent" />
+                  {avgBurn ? avgBurn.toFixed(1) : "N/A"}
+                </div>
+              </div>
+              {brand.website_url && (
+                <a
+                  href={brand.website_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 text-sm text-white/60 transition hover:text-accent"
+                >
+                  <Globe className="h-4 w-4" />
+                  Visit brand site
+                </a>
+              )}
+            </div>
           </div>
         </div>
       </section>
 
       {brandProducts.length > 0 ? (
-        <section>
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
-            <h2 className="text-2xl font-bold">All {brand.name} Pouches</h2>
-            <Link href="/pouches" className="text-sm text-accent hover:text-accent-hover">
+        <section className="space-y-6">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+              <div className="text-[0.66rem] uppercase tracking-[0.22em] text-white/38">Catalog</div>
+              <h2 className="mt-1 font-display text-4xl font-bold text-white">All {brand.name} pouches</h2>
+            </div>
+            <Link href="/pouches" className="text-sm text-white/60 transition hover:text-accent">
               Browse all pouches
             </Link>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
             {brandProducts.map((product) => (
               <ProductCard key={product.id} product={product} />
             ))}
           </div>
         </section>
       ) : (
-        <section className="bg-card border border-border rounded-2xl p-8 text-center">
-          <p className="text-muted">No products listed for this brand yet.</p>
+        <section className="pb-editorial-panel px-6 py-10 text-center">
+          <div className="relative z-10">
+            <h2 className="font-display text-4xl font-bold text-white">No products listed yet</h2>
+            <p className="mt-4 text-white/58">This brand profile exists, but its catalog has not been added yet.</p>
+          </div>
         </section>
       )}
     </div>

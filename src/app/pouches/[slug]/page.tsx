@@ -4,7 +4,7 @@ import { BurnMeter } from "@/components/BurnMeter";
 import { RatingBadge } from "@/components/RatingBadge";
 import { ReviewSection } from "@/components/ReviewSection";
 import { PriceComparison } from "@/components/PriceComparison";
-import { Zap, Droplets, Ruler, Package } from "lucide-react";
+import { Droplets, Package, Ruler, Sparkles, Zap } from "lucide-react";
 import type { Metadata } from "next";
 import type { RelationResult } from "@/lib/types";
 import Link from "next/link";
@@ -57,86 +57,100 @@ export default async function ProductPage({ params }: Props) {
   );
 
   return (
-    <div className="max-w-4xl mx-auto">
-      {/* Breadcrumb */}
-      <div className="text-sm text-muted mb-6 flex flex-wrap items-center gap-y-1">
-        <Link href="/pouches" className="hover:text-foreground transition-colors">Pouches</Link>
-        <span className="mx-2">/</span>
-        <Link href={`/brands/${brand?.slug}`} className="hover:text-foreground transition-colors">{brand?.name}</Link>
-        <span className="mx-2">/</span>
-        <span className="text-foreground">{product.name}</span>
+    <div className="mx-auto max-w-6xl space-y-8">
+      <div className="flex flex-wrap items-center gap-2 text-sm text-white/42">
+        <Link href="/pouches" className="transition hover:text-white">Pouches</Link>
+        <span>/</span>
+        <Link href={`/brands/${brand?.slug}`} className="transition hover:text-white">{brand?.name}</Link>
+        <span>/</span>
+        <span className="text-white/68">{product.name}</span>
       </div>
 
-      {/* Product Header */}
-      <div className="bg-card border border-border rounded-2xl p-6 sm:p-8 mb-8">
-        <div className="flex flex-col sm:flex-row gap-6">
-          <ProductArtwork
-            brand={brand?.name}
-            brandSlug={brand?.slug}
-            name={product.name}
-            flavor={product.flavor}
-            flavorCategory={product.flavor_category}
-            strengthMg={product.strength_mg}
-            format={product.format}
-            imageUrl={product.image_url}
-            size="hero"
-          />
+      <section className="pb-editorial-panel p-5 sm:p-7 lg:p-8">
+        <div className="pb-grid-backdrop absolute inset-0 opacity-70" />
+        <div className="relative grid gap-6 lg:grid-cols-[0.9fr_1.1fr]">
+          <div className="space-y-4">
+            <div className="pb-kicker">
+              <Sparkles className="h-3.5 w-3.5" />
+              Product Entry
+            </div>
+            <ProductArtwork
+              brand={brand?.name}
+              brandSlug={brand?.slug}
+              name={product.name}
+              flavor={product.flavor}
+              flavorCategory={product.flavor_category}
+              strengthMg={product.strength_mg}
+              format={product.format}
+              imageUrl={product.image_url}
+              size="hero"
+            />
+          </div>
 
-          <div className="flex-1">
-            <p className="text-sm text-muted uppercase tracking-wide">{brand?.name}</p>
-            <h1 className="text-3xl font-bold mb-3">{product.name}</h1>
+          <div className="flex flex-col justify-between gap-6">
+            <div>
+              <p className="text-[0.72rem] uppercase tracking-[0.24em] text-white/44">
+                {brand?.name}{brand?.country ? ` · ${brand.country}` : ""}
+              </p>
+              <h1 className="mt-3 font-display text-[clamp(2.7rem,5vw,5rem)] font-bold leading-[0.92] text-white">
+                {product.name}
+              </h1>
+              <p className="mt-4 max-w-2xl text-base leading-8 text-white/62">
+                {product.description || `Structured review entry for ${product.name}.`}
+              </p>
+            </div>
 
-            {/* Tags */}
-            <div className="flex flex-wrap gap-2 mb-4">
-              <span className="text-sm bg-zinc-800 text-muted px-3 py-1 rounded-full flex items-center gap-1.5">
-                <Zap className="w-3.5 h-3.5 text-accent" />
-                {product.strength_mg}mg — {product.strength_label || "Unknown"}
+            <div className="flex flex-wrap gap-2.5">
+              <span className="pb-chip">
+                <Zap className="h-3.5 w-3.5 text-accent" />
+                {product.strength_mg}mg · {product.strength_label || "profile"}
               </span>
-              <span className="text-sm bg-zinc-800 text-muted px-3 py-1 rounded-full">
-                {product.flavor}
-              </span>
-              <span className="text-sm bg-zinc-800 text-muted px-3 py-1 rounded-full flex items-center gap-1.5">
-                <Ruler className="w-3.5 h-3.5" />
+              <span className="pb-chip">{product.flavor}</span>
+              <span className="pb-chip">
+                <Ruler className="h-3.5 w-3.5 text-white/56" />
                 {product.format}
               </span>
-              <span className="text-sm bg-zinc-800 text-muted px-3 py-1 rounded-full flex items-center gap-1.5">
-                <Droplets className="w-3.5 h-3.5" />
+              <span className="pb-chip">
+                <Droplets className="h-3.5 w-3.5 text-white/56" />
                 {product.moisture}
               </span>
-              <span className="text-sm bg-zinc-800 text-muted px-3 py-1 rounded-full flex items-center gap-1.5">
-                <Package className="w-3.5 h-3.5" />
+              <span className="pb-chip">
+                <Package className="h-3.5 w-3.5 text-white/56" />
                 {product.pouches_per_can} pouches/can
               </span>
             </div>
 
-            {/* Ratings */}
             {product.review_count > 0 ? (
-              <div className="space-y-3">
+              <div className="grid gap-4 lg:grid-cols-[1fr_auto] lg:items-end">
                 <BurnMeter rating={product.avg_burn} size="lg" />
-                <div className="grid grid-cols-3 gap-4 max-w-sm">
-                  <RatingBadge label="Flavor" value={product.avg_flavor} />
-                  <RatingBadge label="Longevity" value={product.avg_longevity} />
-                  <RatingBadge label="Overall" value={product.avg_overall} />
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-4 lg:grid-cols-1">
+                  <div className="pb-stat-tile min-w-[9rem]">
+                    <div className="text-[0.66rem] uppercase tracking-[0.22em] text-white/38">Reviews</div>
+                    <div className="mt-1 font-display text-4xl font-bold text-white">
+                      {product.review_count}
+                    </div>
+                  </div>
                 </div>
-                <p className="text-sm text-muted">{product.review_count} review{product.review_count !== 1 ? "s" : ""}</p>
               </div>
             ) : (
-              <p className="text-muted">No reviews yet. Be the first to rate this pouch.</p>
+              <div className="rounded-[1.5rem] border border-dashed border-white/12 px-5 py-5 text-white/58">
+                No community reviews yet. This entry is ready for the first structured rating.
+              </div>
             )}
+
+            <div className="grid gap-3 sm:grid-cols-3">
+              <RatingBadge label="Flavor" value={product.avg_flavor} />
+              <RatingBadge label="Longevity" value={product.avg_longevity} />
+              <RatingBadge label="Overall" value={product.avg_overall} />
+            </div>
           </div>
         </div>
+      </section>
 
-        {/* Description */}
-        {product.description && (
-          <p className="text-muted mt-6 border-t border-border pt-6">{product.description}</p>
-        )}
+      <div className="grid gap-8 xl:grid-cols-[0.95fr_1.05fr] xl:items-start">
+        <PriceComparison productId={product.id} pouchesPerCan={product.pouches_per_can} />
+        <ReviewSection productId={product.id} />
       </div>
-
-      {/* Price Comparison */}
-      <PriceComparison productId={product.id} pouchesPerCan={product.pouches_per_can} />
-
-      {/* Reviews */}
-      <ReviewSection productId={product.id} />
     </div>
   );
 }
