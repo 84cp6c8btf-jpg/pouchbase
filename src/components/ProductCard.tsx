@@ -1,14 +1,16 @@
 import Link from "next/link";
 import { Star, MessageSquare, Zap } from "lucide-react";
-import { Product } from "@/lib/types";
+import { Product, RelationResult } from "@/lib/types";
 import { BurnMeter } from "./BurnMeter";
 import { RatingBadge } from "./RatingBadge";
 
 interface ProductCardProps {
-  product: Product & { brands?: { name: string; slug: string } };
+  product: Product & { brands?: RelationResult<{ name: string; slug: string }> };
 }
 
 export function ProductCard({ product }: ProductCardProps) {
+  const brand = Array.isArray(product.brands) ? product.brands[0] : product.brands;
+
   return (
     <Link
       href={`/pouches/${product.slug}`}
@@ -17,7 +19,7 @@ export function ProductCard({ product }: ProductCardProps) {
       {/* Top: Brand + Name */}
       <div className="mb-3">
         <p className="text-xs text-muted uppercase tracking-wide">
-          {product.brands?.name}
+          {brand?.name}
         </p>
         <h3 className="text-lg font-semibold group-hover:text-accent transition-colors truncate">
           {product.name}

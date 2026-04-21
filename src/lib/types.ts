@@ -8,6 +8,8 @@ export interface Brand {
   website_url: string | null;
 }
 
+export type RelationResult<T> = T | T[] | null;
+
 export interface Product {
   id: string;
   brand_id: string;
@@ -29,7 +31,7 @@ export interface Product {
   avg_overall: number;
   review_count: number;
   created_at: string;
-  brands?: Brand;
+  brands?: RelationResult<Brand>;
 }
 
 export interface Review {

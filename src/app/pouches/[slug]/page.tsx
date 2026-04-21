@@ -6,9 +6,17 @@ import { ReviewSection } from "@/components/ReviewSection";
 import { PriceComparison } from "@/components/PriceComparison";
 import { Zap, Droplets, Ruler, Package } from "lucide-react";
 import type { Metadata } from "next";
+import type { RelationResult } from "@/lib/types";
 
 interface Props {
   params: Promise<{ slug: string }>;
+}
+
+type BrandSummary = { name: string; slug?: string; country?: string | null };
+
+function getSingleBrand<T extends BrandSummary>(brand: RelationResult<T>): T | null {
+  if (Array.isArray(brand)) return brand[0] ?? null;
+  return brand ?? null;
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -21,7 +29,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   if (!product) return { title: "Product Not Found" };
 
-  const brandName = (product.brands as { name: string } | null)?.name || "";
+  const brandName = getSingleBrand(product.brands as RelationResult<{ name: string }>)?.name || "";
   return {
     title: `${brandName} ${product.name} Review — PouchBase`,
     description: `Read real reviews of ${brandName} ${product.name} (${product.flavor}, ${product.strength_mg}mg). Burn rating, flavor score, and price comparison. Rated ${product.avg_overall}/10 by the community.`,
@@ -39,7 +47,9 @@ export default async function ProductPage({ params }: Props) {
 
   if (!product) notFound();
 
-  const brand = product.brands as { name: string; slug: string; country: string | null } | null;
+  const brand = getSingleBrand(
+    product.brands as RelationResult<{ name: string; slug: string; country: string | null }>
+  );
 
   return (
     <div className="max-w-4xl mx-auto">
