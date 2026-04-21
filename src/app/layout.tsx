@@ -5,6 +5,7 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { getSiteUrl, SITE_DESCRIPTION, SITE_NAME } from "@/lib/site";
 import { AgeGate } from "@/components/AgeGate";
+import { OrganizationJsonLd, WebSiteJsonLd } from "@/components/JsonLd";
 
 const manrope = Manrope({
   subsets: ["latin"],
@@ -60,6 +61,8 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${manrope.variable} ${spaceGrotesk.variable} antialiased`}>
       <body className="bg-background text-foreground min-h-screen flex flex-col">
+        <OrganizationJsonLd siteUrl={siteUrl} />
+        <WebSiteJsonLd siteUrl={siteUrl} />
         <AgeGate />
         <Header />
         <main className="flex-1 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-8">

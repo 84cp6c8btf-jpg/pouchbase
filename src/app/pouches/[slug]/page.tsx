@@ -4,6 +4,8 @@ import { BurnMeter } from "@/components/BurnMeter";
 import { RatingBadge } from "@/components/RatingBadge";
 import { ReviewSection } from "@/components/ReviewSection";
 import { PriceComparison } from "@/components/PriceComparison";
+import { ProductJsonLd, BreadcrumbJsonLd } from "@/components/JsonLd";
+import { getSiteUrl } from "@/lib/site";
 import { Droplets, Package, Ruler, Sparkles, Zap } from "lucide-react";
 import type { Metadata } from "next";
 import type { RelationResult } from "@/lib/types";
@@ -56,8 +58,45 @@ export default async function ProductPage({ params }: Props) {
     product.brands as RelationResult<{ name: string; slug: string; country: string | null }>
   );
 
+  const siteUrl = getSiteUrl();
+
+  // Fetch price range for structured data
+  const { data: prices } = await supabase
+    .from("prices")
+    .select("price, currency")
+    .eq("product_id", product.id)
+    .eq("in_stock", true)
+    .order("price", { ascending: true });
+
+  const lowestPrice = prices?.[0]?.price;
+  const highestPrice = prices?.[prices.length - 1]?.price;
+  const priceCurrency = prices?.[0]?.currency || "EUR";
+
   return (
     <div className="mx-auto max-w-6xl space-y-8">
+      <ProductJsonLd
+        name={product.name}
+        brand={brand?.name || ""}
+        description={product.description || `${brand?.name} ${product.name} nicotine pouch review.`}
+        slug={product.slug}
+        flavor={product.flavor}
+        strengthMg={product.strength_mg}
+        avgOverall={product.avg_overall}
+        reviewCount={product.review_count}
+        siteUrl={siteUrl}
+        lowestPrice={lowestPrice}
+        highestPrice={highestPrice}
+        currency={priceCurrency}
+      />
+      <BreadcrumbJsonLd
+        siteUrl={siteUrl}
+        items={[
+          { name: "Home", href: "/" },
+          { name: "Pouches", href: "/pouches" },
+          { name: brand?.name || "", href: `/brands/${brand?.slug}` },
+          { name: product.name, href: `/pouches/${product.slug}` },
+        ]}
+      />
       <div className="flex flex-wrap items-center gap-2 text-sm text-white/42">
         <Link href="/pouches" className="transition hover:text-white">Pouches</Link>
         <span>/</span>
