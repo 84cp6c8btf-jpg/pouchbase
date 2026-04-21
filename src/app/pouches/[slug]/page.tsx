@@ -8,6 +8,7 @@ import { Zap, Droplets, Ruler, Package } from "lucide-react";
 import type { Metadata } from "next";
 import type { RelationResult } from "@/lib/types";
 import Link from "next/link";
+import { ProductArtwork } from "@/components/ProductArtwork";
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -69,14 +70,17 @@ export default async function ProductPage({ params }: Props) {
       {/* Product Header */}
       <div className="bg-card border border-border rounded-2xl p-6 sm:p-8 mb-8">
         <div className="flex flex-col sm:flex-row gap-6">
-          {/* Product Image Placeholder */}
-          <div className="w-full sm:w-48 h-48 bg-zinc-800 rounded-xl flex items-center justify-center text-4xl shrink-0">
-            {product.image_url ? (
-              <img src={product.image_url} alt={product.name} className="w-full h-full object-cover rounded-xl" />
-            ) : (
-              "🫧"
-            )}
-          </div>
+          <ProductArtwork
+            brand={brand?.name}
+            brandSlug={brand?.slug}
+            name={product.name}
+            flavor={product.flavor}
+            flavorCategory={product.flavor_category}
+            strengthMg={product.strength_mg}
+            format={product.format}
+            imageUrl={product.image_url}
+            size="hero"
+          />
 
           <div className="flex-1">
             <p className="text-sm text-muted uppercase tracking-wide">{brand?.name}</p>

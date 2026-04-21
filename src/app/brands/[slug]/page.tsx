@@ -4,6 +4,7 @@ import { supabase } from "@/lib/supabase";
 import { ProductCard } from "@/components/ProductCard";
 import { Flame, Globe, Layers, Star } from "lucide-react";
 import type { Metadata } from "next";
+import { BrandArtwork } from "@/components/BrandArtwork";
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -68,12 +69,15 @@ export default async function BrandDetailPage({ params }: Props) {
 
       <section className="bg-card border border-border rounded-2xl p-6 sm:p-8">
         <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6">
-          <div>
-            <p className="text-sm uppercase tracking-[0.2em] text-accent mb-3">{brand.country || "Global Brand"}</p>
-            <h1 className="text-3xl sm:text-4xl font-bold mb-3">{brand.name}</h1>
-            <p className="text-muted max-w-3xl">
-              {brand.description || `${brand.name} nicotine pouches listed on PouchBase.`}
-            </p>
+          <div className="flex flex-col sm:flex-row gap-5 sm:items-center">
+            <BrandArtwork name={brand.name} slug={brand.slug} country={brand.country} size="hero" />
+            <div>
+              <p className="text-sm uppercase tracking-[0.2em] text-accent mb-3">{brand.country || "Global Brand"}</p>
+              <h1 className="text-3xl sm:text-4xl font-bold mb-3">{brand.name}</h1>
+              <p className="text-muted max-w-3xl">
+                {brand.description || `${brand.name} nicotine pouches listed on PouchBase.`}
+              </p>
+            </div>
           </div>
 
           {brand.website_url && (

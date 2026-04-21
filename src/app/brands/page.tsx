@@ -2,6 +2,7 @@ import Link from "next/link";
 import { supabase } from "@/lib/supabase";
 import { Layers, ArrowRight, Globe } from "lucide-react";
 import type { Metadata } from "next";
+import { BrandArtwork } from "@/components/BrandArtwork";
 
 export const revalidate = 60;
 export const metadata: Metadata = {
@@ -58,9 +59,12 @@ export default async function BrandsPage() {
             className="bg-card border border-border rounded-2xl p-5 hover:border-accent/50 hover:bg-card-hover transition-all group"
           >
             <div className="flex items-start justify-between gap-4 mb-4">
-              <div>
-                <p className="text-xs uppercase tracking-[0.2em] text-muted mb-2">{brand.country || "Global"}</p>
-                <h2 className="text-2xl font-semibold group-hover:text-accent transition-colors">{brand.name}</h2>
+              <div className="flex items-start gap-4">
+                <BrandArtwork name={brand.name} slug={brand.slug} country={brand.country} size="card" />
+                <div>
+                  <p className="text-xs uppercase tracking-[0.2em] text-muted mb-2">{brand.country || "Global"}</p>
+                  <h2 className="text-2xl font-semibold group-hover:text-accent transition-colors">{brand.name}</h2>
+                </div>
               </div>
               <ArrowRight className="w-5 h-5 text-muted group-hover:text-accent transition-colors shrink-0" />
             </div>

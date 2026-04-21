@@ -3,6 +3,7 @@ import { Star, MessageSquare, Zap } from "lucide-react";
 import { Product, RelationResult } from "@/lib/types";
 import { BurnMeter } from "./BurnMeter";
 import { RatingBadge } from "./RatingBadge";
+import { ProductArtwork } from "./ProductArtwork";
 
 interface ProductCardProps {
   product: Product & { brands?: RelationResult<{ name: string; slug: string }> };
@@ -16,6 +17,19 @@ export function ProductCard({ product }: ProductCardProps) {
       href={`/pouches/${product.slug}`}
       className="bg-card border border-border rounded-xl p-4 hover:border-accent/50 hover:bg-card-hover transition-all group"
     >
+      <div className="mb-4">
+        <ProductArtwork
+          brand={brand?.name}
+          brandSlug={brand?.slug}
+          name={product.name}
+          flavor={product.flavor}
+          flavorCategory={product.flavor_category}
+          strengthMg={product.strength_mg}
+          format={product.format}
+          imageUrl={product.image_url}
+        />
+      </div>
+
       {/* Top: Brand + Name */}
       <div className="mb-3">
         <p className="text-xs text-muted uppercase tracking-wide">
