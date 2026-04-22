@@ -1,0 +1,40 @@
+{
+  "brands": [
+    {
+      "name": "Fika",
+      "slug": "fika",
+      "country": "Sweden",
+      "description": "Small-format Scandinavian pouch brand focused on calm mint and citrus profiles.",
+      "websiteUrl": "fika.example.com",
+      "logoUrl": "https://cdn.example.com/pouchbase/brands/fika.png"
+    }
+  ],
+  "products": [
+    {
+      "brandSlug": "fika",
+      "name": "Calm Mint",
+      "slug": "fika-calm-mint-6mg",
+      "flavor": "Calm Mint",
+      "flavorCategory": "mint",
+      "strengthMg": "6mg",
+      "format": "slim",
+      "pouchesPerCan": 20,
+      "moisture": "normal",
+      "description": "Soft peppermint profile intended as a low-friction daily pouch."
+    },
+    {
+      "brandSlug": "zyn",
+      "name": "Cool Mint Mini 3mg",
+      "slug": "zyn-cool-mint-mini-3mg",
+      "flavor": "Cool Mint",
+      "flavorCategory": "mint",
+      "strengthMg": 3,
+      "strengthLabel": "light",
+      "format": "mini",
+      "pouchesPerCan": 20,
+      "moisture": "dry",
+      "description": "A crisp peppermint pouch for lighter daily use with a very controlled burn."
+    }
+  ]
+}
+

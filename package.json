@@ -7,7 +7,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "catalog:import": "node --env-file=.env.local scripts/catalog/import.mts",
+    "catalog:check": "node --env-file=.env.local scripts/catalog/check.mts"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.104.0",

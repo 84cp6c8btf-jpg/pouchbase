@@ -23,6 +23,7 @@ Useful checks:
 npm run typecheck
 npm run lint
 npm run build
+npm run catalog:check
 ```
 
 ## Repo Guide
@@ -31,6 +32,8 @@ npm run build
 - `src/components` — shared UI grouped by concern (`layout`, `burn`, `catalog`, `common`, `polls`, `seo`)
 - `src/lib` — shared utilities and domain logic
 - `src/lib/catalog` — burn thresholds, catalog discovery helpers, ranking logic, and shared select strings
+- `scripts/catalog` — bulk import and integrity tooling for brand/product expansion
+- `data/catalog` — sample JSON/CSV import sources
 - `public` — public assets only when actually used
 - `supabase-*.sql` — schema, seed, migration, and cleanup SQL
 
