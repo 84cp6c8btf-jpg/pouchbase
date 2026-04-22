@@ -81,6 +81,8 @@ export type FlavorCategory = "mint" | "fruit" | "coffee" | "tobacco" | "other";
 export type StrengthLabel = "light" | "normal" | "strong" | "extra-strong" | "super-strong";
 export type Format = "slim" | "mini" | "regular" | "large";
 export type Moisture = "dry" | "normal" | "moist";
+export type PollCategory = "burn" | "flavor" | "value" | "packaging";
+export type PollStatus = "draft" | "active" | "archived";
 
 export const FLAVOR_CATEGORIES: FlavorCategory[] = ["mint", "fruit", "coffee", "tobacco", "other"];
 export const STRENGTH_LABELS: StrengthLabel[] = ["light", "normal", "strong", "extra-strong", "super-strong"];

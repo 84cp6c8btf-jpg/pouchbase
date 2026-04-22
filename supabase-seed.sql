@@ -280,4 +280,50 @@ set
   description = null,
   updated_at = now();
 
+-- ============================================
+-- WEEKLY POLL
+-- ============================================
+insert into polls (slug, question, status, category, week_label, starts_at, cta_label)
+values (
+  'mint-burn-battle-2026-w17',
+  'Which burns harder?',
+  'active',
+  'burn',
+  'Week 17',
+  now(),
+  'Compare these two'
+)
+on conflict (slug) do update
+set
+  question = excluded.question,
+  status = excluded.status,
+  category = excluded.category,
+  week_label = excluded.week_label,
+  starts_at = excluded.starts_at,
+  cta_label = excluded.cta_label,
+  updated_at = now();
+
+update polls
+set status = 'archived', updated_at = now()
+where slug <> 'mint-burn-battle-2026-w17' and status = 'active';
+
+with active_poll as (
+  select id
+  from polls
+  where slug = 'mint-burn-battle-2026-w17'
+),
+option_rows as (
+  select
+    ap.id as poll_id,
+    p.id as product_id,
+    row_number() over (order by p.slug) as sort_order
+  from active_poll ap
+  join products p on p.slug in ('pablo-ice-cold-30mg', 'siberia-extremely-strong-slim')
+)
+insert into poll_options (poll_id, product_id, sort_order)
+select poll_id, product_id, sort_order
+from option_rows
+on conflict (poll_id, sort_order) do update
+set product_id = excluded.product_id;
+
 commit;

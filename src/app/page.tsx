@@ -17,6 +17,8 @@ import { BurnVsStrengthMap } from "@/components/BurnVsStrengthMap";
 import type { ProductWithBrand } from "@/lib/discovery";
 import { ReviewSignalSection } from "@/components/ReviewSignalSection";
 import { getProductsWithAnyReviews, sortProductsByAdjustedMetric } from "@/lib/intelligence";
+import { getActiveWeeklyPoll } from "@/lib/polls";
+import { WeeklyPollCard } from "@/components/WeeklyPollCard";
 
 export const metadata: Metadata = {
   alternates: {
@@ -114,12 +116,13 @@ const NAV_LINKS = [
 ];
 
 export default async function Home() {
-  const [topProducts, highestBurn, stats, burnPool, mostReviewed] = await Promise.all([
+  const [topProducts, highestBurn, stats, burnPool, mostReviewed, activePoll] = await Promise.all([
     getTopProducts(),
     getHighestBurn(),
     getStats(),
     getBurnPool(),
     getMostReviewed(),
+    getActiveWeeklyPoll(),
   ]);
 
   const burnLeader = highestBurn[0];
@@ -190,6 +193,8 @@ export default async function Home() {
           </div>
         </section>
       )}
+
+      {activePoll && <WeeklyPollCard poll={activePoll} />}
 
       {/* Quick links */}
       <section className="grid gap-3 lg:grid-cols-2 xl:grid-cols-4">
