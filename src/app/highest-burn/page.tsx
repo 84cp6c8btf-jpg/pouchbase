@@ -3,6 +3,7 @@ import { ProductCard } from "@/components/ProductCard";
 import type { Metadata } from "next";
 import { BurnMethodology } from "@/components/BurnMethodology";
 import { PageIntro } from "@/components/PageIntro";
+import { ReviewSignalSection } from "@/components/ReviewSignalSection";
 import { TrustDisclosure } from "@/components/TrustDisclosure";
 import { MIN_PUBLIC_SCORE_REVIEWS } from "@/lib/burn";
 import { BurnLadder } from "@/components/BurnLadder";
@@ -10,7 +11,11 @@ import Link from "next/link";
 import type { ProductWithBrand } from "@/lib/discovery";
 import { BurnRankSection } from "@/components/BurnRankSection";
 import { BurnVsStrengthMap } from "@/components/BurnVsStrengthMap";
-import { getBurnIntelligenceModules, sortProductsByAdjustedMetric } from "@/lib/intelligence";
+import {
+  getBurnIntelligenceModules,
+  getProductsWithAnyReviews,
+  sortProductsByAdjustedMetric,
+} from "@/lib/intelligence";
 
 export const revalidate = 60;
 export const metadata: Metadata = {
@@ -22,15 +27,24 @@ export const metadata: Metadata = {
 };
 
 export default async function HighestBurnPage() {
-  const { data: products } = await supabase
-    .from("products")
-    .select("*, brands(name, slug)")
-    .gte("review_count", MIN_PUBLIC_SCORE_REVIEWS)
-    .order("review_count", { ascending: false })
-    .limit(160);
+  const [{ data: products }, { data: reviewedProductsData }] = await Promise.all([
+    supabase
+      .from("products")
+      .select("*, brands(name, slug)")
+      .gte("review_count", MIN_PUBLIC_SCORE_REVIEWS)
+      .order("review_count", { ascending: false })
+      .limit(160),
+    supabase
+      .from("products")
+      .select("*, brands(name, slug)")
+      .gt("review_count", 0)
+      .order("review_count", { ascending: false })
+      .limit(24),
+  ]);
 
   const burnPool = (products || []) as ProductWithBrand[];
   const hottestProducts = sortProductsByAdjustedMetric(burnPool, "avg_burn", "higher").slice(0, 30);
+  const mostReviewed = getProductsWithAnyReviews((reviewedProductsData || []) as ProductWithBrand[]).slice(0, 6);
   const { modules } = getBurnIntelligenceModules(burnPool);
   const burnAboveStrength = modules.find((module) => module.key === "burn-above-strength");
   const hardButLoved = modules.find((module) => module.key === "hard-but-loved");
@@ -41,7 +55,7 @@ export default async function HighestBurnPage() {
         eyebrow="Burn Rankings"
         title="The ones that bite."
         description="Ranked by felt intensity under the lip, not just nicotine milligrams. If you want heat, start here."
-        meta={`${hottestProducts.length} products ranked by burn`}
+        meta={`${hottestProducts.length} public-score products ranked by burn`}
         actions={
           <div className="flex flex-wrap gap-2">
             <Link
@@ -105,6 +119,16 @@ export default async function HighestBurnPage() {
             As real burn scores cross the public threshold, the hardest hitters will show up here.
           </p>
         </div>
+      )}
+
+      {!hottestProducts.length && (
+        <ReviewSignalSection
+          title="Most reviewed while burn rankings build"
+          description="Useful when there is still real review activity in the catalog, but not enough public burn depth to claim a proper leaderboard yet."
+          products={mostReviewed}
+          href="/pouches"
+          hrefLabel="Browse all pouches"
+        />
       )}
     </div>
   );

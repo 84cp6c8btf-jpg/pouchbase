@@ -6,9 +6,11 @@ import { Product, FLAVOR_CATEGORIES } from "@/lib/types";
 import { ProductCard } from "@/components/ProductCard";
 import { Flame, Search, SlidersHorizontal, X } from "lucide-react";
 import { PageIntro } from "@/components/PageIntro";
-import { MIN_PUBLIC_SCORE_REVIEWS } from "@/lib/burn";
+import { MIN_PUBLIC_SCORE_REVIEWS, getScoreState } from "@/lib/burn";
+import { compareProductsByReviewSignal } from "@/lib/intelligence";
 
-type SortOption = "overall" | "burn" | "strength" | "reviews" | "newest";
+type SortOption = "overall" | "burn" | "strength" | "reviews" | "newest" | "name";
+type SignalFilter = "all" | "public" | "early" | "none";
 
 export function PouchesPageClient() {
   const [products, setProducts] = useState<(Product & { brands: { name: string; slug: string } })[]>([]);
@@ -18,7 +20,8 @@ export function PouchesPageClient() {
   const [selectedBrand, setSelectedBrand] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedBurnMin, setSelectedBurnMin] = useState(0);
-  const [sortBy, setSortBy] = useState<SortOption>("overall");
+  const [selectedSignal, setSelectedSignal] = useState<SignalFilter>("all");
+  const [sortBy, setSortBy] = useState<SortOption>("reviews");
   const [showFilters, setShowFilters] = useState(false);
 
   useEffect(() => {
@@ -37,29 +40,18 @@ export function PouchesPageClient() {
       if (selectedBurnMin > 0) {
         query = query.gte("avg_burn", selectedBurnMin);
       }
+      if (selectedSignal === "public") {
+        query = query.gte("review_count", MIN_PUBLIC_SCORE_REVIEWS);
+      } else if (selectedSignal === "early") {
+        query = query.gt("review_count", 0).lt("review_count", MIN_PUBLIC_SCORE_REVIEWS);
+      } else if (selectedSignal === "none") {
+        query = query.eq("review_count", 0);
+      }
       if (search) {
         query = query.or(`name.ilike.%${search}%,flavor.ilike.%${search}%`);
       }
 
-      switch (sortBy) {
-        case "overall":
-          query = query.order("avg_overall", { ascending: false });
-          break;
-        case "burn":
-          query = query.order("avg_burn", { ascending: false });
-          break;
-        case "strength":
-          query = query.order("strength_mg", { ascending: false });
-          break;
-        case "reviews":
-          query = query.order("review_count", { ascending: false });
-          break;
-        case "newest":
-          query = query.order("created_at", { ascending: false });
-          break;
-      }
-
-      const { data } = await query.limit(50);
+      const { data } = await query.limit(180);
 
       if (ignore) return;
 
@@ -72,7 +64,7 @@ export function PouchesPageClient() {
     return () => {
       ignore = true;
     };
-  }, [search, selectedBrand, selectedBurnMin, selectedCategory, sortBy]);
+  }, [search, selectedBrand, selectedBurnMin, selectedCategory, selectedSignal]);
 
   useEffect(() => {
     async function fetchBrands() {
@@ -87,18 +79,68 @@ export function PouchesPageClient() {
     setSelectedBrand("");
     setSelectedCategory("");
     setSelectedBurnMin(0);
-    setSortBy("overall");
+    setSelectedSignal("all");
+    setSortBy("reviews");
   };
 
-  const hasActiveFilters = Boolean(selectedBrand || selectedCategory || selectedBurnMin > 0 || search);
+  const hasActiveFilters = Boolean(
+    selectedBrand || selectedCategory || selectedBurnMin > 0 || search || selectedSignal !== "all"
+  );
+  const sortedProducts = [...products].sort((left, right) => {
+    if (sortBy === "reviews") {
+      return compareProductsByReviewSignal(left, right);
+    }
+
+    if (sortBy === "overall") {
+      const leftState = getScoreState(left.review_count);
+      const rightState = getScoreState(right.review_count);
+      if (leftState !== rightState) {
+        const stateWeight = { none: 0, early: 1, public: 2 } as const;
+        return stateWeight[rightState] - stateWeight[leftState];
+      }
+      if (leftState === "public" && right.avg_overall !== left.avg_overall) {
+        return right.avg_overall - left.avg_overall;
+      }
+      return compareProductsByReviewSignal(left, right);
+    }
+
+    if (sortBy === "burn") {
+      const leftState = getScoreState(left.review_count);
+      const rightState = getScoreState(right.review_count);
+      if (leftState !== rightState) {
+        const stateWeight = { none: 0, early: 1, public: 2 } as const;
+        return stateWeight[rightState] - stateWeight[leftState];
+      }
+      if (leftState === "public" && right.avg_burn !== left.avg_burn) {
+        return right.avg_burn - left.avg_burn;
+      }
+      return compareProductsByReviewSignal(left, right);
+    }
+
+    if (sortBy === "strength") {
+      return right.strength_mg - left.strength_mg || left.name.localeCompare(right.name);
+    }
+
+    if (sortBy === "newest") {
+      return new Date(right.created_at).getTime() - new Date(left.created_at).getTime();
+    }
+
+    return left.name.localeCompare(right.name);
+  });
+  const publicCount = products.filter((product) => getScoreState(product.review_count) === "public").length;
+  const earlyCount = products.filter((product) => getScoreState(product.review_count) === "early").length;
 
   return (
     <div className="space-y-5">
       <PageIntro
         eyebrow="Directory"
         title="Find your next pouch."
-        description="Search by name or flavor, filter by brand and felt burn, and sort the catalog around the signals that matter."
-        meta={loading ? "Refreshing catalog..." : `${products.length} pouch${products.length === 1 ? "" : "es"} shown`}
+        description="Search by name or flavor, filter by brand and signal state, and compare the catalog on product facts first while real community ratings build."
+        meta={
+          loading
+            ? "Refreshing catalog..."
+            : `${products.length} shown · ${publicCount} public score${publicCount === 1 ? "" : "s"} · ${earlyCount} early signal${earlyCount === 1 ? "" : "s"}`
+        }
       />
 
       <section className="rounded-xl border border-white/8 bg-card p-4 sm:p-5">
@@ -123,11 +165,12 @@ export function PouchesPageClient() {
                 onChange={(e) => setSortBy(e.target.value as SortOption)}
                 className="pb-input px-3 py-2.5 text-sm"
               >
-                <option value="overall">Highest rated</option>
-                <option value="burn">Highest burn</option>
-                <option value="strength">Strongest (mg)</option>
                 <option value="reviews">Most reviewed</option>
+                <option value="overall">Highest rated (public only first)</option>
+                <option value="burn">Highest burn (public only first)</option>
+                <option value="strength">Strongest (mg)</option>
                 <option value="newest">Newest</option>
+                <option value="name">Name A-Z</option>
               </select>
             </label>
 
@@ -147,7 +190,7 @@ export function PouchesPageClient() {
           </div>
         </div>
 
-        <div className={`${showFilters ? "grid" : "hidden"} mt-4 gap-3 md:grid md:grid-cols-3`}>
+        <div className={`${showFilters ? "grid" : "hidden"} mt-4 gap-3 md:grid md:grid-cols-4`}>
           <label className="block">
             <span className="mb-1.5 block text-xs uppercase tracking-[0.14em] text-white/42">Brand</span>
             <select
@@ -181,6 +224,20 @@ export function PouchesPageClient() {
           </label>
 
           <label className="block">
+            <span className="mb-1.5 block text-xs uppercase tracking-[0.14em] text-white/42">Signal</span>
+            <select
+              value={selectedSignal}
+              onChange={(e) => setSelectedSignal(e.target.value as SignalFilter)}
+              className="pb-input px-3 py-2.5 text-sm"
+            >
+              <option value="all">Any signal level</option>
+              <option value="public">Public scores only</option>
+              <option value="early">Early signals only</option>
+              <option value="none">No ratings yet</option>
+            </select>
+          </label>
+
+          <label className="block">
             <span className="mb-1.5 flex items-center gap-1.5 text-xs uppercase tracking-[0.14em] text-white/42">
               <Flame className="h-3 w-3 text-accent" />
               Min burn
@@ -203,6 +260,7 @@ export function PouchesPageClient() {
           <div className="flex flex-wrap gap-1.5">
             {selectedCategory && <span className="pb-tag-soft">{selectedCategory}</span>}
             {selectedBrand && <span className="pb-tag-soft">brand filtered</span>}
+            {selectedSignal !== "all" && <span className="pb-tag-soft">{selectedSignal} signal</span>}
             {selectedBurnMin > 0 && <span className="pb-tag-soft">burn {selectedBurnMin}+</span>}
             {search && <span className="pb-tag-soft">&quot;{search}&quot;</span>}
             {hasActiveFilters && (
@@ -217,7 +275,7 @@ export function PouchesPageClient() {
           </div>
 
           <p className="text-xs leading-6 text-white/40">
-            Browse by real community data where it exists, not retailer placement. Public scores appear after {MIN_PUBLIC_SCORE_REVIEWS} structured reviews.
+            Burn and rating sorts prioritize public-score products first. Unrated products stay useful through flavor, format, strength, and live retailer context where available.
           </p>
         </div>
       </section>
@@ -232,9 +290,9 @@ export function PouchesPageClient() {
               />
             ))}
           </div>
-        ) : products.length > 0 ? (
+        ) : sortedProducts.length > 0 ? (
           <div className="grid gap-3 sm:grid-cols-2 2xl:grid-cols-3">
-            {products.map((product) => (
+            {sortedProducts.map((product) => (
               <ProductCard key={product.id} product={product} />
             ))}
           </div>

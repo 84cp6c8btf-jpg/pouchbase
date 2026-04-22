@@ -15,7 +15,8 @@ import { TrustDisclosure } from "@/components/TrustDisclosure";
 import { MIN_PUBLIC_SCORE_REVIEWS } from "@/lib/burn";
 import { BurnVsStrengthMap } from "@/components/BurnVsStrengthMap";
 import type { ProductWithBrand } from "@/lib/discovery";
-import { sortProductsByAdjustedMetric } from "@/lib/intelligence";
+import { ReviewSignalSection } from "@/components/ReviewSignalSection";
+import { getProductsWithAnyReviews, sortProductsByAdjustedMetric } from "@/lib/intelligence";
 
 export const metadata: Metadata = {
   alternates: {
@@ -54,6 +55,17 @@ async function getBurnPool() {
     .limit(120);
 
   return (data || []) as ProductWithBrand[];
+}
+
+async function getMostReviewed() {
+  const { data } = await supabase
+    .from("products")
+    .select("*, brands(name, slug)")
+    .gt("review_count", 0)
+    .order("review_count", { ascending: false })
+    .limit(12);
+
+  return getProductsWithAnyReviews((data || []) as ProductWithBrand[]).slice(0, 6);
 }
 
 async function getStats() {
@@ -102,11 +114,12 @@ const NAV_LINKS = [
 ];
 
 export default async function Home() {
-  const [topProducts, highestBurn, stats, burnPool] = await Promise.all([
+  const [topProducts, highestBurn, stats, burnPool, mostReviewed] = await Promise.all([
     getTopProducts(),
     getHighestBurn(),
     getStats(),
     getBurnPool(),
+    getMostReviewed(),
   ]);
 
   const burnLeader = highestBurn[0];
@@ -151,7 +164,7 @@ export default async function Home() {
           </div>
           <div>
             <div className="font-display text-3xl font-bold text-white">{stats.reviews}</div>
-            <div className="text-sm text-white/40">Reviews</div>
+            <div className="text-sm text-white/40">Structured reviews</div>
           </div>
           <div>
             <div className="font-display text-3xl font-bold text-white">{stats.brands}</div>
@@ -165,7 +178,7 @@ export default async function Home() {
         <section className="rounded-xl border border-white/8 bg-[#111114] p-5 sm:p-6">
           <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
             <div>
-              <p className="text-xs text-white/35 uppercase tracking-wider">Current Burn Leader</p>
+              <p className="text-xs text-white/35 uppercase tracking-wider">Current public burn leader</p>
               <h2 className="mt-1 font-display text-2xl font-bold text-white">
                 {burnLeader.name}
               </h2>
@@ -209,6 +222,14 @@ export default async function Home() {
         description="Some products punch harder than their milligrams suggest, while others stay smoother than nearby-strength peers. This map makes that visible fast."
       />
 
+      <ReviewSignalSection
+        title="Most reviewed so far"
+        description="Separate from rankings. This is the earliest real community activity in the catalog, useful when public-score leaderboards are still thin."
+        products={mostReviewed}
+        href="/pouches"
+        hrefLabel="Browse the full directory"
+      />
+
       {topProducts.length === 0 && highestBurn.length === 0 && (
         <section className="rounded-xl border border-white/8 bg-card p-5 sm:p-6">
           <div className="max-w-2xl">
@@ -233,7 +254,7 @@ export default async function Home() {
             <div>
               <h2 className="font-display text-3xl font-bold text-white sm:text-4xl">Top Rated</h2>
               <p className="mt-2 text-white/45">
-                The pouches people keep coming back to, sorted by overall score.
+                The strongest public overall scores once enough real structured review depth exists.
               </p>
             </div>
             <Link
@@ -258,7 +279,7 @@ export default async function Home() {
             <div>
               <h2 className="font-display text-3xl font-bold text-white sm:text-4xl">Highest Burn</h2>
               <p className="mt-2 text-white/45">
-                Burn measures the actual lip sting — not just nicotine strength. These hit hardest.
+                Burn measures actual lip sting, not just nicotine strength. These are the current public leaders.
               </p>
             </div>
             <Link

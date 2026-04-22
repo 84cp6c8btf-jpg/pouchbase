@@ -96,7 +96,7 @@ export function ProductCard({ product }: ProductCardProps) {
           </p>
         ) : (
           <p className="mt-auto border-t border-white/8 pt-4 text-sm text-white/46">
-            Be the first to review this one.
+            No community ratings yet. Use flavor, format, and strength to compare it for now.
           </p>
         )}
       </div>

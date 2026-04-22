@@ -20,7 +20,7 @@ export function RelatedComparisons({ currentSlug, groups }: RelatedComparisonsPr
         <div className="text-[0.68rem] uppercase tracking-[0.18em] text-accent/85">Compare nearby</div>
         <h2 className="mt-2 font-display text-3xl font-bold text-white">Closest next steps</h2>
         <p className="mt-2 max-w-2xl text-sm leading-6 text-white/54">
-          Discovery suggestions derived from flavor family, burn distance, nicotine strength, and current public scores.
+          Discovery suggestions derived from catalog facts first, then public burn and score relationships where enough data exists.
         </p>
       </div>
 

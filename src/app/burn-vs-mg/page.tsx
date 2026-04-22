@@ -8,7 +8,7 @@ import { PageIntro } from "@/components/PageIntro";
 import { TrustDisclosure } from "@/components/TrustDisclosure";
 import { supabase } from "@/lib/supabase";
 import type { ProductWithBrand } from "@/lib/discovery";
-import { getBurnIntelligenceModules } from "@/lib/intelligence";
+import { getBurnIntelligenceModules, getPublicProducts } from "@/lib/intelligence";
 
 export const revalidate = 60;
 
@@ -30,6 +30,7 @@ export default async function BurnVsMgPage() {
 
   const products = (data || []) as ProductWithBrand[];
   const { modules, bandLeaders } = getBurnIntelligenceModules(products);
+  const publicProducts = getPublicProducts(products);
 
   return (
     <div className="space-y-6">
@@ -37,7 +38,7 @@ export default async function BurnVsMgPage() {
         eyebrow="Burn Intelligence"
         title="Where nicotine strength stops explaining the story."
         description="This view maps nicotine milligrams against felt burn so users can spot unusually harsh products, smoother alternatives, and the best-rated pouches inside each burn lane."
-        meta={`${products.length} products scanned for public-score burn signals`}
+        meta={`${publicProducts.length} products with public burn signals`}
         actions={
           <div className="flex flex-wrap gap-2">
             <Link

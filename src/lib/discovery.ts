@@ -1,7 +1,9 @@
 import type { Product, RelationResult } from "@/lib/types";
 import {
   formatBurnRating,
+  formatReviewCount,
   getBurnLabel,
+  getScoreState,
   hasPublicScore,
 } from "@/lib/burn";
 
@@ -99,7 +101,21 @@ export function getRelatedDiscoveryGroups(
   current: ProductWithBrand,
   products: ProductWithBrand[]
 ): DiscoveryGroup[] {
+  const allProducts = products.filter((product) => product.slug !== current.slug);
   const publicProducts = getPublicScoredProducts(products).filter((product) => product.slug !== current.slug);
+  const sortByCatalogUsefulness = (left: ProductWithBrand, right: ProductWithBrand) =>
+    right.review_count - left.review_count ||
+    Math.abs(left.strength_mg - current.strength_mg) - Math.abs(right.strength_mg - current.strength_mg) ||
+    left.name.localeCompare(right.name);
+
+  const sameFlavorFamily = allProducts
+    .filter((product) => product.flavor_category === current.flavor_category)
+    .sort(sortByCatalogUsefulness)
+    .slice(0, 3);
+
+  const nearbyStrength = allProducts
+    .sort(sortByCatalogUsefulness)
+    .slice(0, 3);
 
   const sameFlavorFamilyHigherBurn = publicProducts
     .filter(
@@ -140,43 +156,62 @@ export function getRelatedDiscoveryGroups(
     .sort((a, b) => Math.abs(b.avg_burn - current.avg_burn) - Math.abs(a.avg_burn - current.avg_burn))
     .slice(0, 3);
 
-  const sameBrandAlternatives = publicProducts
+  const sameBrandAlternatives = allProducts
     .filter((product) => product.brand_id === current.brand_id)
-    .sort((a, b) => b.avg_overall - a.avg_overall || a.avg_burn - b.avg_burn)
+    .sort(sortByCatalogUsefulness)
     .slice(0, 3);
 
-  return [
-    {
-      key: "same-flavor-higher",
-      title: "Same flavor family, higher burn",
-      description: "Useful when you like the profile but want a harder hit.",
-      products: sameFlavorFamilyHigherBurn,
-    },
-    {
-      key: "same-flavor-lower",
-      title: "Same flavor family, lower burn",
-      description: "A step down without leaving the same general flavor lane.",
-      products: sameFlavorFamilyLowerBurn,
-    },
-    {
-      key: "similar-burn-better-rating",
-      title: "Similar burn, better rating",
-      description: "Close in felt intensity, but stronger on community overall score.",
-      products: similarBurnBetterRating,
-    },
-    {
-      key: "same-mg-different-burn",
-      title: "Same mg, different burn",
-      description: "Useful for seeing how recipe and pouch construction change felt harshness.",
-      products: sameMgDifferentBurn,
-    },
+  const groups: DiscoveryGroup[] = [
     {
       key: "same-brand",
       title: "Same brand alternatives",
-      description: "Nearby options within the same brand family.",
+      description: "Useful when you want nearby options within the same brand family even before ratings mature.",
       products: sameBrandAlternatives,
     },
-  ].filter((group) => group.products.length > 0);
+    {
+      key: "same-flavor-family",
+      title: "Same flavor family",
+      description: "A fact-led starting point when you want to stay in the same general flavor lane.",
+      products: sameFlavorFamily,
+    },
+    {
+      key: "nearby-strength",
+      title: "Nearby in strength",
+      description: "Helpful when you are stepping up or down in nicotine before community burn data is fully built out.",
+      products: nearbyStrength,
+    },
+  ];
+
+  if (hasPublicScore(current.review_count)) {
+    groups.push(
+      {
+        key: "same-flavor-higher",
+        title: "Same flavor family, higher burn",
+        description: "Useful when you like the profile but want a harder hit.",
+        products: sameFlavorFamilyHigherBurn,
+      },
+      {
+        key: "same-flavor-lower",
+        title: "Same flavor family, lower burn",
+        description: "A step down without leaving the same general flavor lane.",
+        products: sameFlavorFamilyLowerBurn,
+      },
+      {
+        key: "similar-burn-better-rating",
+        title: "Similar burn, better rating",
+        description: "Close in felt intensity, but stronger on community overall score.",
+        products: similarBurnBetterRating,
+      },
+      {
+        key: "same-mg-different-burn",
+        title: "Same mg, different burn",
+        description: "Useful for seeing how recipe and pouch construction change felt harshness.",
+        products: sameMgDifferentBurn,
+      }
+    );
+  }
+
+  return groups.filter((group) => group.products.length > 0);
 }
 
 export function getStrengthBurnContext(
@@ -257,6 +292,8 @@ export function getCompareUrl(leftSlug: string, rightSlug?: string) {
 }
 
 export function getBurnDisplay(product: ProductWithBrand) {
-  if (!hasPublicScore(product.review_count)) return "Early signal";
+  const state = getScoreState(product.review_count);
+  if (state === "none") return "No community burn signal yet";
+  if (state === "early") return `${formatReviewCount(product.review_count)} · early burn signal`;
   return `${formatBurnRating(product.avg_burn)} · ${getBurnLabel(product.avg_burn)}`;
 }

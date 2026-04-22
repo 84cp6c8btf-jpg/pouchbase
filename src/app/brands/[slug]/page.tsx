@@ -6,6 +6,8 @@ import { Flame, Globe, Layers, Star, Zap } from "lucide-react";
 import type { Metadata } from "next";
 import { BrandArtwork } from "@/components/BrandArtwork";
 import { hasPublicScore, MIN_PUBLIC_SCORE_REVIEWS } from "@/lib/burn";
+import { sortProductsByReviewSignal } from "@/lib/intelligence";
+import type { ProductWithBrand } from "@/lib/discovery";
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -23,7 +25,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   return {
     title: `${brand.name} Nicotine Pouches — PouchBase`,
-    description: brand.description || `Browse ${brand.name} nicotine pouches, ratings, burn scores, and pricing.`,
+    description:
+      brand.description ||
+      `Browse ${brand.name} nicotine pouches, product facts, public scores where available, and retailer pricing where available.`,
     alternates: {
       canonical: `/brands/${slug}`,
     },
@@ -45,22 +49,27 @@ export default async function BrandDetailPage({ params }: Props) {
     .from("products")
     .select("*, brands(name, slug)")
     .eq("brand_id", brand.id)
-    .order("avg_overall", { ascending: false });
+    .order("review_count", { ascending: false })
+    .order("strength_mg", { ascending: false });
 
-  const brandProducts = products || [];
+  const brandProducts = sortProductsByReviewSignal((products || []) as ProductWithBrand[]);
   const reviewedProducts = brandProducts.filter((product) => hasPublicScore(product.review_count));
   const totalReviews = reviewedProducts.reduce((sum, product) => sum + product.review_count, 0);
+  const loggedReviews = brandProducts.reduce((sum, product) => sum + product.review_count, 0);
   const avgOverall =
     totalReviews > 0
       ? reviewedProducts.reduce((sum, product) => sum + Number(product.avg_overall || 0) * product.review_count, 0) / totalReviews
-      : 0;
+      : null;
   const avgBurn =
     totalReviews > 0
       ? reviewedProducts.reduce((sum, product) => sum + Number(product.avg_burn || 0) * product.review_count, 0) / totalReviews
-      : 0;
+      : null;
   const strongestProduct = [...brandProducts].sort(
     (a, b) => b.strength_mg - a.strength_mg || b.review_count - a.review_count
   )[0];
+  const mostReviewedProduct = [...brandProducts]
+    .filter((product) => product.review_count > 0)
+    .sort((a, b) => b.review_count - a.review_count || b.strength_mg - a.strength_mg)[0];
   const bestRatedProduct = [...reviewedProducts].sort(
     (a, b) => b.avg_overall - a.avg_overall || b.review_count - a.review_count
   )[0];
@@ -86,7 +95,7 @@ export default async function BrandDetailPage({ params }: Props) {
               {brand.name}
             </h1>
             <p className="mt-4 max-w-2xl text-base leading-8 text-white/55">
-              {brand.description || `${brand.name} nicotine pouches listed on PouchBase.`}
+              {brand.description || `${brand.name} nicotine pouch catalog tracked on PouchBase.`}
             </p>
             <p className="mt-3 text-sm text-white/46">
               Brand-level averages only reflect products with {MIN_PUBLIC_SCORE_REVIEWS}+ structured reviews.
@@ -115,11 +124,17 @@ export default async function BrandDetailPage({ params }: Props) {
                   Best rated: {bestRatedProduct.name} ({bestRatedProduct.avg_overall.toFixed(1)})
                 </span>
               )}
+              {!bestRatedProduct && mostReviewedProduct && (
+                <span className="inline-flex items-center gap-2">
+                  <Star className="h-4 w-4 text-accent" />
+                  Most reviewed: {mostReviewedProduct.name} ({mostReviewedProduct.review_count})
+                </span>
+              )}
             </div>
           </div>
         </div>
 
-        <div className="grid gap-4 border-t border-white/8 pt-4 sm:grid-cols-3 lg:grid-cols-1 lg:border-t-0 lg:border-l lg:pl-6 lg:pt-0">
+        <div className="grid gap-4 border-t border-white/8 pt-4 sm:grid-cols-2 lg:grid-cols-2 lg:border-t-0 lg:border-l lg:pl-6 lg:pt-0">
           <div>
             <div className="text-[0.66rem] uppercase tracking-[0.16em] text-white/38">Products</div>
             <div className="mt-1 inline-flex items-center gap-2 font-display text-4xl font-bold text-white">
@@ -128,17 +143,24 @@ export default async function BrandDetailPage({ params }: Props) {
             </div>
           </div>
           <div>
+            <div className="text-[0.66rem] uppercase tracking-[0.16em] text-white/38">Reviews Logged</div>
+            <div className="mt-1 inline-flex items-center gap-2 font-display text-4xl font-bold text-white">
+              <Star className="h-5 w-5 text-accent" />
+              {loggedReviews}
+            </div>
+          </div>
+          <div>
             <div className="text-[0.66rem] uppercase tracking-[0.16em] text-white/38">Average Overall</div>
             <div className="mt-1 inline-flex items-center gap-2 font-display text-4xl font-bold text-emerald-200">
               <Star className="h-5 w-5 text-accent" />
-              {avgOverall ? avgOverall.toFixed(1) : "N/A"}
+              {avgOverall ? avgOverall.toFixed(1) : "Building"}
             </div>
           </div>
           <div>
             <div className="text-[0.66rem] uppercase tracking-[0.16em] text-white/38">Average Burn</div>
             <div className="mt-1 inline-flex items-center gap-2 font-display text-4xl font-bold text-white">
               <Flame className="h-5 w-5 text-accent" />
-              {avgBurn ? avgBurn.toFixed(1) : "N/A"}
+              {avgBurn ? avgBurn.toFixed(1) : "Building"}
             </div>
           </div>
         </div>
@@ -149,7 +171,10 @@ export default async function BrandDetailPage({ params }: Props) {
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <div>
               <div className="text-[0.66rem] uppercase tracking-[0.16em] text-white/38">Catalog</div>
-              <h2 className="mt-1 font-display text-4xl font-bold text-white">All {brand.name} pouches</h2>
+              <h2 className="mt-1 font-display text-4xl font-bold text-white">All {brand.name} products</h2>
+              <p className="mt-2 text-sm leading-6 text-white/50">
+                Sorted by real review signal first, then nicotine strength, so low-data launch products still stay useful to scan.
+              </p>
             </div>
             <Link href="/pouches" className="text-sm text-white/60 transition hover:text-accent">
               Browse all pouches

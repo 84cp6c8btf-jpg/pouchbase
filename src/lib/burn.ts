@@ -87,6 +87,10 @@ export function hasPublicScore(reviewCount: number) {
   return getScoreState(reviewCount) === "public";
 }
 
+export function hasAnyReviews(reviewCount: number) {
+  return reviewCount > 0;
+}
+
 export function getReviewsNeededForPublicScore(reviewCount: number) {
   return Math.max(0, MIN_PUBLIC_SCORE_REVIEWS - reviewCount);
 }
@@ -101,4 +105,12 @@ export function getScoreStateLabel(reviewCount: number) {
 
 export function formatReviewCount(reviewCount: number) {
   return `${reviewCount} review${reviewCount === 1 ? "" : "s"}`;
+}
+
+export function getCommunitySignalLabel(reviewCount: number) {
+  const state = getScoreState(reviewCount);
+
+  if (state === "public") return "Public score";
+  if (state === "early") return "Early signal";
+  return "No ratings yet";
 }

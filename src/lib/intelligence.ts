@@ -1,9 +1,10 @@
-import { BURN_SCALE, hasPublicScore } from "@/lib/burn";
+import { BURN_SCALE, getScoreState, hasAnyReviews, hasPublicScore } from "@/lib/burn";
 import type { ProductWithBrand } from "@/lib/discovery";
 
 export const RANKING_PRIOR_REVIEW_COUNT = 5;
 export const HIGH_CONFIDENCE_REVIEW_COUNT = 6;
 export const SMOOTH_HIGH_STRENGTH_MIN_MG = 12;
+export const MIN_DISCOVERY_MODULE_PRODUCTS = 2;
 
 type RankedMetric = "avg_burn" | "avg_overall" | "avg_flavor" | "avg_longevity";
 type RankedDirection = "higher" | "lower";
@@ -57,6 +58,25 @@ export function getConfidenceWeightedScore(
 
 export function getPublicProducts(products: ProductWithBrand[]) {
   return products.filter((product) => hasPublicScore(product.review_count));
+}
+
+export function compareProductsByReviewSignal(left: ProductWithBrand, right: ProductWithBrand) {
+  const stateWeight = { none: 0, early: 1, public: 2 } as const;
+  const leftState = stateWeight[getScoreState(left.review_count)];
+  const rightState = stateWeight[getScoreState(right.review_count)];
+
+  if (rightState !== leftState) return rightState - leftState;
+  if (right.review_count !== left.review_count) return right.review_count - left.review_count;
+  if (right.strength_mg !== left.strength_mg) return right.strength_mg - left.strength_mg;
+  return left.name.localeCompare(right.name);
+}
+
+export function sortProductsByReviewSignal(products: ProductWithBrand[]) {
+  return [...products].sort(compareProductsByReviewSignal);
+}
+
+export function getProductsWithAnyReviews(products: ProductWithBrand[]) {
+  return sortProductsByReviewSignal(products).filter((product) => hasAnyReviews(product.review_count));
 }
 
 export function sortProductsByAdjustedMetric(
@@ -214,7 +234,7 @@ function getBurnBandLeaders(products: ProductWithBrand[]) {
       description: `Best-rated products in the ${band.label.toLowerCase()} burn band.`,
       products: takeTop(sortProductsByAdjustedMetric(candidates, "avg_overall", "higher"), 3),
     };
-  }).filter((module) => module.products.length > 0);
+  }).filter((module) => module.products.length >= MIN_DISCOVERY_MODULE_PRODUCTS);
 }
 
 export function getBurnIntelligenceModules(products: ProductWithBrand[]) {
@@ -310,7 +330,7 @@ export function getBurnIntelligenceModules(products: ProductWithBrand[]) {
   ];
 
   return {
-    modules: modules.filter((module) => module.products.length > 0),
+    modules: modules.filter((module) => module.products.length >= MIN_DISCOVERY_MODULE_PRODUCTS),
     bandLeaders: getBurnBandLeaders(products),
   };
 }

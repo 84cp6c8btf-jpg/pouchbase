@@ -57,6 +57,7 @@ export function ProductBurnSummary({
               <p className="mt-3 text-sm leading-7 text-white/56">
                 This pouch has {formatReviewCount(reviewCount)} so far. PouchBase publishes a formal
                 burn score after {MIN_PUBLIC_SCORE_REVIEWS} structured reviews to avoid false precision.
+                Until then, lean on flavor, format, strength, and price context first.
               </p>
             </>
           ) : (
@@ -66,7 +67,8 @@ export function ProductBurnSummary({
               </div>
               <p className="mt-3 text-sm leading-7 text-white/56">
                 Burn becomes public once a pouch has enough structured review data to say something
-                meaningful about felt intensity.
+                meaningful about felt intensity. For now, this product page leans on the factual
+                product record instead of pretending there is settled community consensus.
               </p>
             </>
           )}

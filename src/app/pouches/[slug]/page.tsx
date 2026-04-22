@@ -14,6 +14,7 @@ import { BurnMethodology } from "@/components/BurnMethodology";
 import { TrustDisclosure } from "@/components/TrustDisclosure";
 import { hasPublicScore } from "@/lib/burn";
 import { ProductBurnSummary } from "@/components/ProductBurnSummary";
+import { ReferencePanel } from "@/components/ReferencePanel";
 import {
   getCompareUrl,
   getRelatedDiscoveryGroups,
@@ -218,13 +219,40 @@ export default async function ProductPage({ params }: Props) {
         <TrustDisclosure context="product" />
       </section>
 
-      <BurnLadder
-        products={ladderProducts}
-        currentSlug={product.slug}
-        compact
-        title="Step down or step up in burn"
-        description="Nearest public-score alternatives above and below this pouch by felt intensity."
-      />
+      {publicScoreVisible ? (
+        <BurnLadder
+          products={ladderProducts}
+          currentSlug={product.slug}
+          compact
+          title="Step down or step up in burn"
+          description="Nearest public-score alternatives above and below this pouch by felt intensity."
+        />
+      ) : (
+        <ReferencePanel
+          eyebrow="Low-Data Mode"
+          title="Use the product record while ratings build."
+          columns={3}
+          items={[
+            {
+              icon: Zap,
+              label: "Strength and flavor first",
+              description: `${product.strength_mg}mg${product.strength_label ? ` · ${product.strength_label}` : ""} with ${product.flavor} flavor${product.flavor_category ? ` in the ${product.flavor_category} lane` : ""}.`,
+            },
+            {
+              icon: Ruler,
+              label: "Format and can details",
+              description: `${product.format ? `${product.format} format` : "Format not listed"}${product.pouches_per_can ? ` · ${product.pouches_per_can} per can` : ""}${product.moisture ? ` · ${product.moisture} moisture` : ""}.`,
+            },
+            {
+              icon: Package,
+              label: "Price context stays separate",
+              description: lowestPrice
+                ? `Current external offers start at ${priceCurrency} ${lowestPrice.toFixed(2)}. Retail pricing never changes ranking or burn status.`
+                : "No live retailer offer is listed right now, so compare this pouch by product facts and nearby alternatives first.",
+            },
+          ]}
+        />
+      )}
 
       <RelatedComparisons currentSlug={product.slug} groups={comparisonGroups} />
 

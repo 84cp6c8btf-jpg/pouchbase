@@ -2,9 +2,10 @@ import { supabase } from "@/lib/supabase";
 import { ProductCard } from "@/components/ProductCard";
 import type { Metadata } from "next";
 import { PageIntro } from "@/components/PageIntro";
+import { ReviewSignalSection } from "@/components/ReviewSignalSection";
 import { TrustDisclosure } from "@/components/TrustDisclosure";
 import { MIN_PUBLIC_SCORE_REVIEWS } from "@/lib/burn";
-import { sortProductsByAdjustedMetric } from "@/lib/intelligence";
+import { getProductsWithAnyReviews, sortProductsByAdjustedMetric } from "@/lib/intelligence";
 import type { ProductWithBrand } from "@/lib/discovery";
 
 export const revalidate = 60;
@@ -17,18 +18,27 @@ export const metadata: Metadata = {
 };
 
 export default async function TopRatedPage() {
-  const { data: products } = await supabase
-    .from("products")
-    .select("*, brands(name, slug)")
-    .gte("review_count", MIN_PUBLIC_SCORE_REVIEWS)
-    .order("review_count", { ascending: false })
-    .limit(160);
+  const [{ data: products }, { data: reviewedProductsData }] = await Promise.all([
+    supabase
+      .from("products")
+      .select("*, brands(name, slug)")
+      .gte("review_count", MIN_PUBLIC_SCORE_REVIEWS)
+      .order("review_count", { ascending: false })
+      .limit(160),
+    supabase
+      .from("products")
+      .select("*, brands(name, slug)")
+      .gt("review_count", 0)
+      .order("review_count", { ascending: false })
+      .limit(24),
+  ]);
 
   const rankedProducts = sortProductsByAdjustedMetric(
     (products || []) as ProductWithBrand[],
     "avg_overall",
     "higher"
   ).slice(0, 30);
+  const mostReviewed = getProductsWithAnyReviews((reviewedProductsData || []) as ProductWithBrand[]).slice(0, 6);
 
   return (
     <div className="space-y-6">
@@ -36,7 +46,7 @@ export default async function TopRatedPage() {
         eyebrow="Rankings"
         title="The best pouches right now."
         description="Ranked by overall community score with a light review-depth weighting, so better-tested products hold more authority when scores are close."
-        meta={`${rankedProducts.length} products ranked`}
+        meta={`${rankedProducts.length} public-score products ranked`}
       />
 
       <TrustDisclosure context="ranking" />
@@ -54,6 +64,16 @@ export default async function TopRatedPage() {
             This page turns on once products reach the real-review threshold for public scoring.
           </p>
         </div>
+      )}
+
+      {!rankedProducts.length && (
+        <ReviewSignalSection
+          title="Most reviewed while rankings build"
+          description="These are the products with the strongest real review activity so far. They are not the same thing as top rated."
+          products={mostReviewed}
+          href="/pouches"
+          hrefLabel="Browse all pouches"
+        />
       )}
     </div>
   );
