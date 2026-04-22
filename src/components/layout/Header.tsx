@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Flame, Menu, Search, X } from "lucide-react";
+import { Flame, Menu, Search, User, X } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { supabase } from "@/lib/supabase";
 import { usePathname } from "next/navigation";
@@ -10,6 +10,7 @@ const NAV_ITEMS = [
   { href: "/pouches", label: "Browse" },
   { href: "/brands", label: "Brands" },
   { href: "/top-rated", label: "Top Rated" },
+  { href: "/compare", label: "Compare" },
   { href: "/highest-burn", label: "Burn", highlight: true },
 ];
 
@@ -95,6 +96,17 @@ export function Header() {
           </Link>
           {userEmail ? (
             <div className="flex items-center gap-3">
+              <Link
+                href="/my-reviews"
+                className={`grid h-9 w-9 place-items-center rounded-lg border transition ${
+                  isActive(pathname, "/my-reviews")
+                    ? "border-accent/40 text-accent"
+                    : "border-white/8 text-white/50 hover:text-white"
+                }`}
+                title="My Reviews"
+              >
+                <User className="h-4 w-4" />
+              </Link>
               <span className="max-w-40 truncate text-xs text-white/40">{userEmail}</span>
               <button
                 type="button"
@@ -145,14 +157,28 @@ export function Header() {
               );
             })}
             {userEmail ? (
-              <button
-                type="button"
-                onClick={handleSignOut}
-                disabled={signingOut}
-                className="mt-2 rounded-lg bg-accent px-3 py-2.5 text-sm font-semibold text-black disabled:opacity-60"
-              >
-                {signingOut ? "..." : "Sign Out"}
-              </button>
+              <>
+                <Link
+                  href="/my-reviews"
+                  className={`rounded-lg px-3 py-2.5 text-sm transition ${
+                    isActive(pathname, "/my-reviews") ? "bg-white/8 text-white" : "text-white/55"
+                  }`}
+                  onClick={() => setMobileOpen(false)}
+                >
+                  <span className="inline-flex items-center gap-2">
+                    <User className="h-3.5 w-3.5" />
+                    My Reviews
+                  </span>
+                </Link>
+                <button
+                  type="button"
+                  onClick={handleSignOut}
+                  disabled={signingOut}
+                  className="mt-2 rounded-lg bg-accent px-3 py-2.5 text-sm font-semibold text-black disabled:opacity-60"
+                >
+                  {signingOut ? "..." : "Sign Out"}
+                </button>
+              </>
             ) : (
               <Link
                 href={loginHref}

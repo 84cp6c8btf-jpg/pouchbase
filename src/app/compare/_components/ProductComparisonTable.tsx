@@ -134,52 +134,84 @@ export function ProductComparisonTable({
   return (
     <div className="space-y-5">
       <section className="grid gap-4 lg:grid-cols-[1fr_5rem_1fr]">
-        {[left, right].map((product, index) => {
-          const brand = index === 0 ? leftBrand : rightBrand;
-          const compareTarget = index === 0 ? right.slug : left.slug;
-          return (
-            <div key={product.id} className="rounded-xl border border-white/8 bg-card p-5">
-              <div className="flex items-start justify-between gap-3">
-                <div className="min-w-0">
-                  <p className="text-[0.68rem] uppercase tracking-[0.16em] text-white/42">{brand?.name}</p>
-                  <h2 className="mt-1 font-display text-2xl font-bold text-white">{product.name}</h2>
-                </div>
-                <Link
-                  href={`/pouches/${product.slug}`}
-                  className="text-xs text-white/48 transition hover:text-accent"
-                >
-                  View
-                </Link>
-              </div>
-              <div className="mt-4">
-                <ProductArtwork
-                  brand={brand?.name}
-                  brandSlug={brand?.slug}
-                  name={product.name}
-                  flavor={product.flavor}
-                  flavorCategory={product.flavor_category}
-                  strengthMg={product.strength_mg}
-                  format={product.format}
-                  imageUrl={product.image_url}
-                />
-              </div>
-              <div className="mt-4 flex flex-wrap gap-1.5">
-                <span className="pb-tag-soft">{product.flavor}</span>
-                <span className="pb-tag-soft">{product.format}</span>
-                <span className="pb-tag-soft">{product.strength_mg}mg</span>
-              </div>
-              <Link
-                href={getCompareUrl(product.slug, compareTarget)}
-                className="mt-4 inline-flex text-sm text-white/48 transition hover:text-accent"
-              >
-                Refresh this comparison
-              </Link>
+        <div className="rounded-xl border border-white/8 bg-card p-5">
+          <div className="flex items-start justify-between gap-3">
+            <div className="min-w-0">
+              <p className="text-[0.68rem] uppercase tracking-[0.16em] text-white/42">{leftBrand?.name}</p>
+              <h2 className="mt-1 font-display text-2xl font-bold text-white">{left.name}</h2>
             </div>
-          );
-        })}
+            <Link
+              href={`/pouches/${left.slug}`}
+              className="text-xs text-white/48 transition hover:text-accent"
+            >
+              View
+            </Link>
+          </div>
+          <div className="mt-4">
+            <ProductArtwork
+              brand={leftBrand?.name}
+              brandSlug={leftBrand?.slug}
+              name={left.name}
+              flavor={left.flavor}
+              flavorCategory={left.flavor_category}
+              strengthMg={left.strength_mg}
+              format={left.format}
+              imageUrl={left.image_url}
+            />
+          </div>
+          <div className="mt-4 flex flex-wrap gap-1.5">
+            <span className="pb-tag-soft">{left.flavor}</span>
+            <span className="pb-tag-soft">{left.format}</span>
+            <span className="pb-tag-soft">{left.strength_mg}mg</span>
+          </div>
+          <Link
+            href={getCompareUrl(left.slug, right.slug)}
+            className="mt-4 inline-flex text-sm text-white/48 transition hover:text-accent"
+          >
+            Refresh this comparison
+          </Link>
+        </div>
 
         <div className="hidden items-center justify-center lg:flex">
           <div className="font-display text-3xl text-white/18">vs</div>
+        </div>
+
+        <div className="rounded-xl border border-white/8 bg-card p-5">
+          <div className="flex items-start justify-between gap-3">
+            <div className="min-w-0">
+              <p className="text-[0.68rem] uppercase tracking-[0.16em] text-white/42">{rightBrand?.name}</p>
+              <h2 className="mt-1 font-display text-2xl font-bold text-white">{right.name}</h2>
+            </div>
+            <Link
+              href={`/pouches/${right.slug}`}
+              className="text-xs text-white/48 transition hover:text-accent"
+            >
+              View
+            </Link>
+          </div>
+          <div className="mt-4">
+            <ProductArtwork
+              brand={rightBrand?.name}
+              brandSlug={rightBrand?.slug}
+              name={right.name}
+              flavor={right.flavor}
+              flavorCategory={right.flavor_category}
+              strengthMg={right.strength_mg}
+              format={right.format}
+              imageUrl={right.image_url}
+            />
+          </div>
+          <div className="mt-4 flex flex-wrap gap-1.5">
+            <span className="pb-tag-soft">{right.flavor}</span>
+            <span className="pb-tag-soft">{right.format}</span>
+            <span className="pb-tag-soft">{right.strength_mg}mg</span>
+          </div>
+          <Link
+            href={getCompareUrl(right.slug, left.slug)}
+            className="mt-4 inline-flex text-sm text-white/48 transition hover:text-accent"
+          >
+            Refresh this comparison
+          </Link>
         </div>
       </section>
 
