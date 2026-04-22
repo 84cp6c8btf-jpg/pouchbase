@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { supabase } from "@/lib/supabase";
-import { ArrowRight, Globe, Layers } from "lucide-react";
+import { ArrowRight, Globe } from "lucide-react";
 import type { Metadata } from "next";
 import { BrandArtwork } from "@/components/BrandArtwork";
 
@@ -41,62 +41,49 @@ export default async function BrandsPage() {
     .sort((a, b) => b.productCount - a.productCount || a.name.localeCompare(b.name));
 
   return (
-    <div className="space-y-8">
-      <section className="pb-editorial-panel px-6 py-7 sm:px-8 sm:py-8">
-        <div className="relative z-10">
-          <div className="pb-kicker mb-5">
-            <Layers className="h-3.5 w-3.5" />
-            All Brands
-          </div>
-          <h1 className="font-display text-[clamp(2.8rem,6vw,5.6rem)] font-bold leading-[0.92] text-white">
-            Every brand we track.
-          </h1>
-          <p className="mt-4 max-w-3xl text-base leading-8 text-white/60">
-            From ZYN and VELO to Pablo and Siberia. Pick a brand to see all their pouches,
-            ratings, and reviews in one place.
-          </p>
-        </div>
+    <div className="space-y-6">
+      <section className="pt-2 sm:pt-6">
+        <h1 className="font-display text-[clamp(2.5rem,5vw,4.5rem)] font-bold leading-[0.92] text-white">
+          Every brand we track.
+        </h1>
+        <p className="mt-3 max-w-xl text-base leading-relaxed text-white/45">
+          From ZYN and VELO to Pablo and Siberia. Pick a brand to see all their pouches,
+          ratings, and reviews in one place.
+        </p>
       </section>
 
-      <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+      <section className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
         {enrichedBrands.map((brand) => (
           <Link
             key={brand.id}
             href={`/brands/${brand.slug}`}
-            className="pb-data-card group p-5 transition duration-300 hover:-translate-y-1 hover:border-accent/35"
+            className="group flex items-start gap-4 rounded-xl border border-white/8 bg-[#111114] p-5 transition hover:border-white/16"
           >
-            <div className="mb-5 flex items-start justify-between gap-4">
-              <div className="flex items-start gap-4">
-                <BrandArtwork name={brand.name} slug={brand.slug} country={brand.country} size="card" />
+            <BrandArtwork name={brand.name} slug={brand.slug} country={brand.country} size="card" />
+            <div className="min-w-0 flex-1">
+              <div className="flex items-start justify-between gap-2">
                 <div>
-                  <p className="mb-2 text-[0.68rem] uppercase tracking-[0.22em] text-white/40">
-                    {brand.country || "Global"}
-                  </p>
-                  <h2 className="font-display text-[1.9rem] font-bold leading-[1] text-white transition group-hover:text-accent">
+                  <p className="text-xs text-white/35">{brand.country || "Global"}</p>
+                  <h2 className="font-display text-xl font-bold text-white group-hover:text-accent transition-colors">
                     {brand.name}
                   </h2>
                 </div>
+                <ArrowRight className="mt-1 h-4 w-4 shrink-0 text-white/20 group-hover:text-accent transition-colors" />
               </div>
-              <ArrowRight className="h-[1.125rem] w-[1.125rem] text-white/30 transition group-hover:text-accent" />
-            </div>
-
-            <p className="min-h-14 text-sm leading-7 text-white/56">
-              {brand.description || `${brand.name} on PouchBase.`}
-            </p>
-
-            <div className="mt-5 flex flex-col gap-3 border-t border-white/8 pt-4 text-sm sm:flex-row sm:items-center sm:justify-between">
-              <span className="inline-flex items-center gap-2 font-medium text-white">
-                <Layers className="h-4 w-4 text-accent" />
-                {brand.productCount} pouch{brand.productCount !== 1 ? "es" : ""}
-              </span>
-              {brand.website_url ? (
-                <span className="inline-flex items-center gap-1 text-white/48">
-                  <Globe className="h-4 w-4" />
-                  Website
+              <p className="mt-2 text-sm leading-relaxed text-white/40 line-clamp-2">
+                {brand.description || `${brand.name} nicotine pouches.`}
+              </p>
+              <div className="mt-3 flex items-center gap-3 text-sm">
+                <span className="text-white/50">
+                  {brand.productCount} pouch{brand.productCount !== 1 ? "es" : ""}
                 </span>
-              ) : (
-                <span className="text-white/40">Profile</span>
-              )}
+                {brand.website_url && (
+                  <span className="inline-flex items-center gap-1 text-white/30">
+                    <Globe className="h-3 w-3" />
+                    Website
+                  </span>
+                )}
+              </div>
             </div>
           </Link>
         ))}

@@ -4,7 +4,7 @@ interface RatingBadgeProps {
   size?: "sm" | "md";
 }
 
-function getTone(rating: number) {
+function getColor(rating: number) {
   if (rating <= 3) return "text-red-300";
   if (rating <= 5) return "text-amber-300";
   if (rating <= 7) return "text-emerald-300";
@@ -16,15 +16,11 @@ export function RatingBadge({ label, value, size = "md" }: RatingBadgeProps) {
   const compact = size === "sm";
 
   return (
-    <div
-      className={`rounded-2xl border border-white/8 bg-white/[0.035] ${
-        compact ? "min-w-[4.4rem] px-3 py-2.5" : "min-w-[5.5rem] px-3.5 py-3"
-      }`}
-    >
-      <div className={`text-white/52 ${compact ? "text-[0.68rem]" : "text-[0.72rem]"} uppercase tracking-[0.18em]`}>
+    <div className={compact ? "px-2 py-1.5" : "px-3 py-2"}>
+      <div className={`text-white/40 ${compact ? "text-[0.65rem]" : "text-xs"} uppercase tracking-wider`}>
         {label}
       </div>
-      <div className={`mt-1 font-display font-bold ${compact ? "text-xl" : "text-2xl"} ${getTone(rounded)}`}>
+      <div className={`font-display font-bold ${compact ? "text-lg" : "text-2xl"} ${getColor(rounded)}`}>
         {rounded > 0 ? rounded.toFixed(1) : "—"}
       </div>
     </div>

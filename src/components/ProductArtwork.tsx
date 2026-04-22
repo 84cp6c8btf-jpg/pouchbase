@@ -10,12 +10,12 @@ type ProductArtworkProps = {
   size?: "card" | "hero";
 };
 
-const CATEGORY_COLORS: Record<string, [string, string, string, string]> = {
-  mint: ["#0f172a", "#155e75", "#38bdf8", "rgba(56, 189, 248, 0.35)"],
-  fruit: ["#2a0f1f", "#9f1239", "#fb7185", "rgba(251, 113, 133, 0.32)"],
-  coffee: ["#27180f", "#78350f", "#f59e0b", "rgba(245, 158, 11, 0.28)"],
-  tobacco: ["#221815", "#7c2d12", "#fb923c", "rgba(251, 146, 60, 0.28)"],
-  other: ["#101522", "#4c1d95", "#a78bfa", "rgba(167, 139, 250, 0.28)"],
+const CATEGORY_COLORS: Record<string, [string, string]> = {
+  mint: ["#0c2d3f", "#1a6b7a"],
+  fruit: ["#2d0f1f", "#7a1a3a"],
+  coffee: ["#2d1a0c", "#6b3a10"],
+  tobacco: ["#251510", "#5a2d12"],
+  other: ["#151028", "#3a1d6b"],
 };
 
 function hashString(value: string) {
@@ -27,27 +27,19 @@ function hashString(value: string) {
   return Math.abs(hash);
 }
 
-function buildBackground(seed: string, flavorCategory?: string | null) {
-  const fallbackSets = [
-    ["#1f1612", "#7c2d12", "#f97316", "rgba(249, 115, 22, 0.32)"],
-    ["#101828", "#1d4ed8", "#60a5fa", "rgba(96, 165, 250, 0.28)"],
-    ["#1a1325", "#6d28d9", "#c084fc", "rgba(192, 132, 252, 0.28)"],
+function getBg(seed: string, flavorCategory?: string | null) {
+  const fallbacks: [string, string][] = [
+    ["#1f1612", "#5a2d12"],
+    ["#101828", "#1d3a6b"],
+    ["#1a1325", "#3d1d6b"],
   ];
-  const base =
+  const colors =
     (flavorCategory && CATEGORY_COLORS[flavorCategory]) ||
-    fallbackSets[hashString(seed) % fallbackSets.length];
+    fallbacks[hashString(seed) % fallbacks.length];
 
   return {
-    background: `radial-gradient(circle at top right, ${base[3]} 0%, transparent 34%), linear-gradient(145deg, ${base[0]} 0%, ${base[1]} 58%, ${base[2]} 100%)`,
-    borderColor: `${base[2]}33`,
+    background: `linear-gradient(135deg, ${colors[0]} 0%, ${colors[1]} 100%)`,
   };
-}
-
-function getStrengthLabel(strengthMg: number) {
-  if (strengthMg >= 24) return "EXT";
-  if (strengthMg >= 15) return "MAX";
-  if (strengthMg >= 8) return "STR";
-  return "MID";
 }
 
 export function ProductArtwork({
@@ -57,58 +49,43 @@ export function ProductArtwork({
   flavor,
   flavorCategory,
   strengthMg,
-  format,
   imageUrl,
   size = "card",
 }: ProductArtworkProps) {
   if (imageUrl) {
     return (
-      <div className={size === "hero" ? "w-full sm:w-52 h-52 shrink-0" : "w-full h-40"}>
-        <img src={imageUrl} alt={name} className="w-full h-full object-cover rounded-2xl border border-border" />
+      <div className={size === "hero" ? "w-full sm:w-48 h-48 shrink-0" : "w-full h-36"}>
+        <img src={imageUrl} alt={name} className="w-full h-full object-cover rounded-lg" />
       </div>
     );
   }
 
-  const bg = buildBackground(`${brandSlug || brand || name}-${flavor}`, flavorCategory);
+  const bg = getBg(`${brandSlug || brand || name}-${flavor}`, flavorCategory);
   const isHero = size === "hero";
 
   return (
     <div
-      className={`relative overflow-hidden rounded-2xl border shadow-[0_20px_60px_rgba(0,0,0,0.22)] ${
-        isHero ? "w-full sm:w-52 h-52 shrink-0" : "w-full h-40"
+      className={`relative overflow-hidden rounded-lg ${
+        isHero ? "w-full sm:w-48 h-48 shrink-0" : "w-full h-36"
       }`}
       style={bg}
     >
-      <div className="absolute inset-0 bg-[linear-gradient(to_bottom,rgba(255,255,255,0.06),transparent_25%,rgba(0,0,0,0.22))]" />
-      <div className="absolute -top-8 -right-8 w-24 h-24 rounded-full bg-white/10 blur-2xl" />
-      <div className="absolute bottom-3 right-3 text-[10px] font-semibold tracking-[0.24em] text-white/40">
-        POUCHBASE
-      </div>
-      <div className="relative h-full flex flex-col justify-between p-4">
-        <div className="flex items-start justify-between gap-3">
-          <div className="rounded-full border border-white/15 bg-black/20 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.22em] text-white/75">
+      <div className="relative h-full flex flex-col justify-between p-3.5">
+        <div className="flex items-start justify-between">
+          <span className="text-[10px] font-medium uppercase tracking-wider text-white/50">
             {brand || "Pouch"}
-          </div>
-          <div className="rounded-full border border-white/15 bg-black/20 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.22em] text-white/75">
-            {format || "slim"}
-          </div>
-        </div>
-
-        <div>
-          <div className={`${isHero ? "text-5xl" : "text-4xl"} font-black tracking-tight text-white leading-none`}>
-            {getStrengthLabel(strengthMg)}
-          </div>
-          <div className="mt-2 text-xs uppercase tracking-[0.22em] text-white/70">
+          </span>
+          <span className="text-[10px] font-medium uppercase tracking-wider text-white/50">
             {flavor}
-          </div>
+          </span>
         </div>
 
         <div>
-          <div className={`${isHero ? "text-base" : "text-sm"} font-semibold text-white/95 leading-tight line-clamp-2`}>
-            {name}
+          <div className={`font-display font-bold text-white leading-none ${isHero ? "text-4xl" : "text-3xl"}`}>
+            {strengthMg}<span className="text-lg text-white/50">mg</span>
           </div>
-          <div className="mt-2 inline-flex items-center rounded-full bg-black/25 px-2.5 py-1 text-[11px] font-medium text-white/85">
-            {strengthMg}mg strength
+          <div className="mt-1 text-sm font-medium text-white/70 leading-tight line-clamp-2">
+            {name}
           </div>
         </div>
       </div>

@@ -1,11 +1,11 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
 import { Review } from "@/lib/types";
 import { BurnMeter } from "./BurnMeter";
 import { RatingBadge } from "./RatingBadge";
-import { MessageSquare, Sparkles, User } from "lucide-react";
+import { MessageSquare, User } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 
@@ -31,7 +31,7 @@ export function ReviewSection({ productId }: ReviewSectionProps) {
   const loginHref = `/login?next=${encodeURIComponent(pathname || `/pouches/${productId}`)}`;
   const existingReview = user ? reviews.find((review) => review.user_id === user.id) || null : null;
 
-  async function fetchReviews() {
+  const fetchReviews = useCallback(async () => {
     const { data } = await supabase
       .from("reviews")
       .select("*, profiles(display_name)")
@@ -39,7 +39,7 @@ export function ReviewSection({ productId }: ReviewSectionProps) {
       .order("created_at", { ascending: false });
     setReviews((data as typeof reviews) || []);
     setLoading(false);
-  }
+  }, [productId]);
 
   useEffect(() => {
     async function init() {
@@ -59,23 +59,34 @@ export function ReviewSection({ productId }: ReviewSectionProps) {
     });
 
     return () => subscription.unsubscribe();
-  }, [productId]);
+  }, [fetchReviews]);
 
-  useEffect(() => {
+  function prepareForm() {
     if (existingReview) {
       setBurn(existingReview.burn_rating);
       setFlavor(existingReview.flavor_rating);
       setLongevity(existingReview.longevity_rating);
       setOverall(existingReview.overall_rating);
       setText(existingReview.review_text || "");
-    } else {
-      setBurn(5);
-      setFlavor(5);
-      setLongevity(5);
-      setOverall(5);
-      setText("");
+      return;
     }
-  }, [existingReview]);
+
+    setBurn(5);
+    setFlavor(5);
+    setLongevity(5);
+    setOverall(5);
+    setText("");
+  }
+
+  function toggleForm() {
+    if (showForm) {
+      setShowForm(false);
+      return;
+    }
+
+    prepareForm();
+    setShowForm(true);
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -112,23 +123,23 @@ export function ReviewSection({ productId }: ReviewSectionProps) {
   };
 
   return (
-    <section className="pb-data-panel p-6 sm:p-7">
+    <section className="rounded-xl border border-white/8 bg-card p-6 sm:p-7">
       <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <div className="mb-2 text-[0.66rem] uppercase tracking-[0.22em] text-white/36">Review Layer</div>
+          <div className="mb-2 text-[0.66rem] uppercase tracking-[0.18em] text-white/36">Community</div>
           <h2 className="font-display text-3xl font-bold text-white">Reviews ({reviews.length})</h2>
         </div>
         {user ? (
           <button
-            onClick={() => setShowForm((open) => !open)}
-            className="rounded-full bg-accent px-5 py-3 text-sm font-semibold text-black transition hover:bg-accent-hover"
+            onClick={toggleForm}
+            className="rounded-lg bg-accent px-5 py-3 text-sm font-semibold text-black transition hover:bg-accent-hover"
           >
             {existingReview ? "Edit Your Review" : "Write a Review"}
           </button>
         ) : (
           <Link
             href={loginHref}
-            className="rounded-full bg-accent px-5 py-3 text-center text-sm font-semibold text-black transition hover:bg-accent-hover"
+            className="rounded-lg bg-accent px-5 py-3 text-center text-sm font-semibold text-black transition hover:bg-accent-hover"
           >
             Sign In to Review
           </Link>
@@ -144,14 +155,7 @@ export function ReviewSection({ productId }: ReviewSectionProps) {
       {errorMessage && <p className="mb-4 text-sm text-red-300">{errorMessage}</p>}
 
       {showForm && user && (
-        <form onSubmit={handleSubmit} className="mb-6 rounded-[1.5rem] border border-white/8 bg-white/[0.03] p-4 sm:p-5">
-          <div className="mb-4">
-            <div className="pb-kicker">
-              <Sparkles className="h-3.5 w-3.5" />
-              Structured Review
-            </div>
-          </div>
-
+        <form onSubmit={handleSubmit} className="mb-6 rounded-xl border border-white/8 bg-white/[0.03] p-4 sm:p-5">
           <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
             {[
               { label: "Burn", value: burn, setter: setBurn },
@@ -159,8 +163,8 @@ export function ReviewSection({ productId }: ReviewSectionProps) {
               { label: "Longevity", value: longevity, setter: setLongevity },
               { label: "Overall", value: overall, setter: setOverall },
             ].map((field) => (
-              <label key={field.label} className="rounded-2xl border border-white/8 bg-black/15 p-3.5">
-                <span className="block text-[0.66rem] uppercase tracking-[0.22em] text-white/38">
+              <label key={field.label} className="rounded-lg border border-white/8 bg-black/15 p-3.5">
+                <span className="block text-[0.66rem] uppercase tracking-[0.18em] text-white/38">
                   {field.label}
                 </span>
                 <input
@@ -180,21 +184,21 @@ export function ReviewSection({ productId }: ReviewSectionProps) {
             value={text}
             onChange={(e) => setText(e.target.value)}
             placeholder="How did it hit, how long did it last, and would you buy it again?"
-            className="mt-4 h-28 w-full resize-none rounded-[1.3rem] border border-white/10 bg-black/20 px-4 py-3 text-sm text-white outline-none transition focus:border-accent/35"
+            className="pb-input mt-4 h-28 resize-none px-4 py-3 text-sm"
           />
 
           <div className="mt-4 flex flex-wrap gap-3">
             <button
               type="submit"
               disabled={submitting}
-              className="rounded-full bg-accent px-5 py-3 text-sm font-semibold text-black transition hover:bg-accent-hover disabled:opacity-60"
+              className="rounded-lg bg-accent px-5 py-3 text-sm font-semibold text-black transition hover:bg-accent-hover disabled:opacity-60"
             >
               {submitting ? "Saving..." : existingReview ? "Update Review" : "Publish Review"}
             </button>
             <button
               type="button"
               onClick={() => setShowForm(false)}
-              className="rounded-full border border-white/10 px-5 py-3 text-sm text-white/66 transition hover:text-white"
+              className="rounded-lg border border-white/10 px-5 py-3 text-sm text-white/66 transition hover:text-white"
             >
               Cancel
             </button>
@@ -211,7 +215,7 @@ export function ReviewSection({ productId }: ReviewSectionProps) {
       ) : reviews.length > 0 ? (
         <div className="space-y-4">
           {reviews.map((review) => (
-            <article key={review.id} className="rounded-[1.5rem] border border-white/8 bg-white/[0.03] p-4 sm:p-5">
+            <article key={review.id} className="rounded-xl border border-white/8 bg-white/[0.03] p-4 sm:p-5">
               <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
                 <div>
                   <div className="flex flex-wrap items-center gap-2">
@@ -222,7 +226,7 @@ export function ReviewSection({ productId }: ReviewSectionProps) {
                       <div className="font-medium text-white">
                         {review.profiles?.display_name || "Anonymous"}
                       </div>
-                      <div className="text-xs uppercase tracking-[0.18em] text-white/34">
+                      <div className="text-xs uppercase tracking-[0.16em] text-white/34">
                         {new Date(review.created_at).toLocaleDateString()}
                       </div>
                     </div>
@@ -244,16 +248,15 @@ export function ReviewSection({ productId }: ReviewSectionProps) {
           ))}
         </div>
       ) : (
-        <div className="pb-editorial-panel px-6 py-10 text-center">
-          <div className="relative z-10 mx-auto max-w-lg">
-            <div className="pb-kicker mb-5">
-              <MessageSquare className="h-3.5 w-3.5" />
-              Empty Review Layer
+        <div className="pb-empty px-6 py-10 text-center">
+          <div className="mx-auto max-w-lg">
+            <div className="mb-4 inline-flex items-center gap-2 text-sm text-white/38">
+              <MessageSquare className="h-4 w-4 text-accent" />
+              No reviews yet
             </div>
-            <h3 className="font-display text-4xl font-bold text-white">No reviews yet.</h3>
+            <h3 className="font-display text-3xl font-bold text-white">Be the first to rate it.</h3>
             <p className="mt-4 text-sm leading-7 text-white/58">
-              This entry is ready for the first structured review. Add burn, flavor, longevity, and
-              overall score to start shaping the ranking.
+              Add burn, flavor, longevity, and overall score to get this pouch onto the board.
             </p>
           </div>
         </div>

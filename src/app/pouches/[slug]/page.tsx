@@ -6,7 +6,7 @@ import { ReviewSection } from "@/components/ReviewSection";
 import { PriceComparison } from "@/components/PriceComparison";
 import { ProductJsonLd, BreadcrumbJsonLd } from "@/components/JsonLd";
 import { getSiteUrl } from "@/lib/site";
-import { Droplets, Package, Ruler, Sparkles, Zap } from "lucide-react";
+import { Droplets, Package, Ruler, Zap } from "lucide-react";
 import type { Metadata } from "next";
 import type { RelationResult } from "@/lib/types";
 import Link from "next/link";
@@ -60,7 +60,6 @@ export default async function ProductPage({ params }: Props) {
 
   const siteUrl = getSiteUrl();
 
-  // Fetch price range for structured data
   const { data: prices } = await supabase
     .from("prices")
     .select("price, currency")
@@ -73,7 +72,7 @@ export default async function ProductPage({ params }: Props) {
   const priceCurrency = prices?.[0]?.currency || "EUR";
 
   return (
-    <div className="mx-auto max-w-6xl space-y-8">
+    <div className="mx-auto max-w-5xl space-y-8">
       <ProductJsonLd
         name={product.name}
         brand={brand?.name || ""}
@@ -97,92 +96,81 @@ export default async function ProductPage({ params }: Props) {
           { name: product.name, href: `/pouches/${product.slug}` },
         ]}
       />
-      <div className="flex flex-wrap items-center gap-2 text-sm text-white/42">
+
+      {/* Breadcrumb */}
+      <nav className="flex flex-wrap items-center gap-2 text-sm text-white/35">
         <Link href="/pouches" className="transition hover:text-white">Pouches</Link>
         <span>/</span>
         <Link href={`/brands/${brand?.slug}`} className="transition hover:text-white">{brand?.name}</Link>
         <span>/</span>
-        <span className="text-white/68">{product.name}</span>
-      </div>
+        <span className="text-white/60">{product.name}</span>
+      </nav>
 
-      <section className="pb-editorial-panel p-5 sm:p-7 lg:p-8">
-        <div className="pb-grid-backdrop absolute inset-0 opacity-70" />
-        <div className="relative grid gap-6 lg:grid-cols-[0.9fr_1.1fr]">
-          <div className="space-y-4">
-            <div className="pb-kicker">
-              <Sparkles className="h-3.5 w-3.5" />
-              Product Entry
-            </div>
-            <ProductArtwork
-              brand={brand?.name}
-              brandSlug={brand?.slug}
-              name={product.name}
-              flavor={product.flavor}
-              flavorCategory={product.flavor_category}
-              strengthMg={product.strength_mg}
-              format={product.format}
-              imageUrl={product.image_url}
-              size="hero"
-            />
+      {/* Product header */}
+      <section className="grid gap-6 lg:grid-cols-[auto_1fr]">
+        <ProductArtwork
+          brand={brand?.name}
+          brandSlug={brand?.slug}
+          name={product.name}
+          flavor={product.flavor}
+          flavorCategory={product.flavor_category}
+          strengthMg={product.strength_mg}
+          format={product.format}
+          imageUrl={product.image_url}
+          size="hero"
+        />
+
+        <div className="flex flex-col gap-4">
+          <div>
+            <p className="text-xs text-white/35">
+              {brand?.name}{brand?.country ? ` · ${brand.country}` : ""}
+            </p>
+            <h1 className="mt-1 font-display text-[clamp(2.2rem,4vw,3.5rem)] font-bold leading-[0.95] text-white">
+              {product.name}
+            </h1>
+            <p className="mt-3 max-w-xl text-base leading-relaxed text-white/50">
+              {product.description || `${brand?.name} ${product.name} — ${product.flavor}, ${product.strength_mg}mg nicotine pouch.`}
+            </p>
           </div>
 
-          <div className="flex flex-col justify-between gap-6">
-            <div>
-              <p className="text-[0.72rem] uppercase tracking-[0.24em] text-white/44">
-                {brand?.name}{brand?.country ? ` · ${brand.country}` : ""}
-              </p>
-              <h1 className="mt-3 font-display text-[clamp(2.7rem,5vw,5rem)] font-bold leading-[0.92] text-white">
-                {product.name}
-              </h1>
-              <p className="mt-4 max-w-2xl text-base leading-8 text-white/62">
-                {product.description || `${brand?.name} ${product.name} — ${product.flavor}, ${product.strength_mg}mg nicotine pouch.`}
-              </p>
-            </div>
+          <div className="flex flex-wrap gap-1.5">
+            <span className="pb-tag">
+              <Zap className="h-3 w-3 text-accent" />
+              {product.strength_mg}mg{product.strength_label ? ` · ${product.strength_label}` : ""}
+            </span>
+            <span className="pb-tag">{product.flavor}</span>
+            <span className="pb-tag">
+              <Ruler className="h-3 w-3 text-white/40" />
+              {product.format}
+            </span>
+            <span className="pb-tag">
+              <Droplets className="h-3 w-3 text-white/40" />
+              {product.moisture}
+            </span>
+            <span className="pb-tag">
+              <Package className="h-3 w-3 text-white/40" />
+              {product.pouches_per_can}/can
+            </span>
+          </div>
 
-            <div className="flex flex-wrap gap-2.5">
-              <span className="pb-chip">
-                <Zap className="h-3.5 w-3.5 text-accent" />
-                {product.strength_mg}mg · {product.strength_label || "profile"}
-              </span>
-              <span className="pb-chip">{product.flavor}</span>
-              <span className="pb-chip">
-                <Ruler className="h-3.5 w-3.5 text-white/56" />
-                {product.format}
-              </span>
-              <span className="pb-chip">
-                <Droplets className="h-3.5 w-3.5 text-white/56" />
-                {product.moisture}
-              </span>
-              <span className="pb-chip">
-                <Package className="h-3.5 w-3.5 text-white/56" />
-                {product.pouches_per_can} pouches/can
-              </span>
-            </div>
-
-            {product.review_count > 0 ? (
-              <div className="grid gap-4 lg:grid-cols-[1fr_auto] lg:items-end">
-                <BurnMeter rating={product.avg_burn} size="lg" />
-                <div className="grid grid-cols-1 gap-4 sm:grid-cols-4 lg:grid-cols-1">
-                  <div className="pb-stat-tile min-w-[9rem]">
-                    <div className="text-[0.66rem] uppercase tracking-[0.22em] text-white/38">Reviews</div>
-                    <div className="mt-1 font-display text-4xl font-bold text-white">
-                      {product.review_count}
-                    </div>
-                  </div>
+          {product.review_count > 0 ? (
+            <>
+              <BurnMeter rating={product.avg_burn} size="lg" />
+              <div className="grid grid-cols-3 gap-2 sm:grid-cols-4">
+                <RatingBadge label="Flavor" value={product.avg_flavor} />
+                <RatingBadge label="Longevity" value={product.avg_longevity} />
+                <RatingBadge label="Overall" value={product.avg_overall} />
+                <div className="px-3 py-2">
+                  <div className="text-xs text-white/40 uppercase tracking-wider">Reviews</div>
+                  <div className="font-display text-2xl font-bold text-white">{product.review_count}</div>
                 </div>
               </div>
-            ) : (
-              <div className="rounded-[1.5rem] border border-dashed border-white/12 px-5 py-5 text-white/58">
-                No reviews yet — be the first to rate this pouch.
-              </div>
-            )}
-
-            <div className="grid gap-3 sm:grid-cols-3">
-              <RatingBadge label="Flavor" value={product.avg_flavor} />
-              <RatingBadge label="Longevity" value={product.avg_longevity} />
-              <RatingBadge label="Overall" value={product.avg_overall} />
+            </>
+          ) : (
+            <div className="rounded-lg border border-dashed border-white/10 px-4 py-4 text-white/45">
+              No reviews yet — be the first to rate this pouch.
             </div>
-          </div>
+          )}
         </div>
       </section>
 

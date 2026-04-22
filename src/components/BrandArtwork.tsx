@@ -25,42 +25,40 @@ function hashString(value: string) {
 
 function getBrandBackground(seed: string) {
   const sets = [
-    ["#171114", "#7c2d12", "#f97316", "rgba(249,115,22,0.30)"],
-    ["#0f172a", "#1d4ed8", "#60a5fa", "rgba(96,165,250,0.24)"],
-    ["#15121e", "#6d28d9", "#c084fc", "rgba(192,132,252,0.24)"],
-    ["#132018", "#166534", "#4ade80", "rgba(74,222,128,0.24)"],
+    { background: "#1b120d", border: "#ff7a1a33", accent: "#ffb27c" },
+    { background: "#101722", border: "#60a5fa33", accent: "#c3ddff" },
+    { background: "#18131f", border: "#c084fc33", accent: "#ebcfff" },
+    { background: "#111912", border: "#4ade8033", accent: "#c7f7d7" },
   ];
-  const set = sets[hashString(seed) % sets.length];
-  return {
-    background: `radial-gradient(circle at top right, ${set[3]} 0%, transparent 34%), linear-gradient(145deg, ${set[0]} 0%, ${set[1]} 58%, ${set[2]} 100%)`,
-    borderColor: `${set[2]}33`,
-  };
+  return sets[hashString(seed) % sets.length];
 }
 
 export function BrandArtwork({ name, slug, country, logoUrl, size = "card" }: BrandArtworkProps) {
   if (logoUrl) {
     return (
       <div className={size === "hero" ? "w-24 h-24 sm:w-28 sm:h-28" : "w-14 h-14"}>
-        <img src={logoUrl} alt={name} className="w-full h-full object-cover rounded-2xl border border-border" />
+        <img src={logoUrl} alt={name} className="w-full h-full object-cover rounded-xl border border-border" />
       </div>
     );
   }
 
   const isHero = size === "hero";
+  const palette = getBrandBackground(slug || name);
 
   return (
     <div
-      className={`relative overflow-hidden rounded-2xl border shrink-0 ${isHero ? "w-24 h-24 sm:w-28 sm:h-28" : "w-14 h-14"}`}
-      style={getBrandBackground(slug || name)}
+      className={`relative shrink-0 overflow-hidden rounded-xl border ${isHero ? "h-24 w-24 sm:h-28 sm:w-28" : "h-14 w-14"}`}
+      style={{ background: palette.background, borderColor: palette.border }}
     >
-      <div className="absolute inset-0 bg-[linear-gradient(to_bottom,rgba(255,255,255,0.06),transparent_30%,rgba(0,0,0,0.22))]" />
-      <div className="absolute -top-3 -right-3 w-10 h-10 rounded-full bg-white/12 blur-xl" />
-      <div className="relative h-full flex flex-col items-center justify-center">
-        <div className={`${isHero ? "text-2xl" : "text-base"} font-black tracking-[0.18em] text-white`}>
+      <div className="relative flex h-full flex-col items-center justify-center">
+        <div
+          className={`${isHero ? "text-2xl" : "text-base"} font-display font-bold tracking-[0.18em]`}
+          style={{ color: palette.accent }}
+        >
           {getInitials(name)}
         </div>
         {isHero && (
-          <div className="mt-1 text-[10px] uppercase tracking-[0.22em] text-white/70">
+          <div className="mt-1 text-[10px] uppercase tracking-[0.22em] text-white/52">
             {country || "Global"}
           </div>
         )}

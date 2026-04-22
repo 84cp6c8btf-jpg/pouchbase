@@ -1,6 +1,5 @@
 import { supabase } from "@/lib/supabase";
 import { ProductCard } from "@/components/ProductCard";
-import { Star } from "lucide-react";
 import type { Metadata } from "next";
 
 export const revalidate = 60;
@@ -24,41 +23,33 @@ export default async function TopRatedPage() {
   const rankedProducts = products || [];
 
   return (
-    <div className="space-y-8">
-      <section className="pb-editorial-panel px-6 py-7 sm:px-8 sm:py-8">
-        <div className="relative z-10">
-          <div className="pb-kicker mb-5">
-            <Star className="h-3.5 w-3.5" />
-            Top Rated
-          </div>
-          <h1 className="font-display text-[clamp(2.8rem,6vw,5.5rem)] font-bold leading-[0.92] text-white">
-            The best pouches right now.
-          </h1>
-          <p className="mt-4 max-w-3xl text-base leading-8 text-white/60">
-            Ranked by overall community score. Products with more reviews rank higher when
-            scores are tied, so well-tested favorites rise to the top.
-          </p>
-          <div className="mt-6 inline-flex rounded-full border border-white/10 bg-white/[0.04] px-4 py-2 text-sm text-white/64">
-            {rankedProducts.length} products currently ranked
-          </div>
-        </div>
+    <div className="space-y-6">
+      <section className="pt-2 sm:pt-6">
+        <h1 className="font-display text-[clamp(2.5rem,5vw,4.5rem)] font-bold leading-[0.92] text-white">
+          The best pouches right now.
+        </h1>
+        <p className="mt-3 max-w-xl text-base leading-relaxed text-white/45">
+          Ranked by overall community score. Products with more reviews rank higher when
+          scores are tied, so well-tested favorites rise to the top.
+        </p>
+        <p className="mt-4 text-sm text-white/30">
+          {rankedProducts.length} products ranked
+        </p>
       </section>
 
       {rankedProducts.length > 0 ? (
-        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+        <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
           {rankedProducts.map((product) => (
             <ProductCard key={product.id} product={product} />
           ))}
         </div>
       ) : (
-        <section className="pb-editorial-panel px-6 py-10 text-center">
-          <div className="relative z-10">
-            <h2 className="font-display text-4xl font-bold text-white">No ranked products yet</h2>
-            <p className="mt-4 text-white/58">
-              Once reviews arrive, the strongest community favorites will appear here.
-            </p>
-          </div>
-        </section>
+        <div className="rounded-xl border border-white/8 bg-[#111114] px-6 py-12 text-center">
+          <h2 className="font-display text-2xl font-bold text-white">No ranked products yet</h2>
+          <p className="mt-2 text-sm text-white/40">
+            Once reviews come in, the community favorites will show up here.
+          </p>
+        </div>
       )}
     </div>
   );

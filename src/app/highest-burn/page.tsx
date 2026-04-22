@@ -1,6 +1,5 @@
 import { supabase } from "@/lib/supabase";
 import { ProductCard } from "@/components/ProductCard";
-import { Flame } from "lucide-react";
 import type { Metadata } from "next";
 
 export const revalidate = 60;
@@ -24,41 +23,33 @@ export default async function HighestBurnPage() {
   const hottestProducts = products || [];
 
   return (
-    <div className="space-y-8">
-      <section className="pb-editorial-panel px-6 py-7 sm:px-8 sm:py-8">
-        <div className="relative z-10">
-          <div className="pb-kicker mb-5">
-            <Flame className="h-3.5 w-3.5" />
-            Highest Burn
-          </div>
-          <h1 className="font-display text-[clamp(2.8rem,6vw,5.5rem)] font-bold leading-[0.92] text-white">
-            The ones that bite.
-          </h1>
-          <p className="mt-4 max-w-3xl text-base leading-8 text-white/60">
-            Ranked by burn score — the felt intensity under your lip, not just nicotine milligrams.
-            If you want heat, start here.
-          </p>
-          <div className="mt-6 inline-flex rounded-full border border-white/10 bg-white/[0.04] px-4 py-2 text-sm text-white/64">
-            {hottestProducts.length} products currently ranked
-          </div>
-        </div>
+    <div className="space-y-6">
+      <section className="pt-2 sm:pt-6">
+        <h1 className="font-display text-[clamp(2.5rem,5vw,4.5rem)] font-bold leading-[0.92] text-white">
+          The ones that bite.
+        </h1>
+        <p className="mt-3 max-w-xl text-base leading-relaxed text-white/45">
+          Ranked by burn score — the felt intensity under your lip, not just nicotine milligrams.
+          If you want heat, start here.
+        </p>
+        <p className="mt-4 text-sm text-white/30">
+          {hottestProducts.length} products ranked
+        </p>
       </section>
 
       {hottestProducts.length > 0 ? (
-        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+        <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
           {hottestProducts.map((product) => (
             <ProductCard key={product.id} product={product} />
           ))}
         </div>
       ) : (
-        <section className="pb-editorial-panel px-6 py-10 text-center">
-          <div className="relative z-10">
-            <h2 className="font-display text-4xl font-bold text-white">No burn leaders yet</h2>
-            <p className="mt-4 text-white/58">
-              As burn scores come in, the fiercest entries will appear here.
-            </p>
-          </div>
-        </section>
+        <div className="rounded-xl border border-white/8 bg-[#111114] px-6 py-12 text-center">
+          <h2 className="font-display text-2xl font-bold text-white">No burn leaders yet</h2>
+          <p className="mt-2 text-sm text-white/40">
+            As burn scores come in, the hottest pouches will show up here.
+          </p>
+        </div>
       )}
     </div>
   );

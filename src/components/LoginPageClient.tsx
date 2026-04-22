@@ -99,45 +99,45 @@ export function LoginPageClient({ returnTo }: LoginPageClientProps) {
 
   if (checkingSession) {
     return (
-      <div className="max-w-2xl mx-auto bg-card border border-border rounded-3xl p-8 sm:p-10 text-center">
-        <p className="text-sm uppercase tracking-[0.2em] text-accent mb-3">PouchBase Account</p>
-        <h1 className="text-3xl font-bold mb-3">Checking your sign-in session...</h1>
-        <p className="text-muted">If you just used a magic link or Google, we’ll send you back automatically.</p>
+      <div className="mx-auto max-w-2xl rounded-xl border border-white/8 bg-card p-8 text-center sm:p-10">
+        <p className="mb-3 text-sm uppercase tracking-[0.16em] text-accent">PouchBase Account</p>
+        <h1 className="mb-3 font-display text-3xl font-bold">Checking your sign-in session...</h1>
+        <p className="text-white/50">If you just used a magic link or Google, we’ll send you back automatically.</p>
       </div>
     );
   }
 
   return (
-    <div className="max-w-5xl mx-auto grid grid-cols-1 lg:grid-cols-[1.1fr_0.9fr] gap-6">
-      <section className="bg-card border border-border rounded-3xl p-6 sm:p-8 lg:p-10">
-        <div className="inline-flex items-center gap-2 text-accent mb-4">
+    <div className="mx-auto grid max-w-5xl grid-cols-1 gap-6 lg:grid-cols-[1.1fr_0.9fr]">
+      <section className="rounded-xl border border-white/8 bg-card p-6 sm:p-8 lg:p-10">
+        <div className="mb-4 inline-flex items-center gap-2 text-accent">
           <Flame className="w-5 h-5" />
-          <span className="text-sm uppercase tracking-[0.2em]">PouchBase Account</span>
+          <span className="text-sm uppercase tracking-[0.16em]">PouchBase Account</span>
         </div>
-        <h1 className="text-3xl sm:text-4xl font-bold mb-4">Sign in to rate, review, and build your taste profile</h1>
-        <p className="text-muted max-w-2xl">
+        <h1 className="mb-4 font-display text-3xl font-bold sm:text-4xl">Sign in to rate, review, and build your taste profile</h1>
+        <p className="max-w-2xl text-white/50">
           Create an account to leave burn ratings, compare favorites, and help shape the most honest pouch database on the internet.
         </p>
 
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-8">
+        <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-3">
           {[
             "Rate burn, flavor, and longevity",
             "Track your favorite brands and products",
             "Help other users find the best pouch",
           ].map((item) => (
-            <div key={item} className="bg-zinc-900/60 border border-border rounded-xl p-4 text-sm text-muted">
+            <div key={item} className="rounded-lg border border-white/8 bg-black/20 p-4 text-sm text-white/45">
               {item}
             </div>
           ))}
         </div>
       </section>
 
-      <section className="bg-card border border-border rounded-3xl p-6 sm:p-8">
-        <h2 className="text-2xl font-bold mb-2">Sign In</h2>
-        <p className="text-sm text-muted mb-6">Use Google or get a secure magic link by email.</p>
+      <section className="rounded-xl border border-white/8 bg-card p-6 sm:p-8">
+        <h2 className="mb-2 font-display text-2xl font-bold">Sign In</h2>
+        <p className="mb-6 text-sm text-white/45">Use Google or get a secure magic link by email.</p>
         {nextPath !== "/" && (
-          <p className="text-xs text-muted mb-4">
-            You’ll be sent back to <span className="text-foreground">{nextPath}</span> after sign-in.
+          <p className="mb-4 text-xs text-white/40">
+            You’ll be sent back to <span className="text-white">{nextPath}</span> after sign-in.
           </p>
         )}
 
@@ -154,25 +154,25 @@ export function LoginPageClient({ returnTo }: LoginPageClientProps) {
 
           <div className="relative py-2">
             <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-border" />
+              <div className="w-full border-t border-white/8" />
             </div>
             <div className="relative flex justify-center">
-              <span className="bg-card px-3 text-xs uppercase tracking-[0.2em] text-muted">Or</span>
+              <span className="bg-card px-3 text-xs uppercase tracking-[0.16em] text-white/40">Or</span>
             </div>
           </div>
 
           <form onSubmit={handleMagicLink} className="space-y-4">
             <label className="block">
-              <span className="text-sm text-muted mb-2 block">Email address</span>
+              <span className="mb-2 block text-sm text-white/45">Email address</span>
               <div className="relative">
-                <Mail className="w-4 h-4 text-muted absolute left-3 top-1/2 -translate-y-1/2" />
+                <Mail className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-white/35" />
                 <input
                   type="email"
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="you@example.com"
-                  className="w-full bg-zinc-800 border border-border rounded-xl pl-10 pr-4 py-3 text-sm focus:outline-none focus:border-accent"
+                  className="pb-input pl-10 pr-4 py-3 text-sm"
                 />
               </div>
             </label>

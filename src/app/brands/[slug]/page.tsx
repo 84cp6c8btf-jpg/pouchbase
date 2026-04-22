@@ -67,55 +67,53 @@ export default async function BrandDetailPage({ params }: Props) {
         <span className="text-white/68">{brand.name}</span>
       </div>
 
-      <section className="pb-editorial-panel p-6 sm:p-8">
-        <div className="relative z-10">
-          <div className="grid gap-6 lg:grid-cols-[1fr_0.9fr] lg:items-end">
-            <div className="flex flex-col gap-5 sm:flex-row sm:items-center">
-              <BrandArtwork name={brand.name} slug={brand.slug} country={brand.country} size="hero" />
-              <div>
-                <div className="pb-kicker mb-4">{brand.country || "Global Brand"}</div>
-                <h1 className="font-display text-[clamp(2.8rem,5vw,4.8rem)] font-bold leading-[0.92] text-white">
-                  {brand.name}
-                </h1>
-                <p className="mt-4 max-w-2xl text-base leading-8 text-white/60">
-                  {brand.description || `${brand.name} nicotine pouches listed on PouchBase.`}
-                </p>
-              </div>
-            </div>
+      <section className="grid gap-6 rounded-xl border border-white/8 bg-card p-6 sm:p-8 lg:grid-cols-[1fr_18rem] lg:items-end">
+        <div className="flex flex-col gap-5 sm:flex-row sm:items-center">
+          <BrandArtwork name={brand.name} slug={brand.slug} country={brand.country} size="hero" />
+          <div>
+            <p className="text-xs uppercase tracking-[0.16em] text-white/35">
+              {brand.country || "Global Brand"}
+            </p>
+            <h1 className="mt-2 font-display text-[clamp(2.8rem,5vw,4.8rem)] font-bold leading-[0.92] text-white">
+              {brand.name}
+            </h1>
+            <p className="mt-4 max-w-2xl text-base leading-8 text-white/55">
+              {brand.description || `${brand.name} nicotine pouches listed on PouchBase.`}
+            </p>
+            {brand.website_url && (
+              <a
+                href={brand.website_url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-5 inline-flex items-center gap-2 text-sm text-white/55 transition hover:text-accent"
+              >
+                <Globe className="h-4 w-4" />
+                Visit brand site
+              </a>
+            )}
+          </div>
+        </div>
 
-            <div className="grid gap-3 sm:grid-cols-3 lg:grid-cols-1">
-              <div className="pb-stat-tile">
-                <div className="text-[0.66rem] uppercase tracking-[0.22em] text-white/38">Products</div>
-                <div className="mt-1 inline-flex items-center gap-2 font-display text-4xl font-bold text-white">
-                  <Layers className="h-5 w-5 text-accent" />
-                  {brandProducts.length}
-                </div>
-              </div>
-              <div className="pb-stat-tile">
-                <div className="text-[0.66rem] uppercase tracking-[0.22em] text-white/38">Average Overall</div>
-                <div className="mt-1 inline-flex items-center gap-2 font-display text-4xl font-bold text-emerald-200">
-                  <Star className="h-5 w-5 text-accent" />
-                  {avgOverall ? avgOverall.toFixed(1) : "N/A"}
-                </div>
-              </div>
-              <div className="pb-stat-tile">
-                <div className="text-[0.66rem] uppercase tracking-[0.22em] text-white/38">Average Burn</div>
-                <div className="mt-1 inline-flex items-center gap-2 font-display text-4xl font-bold text-white">
-                  <Flame className="h-5 w-5 text-accent" />
-                  {avgBurn ? avgBurn.toFixed(1) : "N/A"}
-                </div>
-              </div>
-              {brand.website_url && (
-                <a
-                  href={brand.website_url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 text-sm text-white/60 transition hover:text-accent"
-                >
-                  <Globe className="h-4 w-4" />
-                  Visit brand site
-                </a>
-              )}
+        <div className="grid gap-4 border-t border-white/8 pt-4 sm:grid-cols-3 lg:grid-cols-1 lg:border-t-0 lg:border-l lg:pl-6 lg:pt-0">
+          <div>
+            <div className="text-[0.66rem] uppercase tracking-[0.16em] text-white/38">Products</div>
+            <div className="mt-1 inline-flex items-center gap-2 font-display text-4xl font-bold text-white">
+              <Layers className="h-5 w-5 text-accent" />
+              {brandProducts.length}
+            </div>
+          </div>
+          <div>
+            <div className="text-[0.66rem] uppercase tracking-[0.16em] text-white/38">Average Overall</div>
+            <div className="mt-1 inline-flex items-center gap-2 font-display text-4xl font-bold text-emerald-200">
+              <Star className="h-5 w-5 text-accent" />
+              {avgOverall ? avgOverall.toFixed(1) : "N/A"}
+            </div>
+          </div>
+          <div>
+            <div className="text-[0.66rem] uppercase tracking-[0.16em] text-white/38">Average Burn</div>
+            <div className="mt-1 inline-flex items-center gap-2 font-display text-4xl font-bold text-white">
+              <Flame className="h-5 w-5 text-accent" />
+              {avgBurn ? avgBurn.toFixed(1) : "N/A"}
             </div>
           </div>
         </div>
@@ -125,7 +123,7 @@ export default async function BrandDetailPage({ params }: Props) {
         <section className="space-y-6">
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <div>
-              <div className="text-[0.66rem] uppercase tracking-[0.22em] text-white/38">Catalog</div>
+              <div className="text-[0.66rem] uppercase tracking-[0.16em] text-white/38">Catalog</div>
               <h2 className="mt-1 font-display text-4xl font-bold text-white">All {brand.name} pouches</h2>
             </div>
             <Link href="/pouches" className="text-sm text-white/60 transition hover:text-accent">
@@ -139,8 +137,8 @@ export default async function BrandDetailPage({ params }: Props) {
           </div>
         </section>
       ) : (
-        <section className="pb-editorial-panel px-6 py-10 text-center">
-          <div className="relative z-10">
+        <section className="pb-empty px-6 py-10 text-center">
+          <div>
             <h2 className="font-display text-4xl font-bold text-white">No products listed yet</h2>
             <p className="mt-4 text-white/58">This brand profile exists, but its catalog has not been added yet.</p>
           </div>
