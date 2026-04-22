@@ -36,15 +36,24 @@ function getBrandBackground(seed: string) {
 }
 
 export function BrandArtwork({ name, slug, country, logoUrl, size = "card" }: BrandArtworkProps) {
+  const isHero = size === "hero";
+
   if (logoUrl) {
     return (
-      <div className={size === "hero" ? "w-24 h-24 sm:w-28 sm:h-28" : "w-14 h-14"}>
-        <img src={logoUrl} alt={name} className="w-full h-full object-cover rounded-xl border border-border" />
+      <div
+        className={`shrink-0 overflow-hidden rounded-xl border border-white/8 bg-white/[0.04] ${
+          isHero ? "h-24 w-24 sm:h-28 sm:w-28" : "h-14 w-14"
+        }`}
+      >
+        <img
+          src={logoUrl}
+          alt={name}
+          className={`h-full w-full object-contain ${isHero ? "p-3" : "p-2"}`}
+          loading="lazy"
+        />
       </div>
     );
   }
-
-  const isHero = size === "hero";
   const palette = getBrandBackground(slug || name);
 
   return (

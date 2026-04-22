@@ -5,6 +5,7 @@ import type { Metadata } from "next";
 import { BrandArtwork } from "@/components/catalog/BrandArtwork";
 import { PageIntro } from "@/components/common/PageIntro";
 import { hasPublicScore } from "@/lib/catalog/burn";
+import { getPublicWebsiteUrl } from "@/lib/site";
 
 export const revalidate = 60;
 export const metadata: Metadata = {
@@ -21,6 +22,7 @@ type BrandRow = {
   slug: string;
   country: string | null;
   description: string | null;
+  logo_url: string | null;
   website_url: string | null;
 };
 
@@ -36,7 +38,7 @@ type BrandProductRow = {
 
 export default async function BrandsPage() {
   const [{ data: brands }, { data: products }] = await Promise.all([
-    supabase.from("brands").select("id, name, slug, country, description, website_url").order("name"),
+    supabase.from("brands").select("id, name, slug, country, description, logo_url, website_url").order("name"),
     supabase
       .from("products")
       .select("brand_id, slug, name, strength_mg, avg_burn, avg_overall, review_count"),
@@ -85,6 +87,7 @@ export default async function BrandsPage() {
         publicProductCount: reviewedProducts.length,
         avgOverall: weightedOverall,
         avgBurn: weightedBurn,
+        officialWebsiteUrl: getPublicWebsiteUrl(brand.website_url),
         strongestProduct,
         mostReviewedProduct,
         bestRatedProduct,
@@ -109,7 +112,7 @@ export default async function BrandsPage() {
             className="group flex h-full flex-col rounded-xl border border-white/8 bg-card p-5 transition hover:border-white/16"
           >
             <div className="flex items-start gap-4">
-              <BrandArtwork name={brand.name} slug={brand.slug} country={brand.country} size="card" />
+              <BrandArtwork name={brand.name} slug={brand.slug} country={brand.country} logoUrl={brand.logo_url} size="card" />
               <div className="min-w-0 flex-1">
                 <p className="text-[0.68rem] uppercase tracking-[0.16em] text-white/42">
                   {brand.country || "Global"}
@@ -187,7 +190,7 @@ export default async function BrandsPage() {
               <span>
                 {brand.publicProductCount} public-score product{brand.publicProductCount === 1 ? "" : "s"}
               </span>
-              {brand.website_url && (
+              {brand.officialWebsiteUrl && (
                 <span className="inline-flex items-center gap-1 text-white/40">
                   <Globe className="h-3 w-3" />
                   Brand site

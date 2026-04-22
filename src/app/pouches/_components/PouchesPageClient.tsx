@@ -166,7 +166,7 @@ export function PouchesPageClient() {
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value as SortOption)}
-                className="pb-input px-3 py-2.5 text-sm"
+                className="pb-select px-3 py-2.5 text-sm"
               >
                 <option value="reviews">Most reviewed</option>
                 <option value="overall">Highest rated (public only first)</option>
@@ -199,7 +199,7 @@ export function PouchesPageClient() {
             <select
               value={selectedBrand}
               onChange={(e) => setSelectedBrand(e.target.value)}
-              className="pb-input px-3 py-2.5 text-sm"
+              className="pb-select px-3 py-2.5 text-sm"
             >
               <option value="">All brands</option>
               {brands.map((brand) => (
@@ -215,7 +215,7 @@ export function PouchesPageClient() {
             <select
               value={selectedCategory}
               onChange={(e) => setSelectedCategory(e.target.value)}
-              className="pb-input px-3 py-2.5 text-sm"
+              className="pb-select px-3 py-2.5 text-sm"
             >
               <option value="">All flavors</option>
               {FLAVOR_CATEGORIES.map((category) => (
@@ -231,7 +231,7 @@ export function PouchesPageClient() {
             <select
               value={selectedSignal}
               onChange={(e) => setSelectedSignal(e.target.value as SignalFilter)}
-              className="pb-input px-3 py-2.5 text-sm"
+              className="pb-select px-3 py-2.5 text-sm"
             >
               <option value="all">Any signal level</option>
               <option value="public">Public scores only</option>
@@ -248,7 +248,7 @@ export function PouchesPageClient() {
             <select
               value={selectedBurnMin}
               onChange={(e) => setSelectedBurnMin(Number(e.target.value))}
-              className="pb-input px-3 py-2.5 text-sm"
+              className="pb-select px-3 py-2.5 text-sm"
             >
               <option value={0}>Any</option>
               <option value={3}>3+ Warm</option>

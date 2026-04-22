@@ -90,7 +90,7 @@ export function LoginPageClient({ returnTo }: LoginPageClientProps) {
     if (error) {
       setError(error.message);
     } else {
-      setMessage("Check your email for a magic link to sign in.");
+      setMessage("Check your inbox and open the magic link on this same device and browser to finish signing in.");
       setEmail("");
     }
 
@@ -102,7 +102,7 @@ export function LoginPageClient({ returnTo }: LoginPageClientProps) {
       <div className="mx-auto max-w-2xl rounded-xl border border-white/8 bg-card p-8 text-center sm:p-10">
         <p className="mb-3 text-sm uppercase tracking-[0.16em] text-accent">PouchBase Account</p>
         <h1 className="mb-3 font-display text-3xl font-bold">Checking your sign-in session...</h1>
-        <p className="text-white/50">If you just used a magic link or Google, we’ll send you back automatically.</p>
+        <p className="text-white/50">If you just used Google or opened a magic link on this device, we’ll send you back automatically.</p>
       </div>
     );
   }
@@ -114,16 +114,16 @@ export function LoginPageClient({ returnTo }: LoginPageClientProps) {
           <Flame className="w-5 h-5" />
           <span className="text-sm uppercase tracking-[0.16em]">PouchBase Account</span>
         </div>
-        <h1 className="mb-4 font-display text-3xl font-bold sm:text-4xl">Sign in to rate, review, and build your taste profile</h1>
+        <h1 className="mb-4 font-display text-3xl font-bold sm:text-4xl">Sign in to rate, review, and add trusted signal to the catalog</h1>
         <p className="max-w-2xl text-white/50">
-          Create an account to leave burn ratings, compare favorites, and help shape the most honest pouch database on the internet.
+          PouchBase keeps scoring trust-first. Signing in lets you leave structured reviews, compare favorites, and help build public scores only when enough real data exists.
         </p>
 
         <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-3">
           {[
             "Rate burn, flavor, and longevity",
-            "Track your favorite brands and products",
-            "Help other users find the best pouch",
+            "Compare products with your own logged experience",
+            "Help public scores earn credibility over time",
           ].map((item) => (
             <div key={item} className="rounded-lg border border-white/8 bg-black/20 p-4 text-sm text-white/45">
               {item}
@@ -134,7 +134,7 @@ export function LoginPageClient({ returnTo }: LoginPageClientProps) {
 
       <section className="rounded-xl border border-white/8 bg-card p-6 sm:p-8">
         <h2 className="mb-2 font-display text-2xl font-bold">Sign In</h2>
-        <p className="mb-6 text-sm text-white/45">Use Google or get a secure magic link by email.</p>
+        <p className="mb-6 text-sm text-white/45">Google is the fastest path. Email remains available as a slower fallback.</p>
         {nextPath !== "/" && (
           <p className="mb-4 text-xs text-white/40">
             You’ll be sent back to <span className="text-white">{nextPath}</span> after sign-in.
@@ -142,49 +142,65 @@ export function LoginPageClient({ returnTo }: LoginPageClientProps) {
         )}
 
         <div className="space-y-4">
-          <button
-            type="button"
-            onClick={handleGoogleSignIn}
-            disabled={submitting}
-            className="w-full flex items-center justify-center gap-3 bg-white text-black font-semibold rounded-xl px-4 py-3 hover:bg-zinc-200 transition-colors disabled:opacity-60"
-          >
-            <Flame className="w-5 h-5" />
-            Continue with Google
-          </button>
+          <div className="rounded-xl border border-white/10 bg-black/20 p-4">
+            <div className="mb-3 flex items-start justify-between gap-3">
+              <div>
+                <p className="text-[0.68rem] uppercase tracking-[0.16em] text-accent">Recommended</p>
+                <h3 className="mt-1 font-display text-xl font-bold text-white">Continue with Google</h3>
+                <p className="mt-1 text-sm text-white/45">Faster sign-in, fewer steps, and the smoothest return to your review flow.</p>
+              </div>
+            </div>
+            <button
+              type="button"
+              onClick={handleGoogleSignIn}
+              disabled={submitting}
+              className="flex w-full items-center justify-center gap-3 rounded-xl bg-white px-4 py-3 font-semibold text-black transition-colors hover:bg-zinc-200 disabled:opacity-60"
+            >
+              <Flame className="h-5 w-5" />
+              Continue with Google
+            </button>
+          </div>
 
           <div className="relative py-2">
             <div className="absolute inset-0 flex items-center">
               <div className="w-full border-t border-white/8" />
             </div>
             <div className="relative flex justify-center">
-              <span className="bg-card px-3 text-xs uppercase tracking-[0.16em] text-white/40">Or</span>
+              <span className="bg-card px-3 text-xs uppercase tracking-[0.16em] text-white/40">Email fallback</span>
             </div>
           </div>
 
-          <form onSubmit={handleMagicLink} className="space-y-4">
-            <label className="block">
-              <span className="mb-2 block text-sm text-white/45">Email address</span>
-              <div className="relative">
-                <Mail className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-white/35" />
-                <input
-                  type="email"
-                  required
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="you@example.com"
-                  className="pb-input pl-10 pr-4 py-3 text-sm"
-                />
-              </div>
-            </label>
+          <div className="rounded-xl border border-white/8 bg-black/10 p-4">
+            <p className="text-sm font-medium text-white/72">Use a magic link instead</p>
+            <p className="mt-1 text-sm leading-6 text-white/42">
+              Best if you open the email on this same device and browser. Cross-device opens can interrupt the return flow.
+            </p>
 
-            <button
-              type="submit"
-              disabled={submitting}
-              className="w-full bg-accent hover:bg-accent-hover text-black font-semibold rounded-xl px-4 py-3 transition-colors disabled:opacity-60"
-            >
-              Send Magic Link
-            </button>
-          </form>
+            <form onSubmit={handleMagicLink} className="mt-4 space-y-4">
+              <label className="block">
+                <span className="mb-2 block text-sm text-white/45">Email address</span>
+                <div className="relative">
+                  <Mail className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-white/35" />
+                  <input
+                    type="email"
+                    required
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="you@example.com"
+                    className="pb-input pl-10 pr-4 py-3 text-sm"
+                  />
+                </div>
+              </label>
+
+              <button
+                type="submit"
+                disabled={submitting}
+                className="w-full rounded-xl border border-white/10 bg-accent px-4 py-3 font-semibold text-black transition-colors hover:bg-accent-hover disabled:opacity-60"
+              >
+                Send Magic Link
+              </button>
+            </form>
+          </div>
 
           {message && (
             <p className="text-sm text-green-400 inline-flex items-center gap-2">

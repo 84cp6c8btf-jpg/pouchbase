@@ -9,6 +9,7 @@ import { hasPublicScore, MIN_PUBLIC_SCORE_REVIEWS } from "@/lib/catalog/burn";
 import type { ProductWithBrand } from "@/lib/catalog/discovery";
 import { PRODUCT_WITH_BRAND_SELECT } from "@/lib/catalog/selects";
 import { sortProductsByReviewSignal } from "@/lib/catalog/intelligence";
+import { getPublicWebsiteUrl } from "@/lib/site";
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -40,11 +41,13 @@ export default async function BrandDetailPage({ params }: Props) {
 
   const { data: brand } = await supabase
     .from("brands")
-    .select("id, name, slug, country, description, website_url")
+    .select("id, name, slug, country, description, logo_url, website_url")
     .eq("slug", slug)
     .single();
 
   if (!brand) notFound();
+
+  const officialWebsiteUrl = getPublicWebsiteUrl(brand.website_url);
 
   const { data: products } = await supabase
     .from("products")
@@ -87,7 +90,7 @@ export default async function BrandDetailPage({ params }: Props) {
 
       <section className="grid gap-6 rounded-xl border border-white/8 bg-card p-6 sm:p-8 lg:grid-cols-[1fr_18rem] lg:items-end">
         <div className="flex flex-col gap-5 sm:flex-row sm:items-center">
-          <BrandArtwork name={brand.name} slug={brand.slug} country={brand.country} size="hero" />
+          <BrandArtwork name={brand.name} slug={brand.slug} country={brand.country} logoUrl={brand.logo_url} size="hero" />
           <div>
             <p className="text-xs uppercase tracking-[0.16em] text-white/35">
               {brand.country || "Global Brand"}
@@ -101,9 +104,9 @@ export default async function BrandDetailPage({ params }: Props) {
             <p className="mt-3 text-sm text-white/46">
               Brand-level averages only reflect products with {MIN_PUBLIC_SCORE_REVIEWS}+ structured reviews.
             </p>
-            {brand.website_url && (
+            {officialWebsiteUrl && (
               <a
-                href={brand.website_url}
+                href={officialWebsiteUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="mt-5 inline-flex items-center gap-2 text-sm text-white/55 transition hover:text-accent"

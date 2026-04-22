@@ -115,6 +115,39 @@
     border-color: rgba(255, 122, 26, 0.35);
   }
 
+  /* Select control — custom arrow, better readability on dark bg */
+  .pb-select {
+    width: 100%;
+    border-radius: 0.75rem;
+    border: 1px solid var(--border);
+    background: rgba(0, 0, 0, 0.28);
+    color: var(--foreground);
+    outline: none;
+    transition: border-color 150ms ease;
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' viewBox='0 0 16 16'%3E%3Cpath stroke='%238a8f9e' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m4 6 4 4 4-4'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.65rem center;
+    background-size: 1rem;
+    padding-right: 2.2rem;
+    cursor: pointer;
+  }
+
+  .pb-select:focus {
+    border-color: rgba(255, 122, 26, 0.35);
+  }
+
+  .pb-select:hover {
+    border-color: var(--border-strong);
+  }
+
+  .pb-select option {
+    background: #1a1a1f;
+    color: var(--foreground);
+    padding: 0.5rem;
+  }
+
   .pb-empty {
     border-radius: 1rem;
     border: 1px dashed rgba(255, 255, 255, 0.12);

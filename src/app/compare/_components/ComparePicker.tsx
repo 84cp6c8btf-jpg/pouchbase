@@ -15,7 +15,7 @@ export function ComparePicker({ products, leftSlug, rightSlug }: ComparePickerPr
           <select
             name="left"
             defaultValue={leftSlug || ""}
-            className="pb-input px-3 py-2.5 text-sm"
+            className="pb-select px-3 py-2.5 text-sm"
           >
             <option value="">Select a pouch</option>
             {products.map((product) => {
@@ -34,7 +34,7 @@ export function ComparePicker({ products, leftSlug, rightSlug }: ComparePickerPr
           <select
             name="right"
             defaultValue={rightSlug || ""}
-            className="pb-input px-3 py-2.5 text-sm"
+            className="pb-select px-3 py-2.5 text-sm"
           >
             <option value="">Select a pouch</option>
             {products.map((product) => {

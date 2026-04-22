@@ -192,7 +192,29 @@ export default async function Home() {
         </section>
       )}
 
-      {activePoll && <WeeklyPollCard poll={activePoll} />}
+      {activePoll ? (
+        <WeeklyPollCard poll={activePoll} />
+      ) : (
+        <section className="rounded-xl border border-white/8 bg-card p-5 sm:p-6">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+              <div className="text-[0.68rem] uppercase tracking-[0.18em] text-accent/85">
+                Weekly Burn Battle
+              </div>
+              <h2 className="mt-2 font-display text-2xl font-bold text-white">
+                Next poll incoming.
+              </h2>
+              <p className="mt-2 max-w-xl text-sm leading-6 text-white/50">
+                One editorial head-to-head at a time. The next burn battle will appear here once it goes live.
+              </p>
+            </div>
+            <div className="inline-flex items-center gap-2 self-start rounded-full border border-white/10 bg-black/20 px-3 py-1.5 text-xs text-white/38">
+              <Flame className="h-3.5 w-3.5 text-accent/60" />
+              Between rounds
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* Quick links */}
       <section className="grid gap-3 lg:grid-cols-2 xl:grid-cols-4">
