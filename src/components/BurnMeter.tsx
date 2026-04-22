@@ -1,4 +1,5 @@
 import { Flame } from "lucide-react";
+import { formatBurnRating, getBurnLabel, getBurnUiTone } from "@/lib/burn";
 
 interface BurnMeterProps {
   rating: number;
@@ -6,33 +7,9 @@ interface BurnMeterProps {
   showLabel?: boolean;
 }
 
-export const BURN_SCALE = [
-  { label: "Soft", range: "0-2.4" },
-  { label: "Warm", range: "2.5-4.4" },
-  { label: "Sharp", range: "4.5-6.4" },
-  { label: "Intense", range: "6.5-8.4" },
-  { label: "Inferno", range: "8.5-10" },
-] as const;
-
-export function getBurnLabel(rating: number) {
-  if (rating < 2.5) return "Soft";
-  if (rating < 4.5) return "Warm";
-  if (rating < 6.5) return "Sharp";
-  if (rating < 8.5) return "Intense";
-  return "Inferno";
-}
-
-function getColor(rating: number) {
-  if (rating < 2.5) return { text: "text-amber-300", bar: "bg-amber-400" };
-  if (rating < 4.5) return { text: "text-orange-300", bar: "bg-orange-400" };
-  if (rating < 6.5) return { text: "text-orange-400", bar: "bg-orange-500" };
-  if (rating < 8.5) return { text: "text-red-400", bar: "bg-red-500" };
-  return { text: "text-red-300", bar: "bg-red-400" };
-}
-
 export function BurnMeter({ rating, size = "md", showLabel = true }: BurnMeterProps) {
-  const rounded = Math.round(rating * 10) / 10;
-  const color = getColor(rounded);
+  const rounded = Number(formatBurnRating(rating));
+  const color = getBurnUiTone(rounded);
   const width = `${Math.max(8, Math.min(100, rounded * 10))}%`;
 
   const compact = size === "sm";

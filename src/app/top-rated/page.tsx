@@ -2,8 +2,10 @@ import { supabase } from "@/lib/supabase";
 import { ProductCard } from "@/components/ProductCard";
 import type { Metadata } from "next";
 import { PageIntro } from "@/components/PageIntro";
-import { ReferencePanel } from "@/components/ReferencePanel";
-import { MessageSquare, ShieldCheck } from "lucide-react";
+import { TrustDisclosure } from "@/components/TrustDisclosure";
+import { MIN_PUBLIC_SCORE_REVIEWS } from "@/lib/burn";
+import { sortProductsByAdjustedMetric } from "@/lib/intelligence";
+import type { ProductWithBrand } from "@/lib/discovery";
 
 export const revalidate = 60;
 export const metadata: Metadata = {
@@ -18,40 +20,26 @@ export default async function TopRatedPage() {
   const { data: products } = await supabase
     .from("products")
     .select("*, brands(name, slug)")
-    .gt("review_count", 0)
-    .order("avg_overall", { ascending: false })
+    .gte("review_count", MIN_PUBLIC_SCORE_REVIEWS)
     .order("review_count", { ascending: false })
-    .limit(30);
+    .limit(160);
 
-  const rankedProducts = products || [];
+  const rankedProducts = sortProductsByAdjustedMetric(
+    (products || []) as ProductWithBrand[],
+    "avg_overall",
+    "higher"
+  ).slice(0, 30);
 
   return (
     <div className="space-y-6">
       <PageIntro
         eyebrow="Rankings"
         title="The best pouches right now."
-        description="Ranked by overall community score. When products are tied, the better-tested one stays ahead."
+        description="Ranked by overall community score with a light review-depth weighting, so better-tested products hold more authority when scores are close."
         meta={`${rankedProducts.length} products ranked`}
       />
 
-      <ReferencePanel
-        title="How this list works"
-        columns={2}
-        items={[
-          {
-            icon: MessageSquare,
-            label: "Review data leads",
-            description:
-              "Overall rankings follow community scores, with more-reviewed products breaking ties.",
-          },
-          {
-            icon: ShieldCheck,
-            label: "Retail links stay separate",
-            description:
-              "Affiliate or retailer relationships never change rank order. This list is review-led, not sponsored placement.",
-          },
-        ]}
-      />
+      <TrustDisclosure context="ranking" />
 
       {rankedProducts.length > 0 ? (
         <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">

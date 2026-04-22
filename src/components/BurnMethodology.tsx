@@ -1,5 +1,5 @@
 import { Flame } from "lucide-react";
-import { BURN_SCALE } from "@/components/BurnMeter";
+import { BURN_SCALE, MIN_PUBLIC_SCORE_REVIEWS } from "@/lib/burn";
 
 interface BurnMethodologyProps {
   compact?: boolean;
@@ -20,7 +20,8 @@ export function BurnMethodology({ compact = false }: BurnMethodologyProps) {
           <p className="mt-3 text-sm leading-7 text-white/55">
             PouchBase burn scores come from community reviews of perceived intensity. Moisture,
             flavoring, recipe, and pouch construction can make a lower-mg pouch feel harsher than
-            a stronger one.
+            a stronger one. Public burn scores appear once a pouch reaches {MIN_PUBLIC_SCORE_REVIEWS}
+            structured reviews.
           </p>
         </div>
 
@@ -29,6 +30,7 @@ export function BurnMethodology({ compact = false }: BurnMethodologyProps) {
             <div key={step.label} className="rounded-lg border border-white/8 bg-white/[0.03] px-3 py-3">
               <div className="text-[0.68rem] uppercase tracking-[0.16em] text-white/38">{step.range}</div>
               <div className="mt-1 font-display text-lg font-bold text-white">{step.label}</div>
+              {!compact && <p className="mt-1 text-sm leading-6 text-white/48">{step.description}</p>}
             </div>
           ))}
         </div>

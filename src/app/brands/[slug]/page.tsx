@@ -2,9 +2,10 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 import { ProductCard } from "@/components/ProductCard";
-import { Flame, Globe, Layers, Star } from "lucide-react";
+import { Flame, Globe, Layers, Star, Zap } from "lucide-react";
 import type { Metadata } from "next";
 import { BrandArtwork } from "@/components/BrandArtwork";
+import { hasPublicScore, MIN_PUBLIC_SCORE_REVIEWS } from "@/lib/burn";
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -47,15 +48,22 @@ export default async function BrandDetailPage({ params }: Props) {
     .order("avg_overall", { ascending: false });
 
   const brandProducts = products || [];
-  const reviewedProducts = brandProducts.filter((product) => product.review_count > 0);
+  const reviewedProducts = brandProducts.filter((product) => hasPublicScore(product.review_count));
+  const totalReviews = reviewedProducts.reduce((sum, product) => sum + product.review_count, 0);
   const avgOverall =
-    reviewedProducts.length > 0
-      ? reviewedProducts.reduce((sum, product) => sum + Number(product.avg_overall || 0), 0) / reviewedProducts.length
+    totalReviews > 0
+      ? reviewedProducts.reduce((sum, product) => sum + Number(product.avg_overall || 0) * product.review_count, 0) / totalReviews
       : 0;
   const avgBurn =
-    reviewedProducts.length > 0
-      ? reviewedProducts.reduce((sum, product) => sum + Number(product.avg_burn || 0), 0) / reviewedProducts.length
+    totalReviews > 0
+      ? reviewedProducts.reduce((sum, product) => sum + Number(product.avg_burn || 0) * product.review_count, 0) / totalReviews
       : 0;
+  const strongestProduct = [...brandProducts].sort(
+    (a, b) => b.strength_mg - a.strength_mg || b.review_count - a.review_count
+  )[0];
+  const bestRatedProduct = [...reviewedProducts].sort(
+    (a, b) => b.avg_overall - a.avg_overall || b.review_count - a.review_count
+  )[0];
 
   return (
     <div className="space-y-8">
@@ -80,6 +88,9 @@ export default async function BrandDetailPage({ params }: Props) {
             <p className="mt-4 max-w-2xl text-base leading-8 text-white/55">
               {brand.description || `${brand.name} nicotine pouches listed on PouchBase.`}
             </p>
+            <p className="mt-3 text-sm text-white/46">
+              Brand-level averages only reflect products with {MIN_PUBLIC_SCORE_REVIEWS}+ structured reviews.
+            </p>
             {brand.website_url && (
               <a
                 href={brand.website_url}
@@ -91,6 +102,20 @@ export default async function BrandDetailPage({ params }: Props) {
                 Visit brand site
               </a>
             )}
+            <div className="mt-5 flex flex-wrap gap-4 text-sm text-white/48">
+              {strongestProduct && (
+                <span className="inline-flex items-center gap-2">
+                  <Zap className="h-4 w-4 text-accent" />
+                  Strongest: {strongestProduct.name} ({strongestProduct.strength_mg}mg)
+                </span>
+              )}
+              {bestRatedProduct && (
+                <span className="inline-flex items-center gap-2">
+                  <Star className="h-4 w-4 text-accent" />
+                  Best rated: {bestRatedProduct.name} ({bestRatedProduct.avg_overall.toFixed(1)})
+                </span>
+              )}
+            </div>
           </div>
         </div>
 

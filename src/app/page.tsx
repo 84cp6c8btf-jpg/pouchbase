@@ -2,11 +2,8 @@ import Link from "next/link";
 import {
   ArrowRight,
   Flame,
-  ListOrdered,
   Search,
-  ShieldCheck,
   Star,
-  Store,
   Tag,
 } from "lucide-react";
 import { supabase } from "@/lib/supabase";
@@ -14,7 +11,11 @@ import { ProductCard } from "@/components/ProductCard";
 import { BurnMeter } from "@/components/BurnMeter";
 import type { Metadata } from "next";
 import { BurnMethodology } from "@/components/BurnMethodology";
-import { ReferencePanel } from "@/components/ReferencePanel";
+import { TrustDisclosure } from "@/components/TrustDisclosure";
+import { MIN_PUBLIC_SCORE_REVIEWS } from "@/lib/burn";
+import { BurnVsStrengthMap } from "@/components/BurnVsStrengthMap";
+import type { ProductWithBrand } from "@/lib/discovery";
+import { sortProductsByAdjustedMetric } from "@/lib/intelligence";
 
 export const metadata: Metadata = {
   alternates: {
@@ -28,19 +29,31 @@ async function getTopProducts() {
   const { data } = await supabase
     .from("products")
     .select("*, brands(name, slug)")
-    .order("avg_overall", { ascending: false })
-    .limit(6);
-  return data || [];
+    .gte("review_count", MIN_PUBLIC_SCORE_REVIEWS)
+    .order("review_count", { ascending: false })
+    .limit(80);
+  return sortProductsByAdjustedMetric((data || []) as ProductWithBrand[], "avg_overall", "higher").slice(0, 6);
 }
 
 async function getHighestBurn() {
   const { data } = await supabase
     .from("products")
     .select("*, brands(name, slug)")
-    .gt("review_count", 0)
-    .order("avg_burn", { ascending: false })
-    .limit(3);
-  return data || [];
+    .gte("review_count", MIN_PUBLIC_SCORE_REVIEWS)
+    .order("review_count", { ascending: false })
+    .limit(80);
+  return sortProductsByAdjustedMetric((data || []) as ProductWithBrand[], "avg_burn", "higher").slice(0, 3);
+}
+
+async function getBurnPool() {
+  const { data } = await supabase
+    .from("products")
+    .select("*, brands(name, slug)")
+    .gte("review_count", MIN_PUBLIC_SCORE_REVIEWS)
+    .order("review_count", { ascending: false })
+    .limit(120);
+
+  return (data || []) as ProductWithBrand[];
 }
 
 async function getStats() {
@@ -80,13 +93,20 @@ const NAV_LINKS = [
     description: "Browse every brand we cover — from mainstream giants to cult favorites.",
     icon: Tag,
   },
+  {
+    href: "/burn-vs-mg",
+    title: "Burn vs Mg",
+    description: "See where similar-strength pouches split apart on felt burn.",
+    icon: Flame,
+  },
 ];
 
 export default async function Home() {
-  const [topProducts, highestBurn, stats] = await Promise.all([
+  const [topProducts, highestBurn, stats, burnPool] = await Promise.all([
     getTopProducts(),
     getHighestBurn(),
     getStats(),
+    getBurnPool(),
   ]);
 
   const burnLeader = highestBurn[0];
@@ -158,7 +178,7 @@ export default async function Home() {
       )}
 
       {/* Quick links */}
-      <section className="grid gap-3 lg:grid-cols-3">
+      <section className="grid gap-3 lg:grid-cols-2 xl:grid-cols-4">
         {NAV_LINKS.map(({ href, title, description, icon: Icon }) => (
           <Link
             key={href}
@@ -178,31 +198,15 @@ export default async function Home() {
 
       <section className="grid gap-4 lg:grid-cols-[1.15fr_0.85fr]">
         <BurnMethodology compact />
-        <ReferencePanel
-          eyebrow="Trust Signals"
-          title="Built to compare, not to sell."
-          items={[
-            {
-              icon: ListOrdered,
-              label: "Rankings follow review data",
-              description:
-                "Top Rated and Highest Burn lists follow community scores and review depth, not commercial placement.",
-            },
-            {
-              icon: Store,
-              label: "Prices come from external shops",
-              description:
-                "PouchBase does not sell pouches. Retailer availability and pricing can change outside the directory.",
-            },
-            {
-              icon: ShieldCheck,
-              label: "Affiliate links stay separate",
-              description:
-                "Retailer links can support the site, but they never change burn scores, reviews, or product order.",
-            },
-          ]}
-        />
+        <TrustDisclosure context="discovery" />
       </section>
+
+      <BurnVsStrengthMap
+        products={burnPool}
+        compact
+        title="Burn vs nicotine at a glance"
+        description="Some products punch harder than their milligrams suggest, while others stay smoother than nearby-strength peers. This map makes that visible fast."
+      />
 
       {/* Top Rated */}
       {topProducts.length > 0 && (

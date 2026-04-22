@@ -26,6 +26,9 @@ export function Footer() {
               <li><Link href="/brands" className="transition hover:text-white">Brands</Link></li>
               <li><Link href="/top-rated" className="transition hover:text-white">Top Rated</Link></li>
               <li><Link href="/highest-burn" className="transition hover:text-white">Highest Burn</Link></li>
+              <li><Link href="/burn-ladder" className="transition hover:text-white">Burn Ladder</Link></li>
+              <li><Link href="/burn-vs-mg" className="transition hover:text-white">Burn vs Mg</Link></li>
+              <li><Link href="/compare" className="transition hover:text-white">Compare</Link></li>
             </ul>
           </div>
 

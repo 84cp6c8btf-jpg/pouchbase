@@ -6,6 +6,7 @@ import { Product, FLAVOR_CATEGORIES } from "@/lib/types";
 import { ProductCard } from "@/components/ProductCard";
 import { Flame, Search, SlidersHorizontal, X } from "lucide-react";
 import { PageIntro } from "@/components/PageIntro";
+import { MIN_PUBLIC_SCORE_REVIEWS } from "@/lib/burn";
 
 type SortOption = "overall" | "burn" | "strength" | "reviews" | "newest";
 
@@ -216,7 +217,7 @@ export function PouchesPageClient() {
           </div>
 
           <p className="text-xs leading-6 text-white/40">
-            Browse by community data, not retailer placement. Burn and ranking signals come from product reviews.
+            Browse by community data, not retailer placement. Public scores appear after {MIN_PUBLIC_SCORE_REVIEWS} structured reviews.
           </p>
         </div>
       </section>

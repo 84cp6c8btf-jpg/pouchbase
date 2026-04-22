@@ -1,25 +1,17 @@
 import { ImageResponse } from "next/og";
 import { supabase } from "@/lib/supabase";
+import {
+  formatBurnRating,
+  getBurnLabel,
+  getBurnUiTone,
+  hasPublicScore,
+  MIN_PUBLIC_SCORE_REVIEWS,
+} from "@/lib/burn";
 
 export const runtime = "edge";
 export const alt = "PouchBase — Nicotine Pouch Review";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
-
-function getBurnColor(burn: number): string {
-  if (burn <= 3) return "#22c55e";
-  if (burn <= 5) return "#eab308";
-  if (burn <= 7) return "#f97316";
-  return "#ef4444";
-}
-
-function getBurnLabel(burn: number): string {
-  if (burn <= 2) return "MILD";
-  if (burn <= 4) return "MODERATE";
-  if (burn <= 6) return "SPICY";
-  if (burn <= 8) return "INTENSE";
-  return "INFERNO";
-}
 
 export default async function OgImage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
@@ -55,8 +47,9 @@ export default async function OgImage({ params }: { params: Promise<{ slug: stri
 
   const brandRaw = product.brands;
   const brandName = Array.isArray(brandRaw) ? brandRaw[0]?.name : (brandRaw as { name: string } | null)?.name || "";
-  const burnColor = getBurnColor(product.avg_burn);
-  const burnLabel = getBurnLabel(product.avg_burn);
+  const burnColor = getBurnUiTone(product.avg_burn).ogColor;
+  const burnLabel = getBurnLabel(product.avg_burn).toUpperCase();
+  const publicScoreVisible = hasPublicScore(product.review_count);
 
   return new ImageResponse(
     (
@@ -128,14 +121,25 @@ export default async function OgImage({ params }: { params: Promise<{ slug: stri
             <span style={{ color: "rgba(255,255,255,0.4)", fontSize: "13px", letterSpacing: "0.2em" }}>
               BURN INDEX
             </span>
-            <div style={{ display: "flex", alignItems: "baseline", gap: "8px" }}>
-              <span style={{ color: burnColor, fontSize: "56px", fontWeight: 800, lineHeight: 1 }}>
-                {product.avg_burn.toFixed(1)}
-              </span>
-              <span style={{ color: burnColor, fontSize: "18px", fontWeight: 600, opacity: 0.8 }}>
-                {burnLabel}
-              </span>
-            </div>
+            {publicScoreVisible ? (
+              <div style={{ display: "flex", alignItems: "baseline", gap: "8px" }}>
+                <span style={{ color: burnColor, fontSize: "56px", fontWeight: 800, lineHeight: 1 }}>
+                  {formatBurnRating(product.avg_burn)}
+                </span>
+                <span style={{ color: burnColor, fontSize: "18px", fontWeight: 600, opacity: 0.8 }}>
+                  {burnLabel}
+                </span>
+              </div>
+            ) : (
+              <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+                <span style={{ color: "white", fontSize: "34px", fontWeight: 800, lineHeight: 1.1 }}>
+                  BUILDING SCORE
+                </span>
+                <span style={{ color: "rgba(255,255,255,0.55)", fontSize: "18px" }}>
+                  Public at {MIN_PUBLIC_SCORE_REVIEWS}+ reviews
+                </span>
+              </div>
+            )}
           </div>
 
           {/* Overall */}
@@ -155,9 +159,11 @@ export default async function OgImage({ params }: { params: Promise<{ slug: stri
             </span>
             <div style={{ display: "flex", alignItems: "baseline", gap: "8px" }}>
               <span style={{ color: "#f97316", fontSize: "56px", fontWeight: 800, lineHeight: 1 }}>
-                {product.avg_overall.toFixed(1)}
+                {publicScoreVisible ? product.avg_overall.toFixed(1) : "—"}
               </span>
-              <span style={{ color: "rgba(255,255,255,0.4)", fontSize: "18px" }}>/10</span>
+              <span style={{ color: "rgba(255,255,255,0.4)", fontSize: "18px" }}>
+                {publicScoreVisible ? "/10" : `Needs ${MIN_PUBLIC_SCORE_REVIEWS}+ reviews`}
+              </span>
             </div>
           </div>
 

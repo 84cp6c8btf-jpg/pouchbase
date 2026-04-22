@@ -4,6 +4,7 @@ import { Flame, Globe, MessageSquare, Star, Zap } from "lucide-react";
 import type { Metadata } from "next";
 import { BrandArtwork } from "@/components/BrandArtwork";
 import { PageIntro } from "@/components/PageIntro";
+import { hasPublicScore } from "@/lib/burn";
 
 export const revalidate = 60;
 export const metadata: Metadata = {
@@ -55,7 +56,7 @@ export default async function BrandsPage() {
       products: brandProducts.get(brand.id) || [],
     }))
     .map((brand) => {
-      const reviewedProducts = brand.products.filter((product) => product.review_count > 0);
+      const reviewedProducts = brand.products.filter((product) => hasPublicScore(product.review_count));
       const totalReviews = reviewedProducts.reduce((sum, product) => sum + product.review_count, 0);
       const weightedOverall =
         totalReviews > 0
@@ -68,7 +69,9 @@ export default async function BrandsPage() {
       const strongestProduct = [...brand.products].sort(
         (a, b) => b.strength_mg - a.strength_mg || b.review_count - a.review_count
       )[0];
-      const mostReviewedProduct = [...reviewedProducts].sort((a, b) => b.review_count - a.review_count)[0];
+      const bestRatedProduct = [...reviewedProducts].sort(
+        (a, b) => b.avg_overall - a.avg_overall || b.review_count - a.review_count
+      )[0];
 
       return {
         ...brand,
@@ -77,7 +80,7 @@ export default async function BrandsPage() {
         avgOverall: weightedOverall,
         avgBurn: weightedBurn,
         strongestProduct,
-        mostReviewedProduct,
+        bestRatedProduct,
       };
     })
     .sort((a, b) => b.productCount - a.productCount || a.name.localeCompare(b.name));
@@ -144,17 +147,17 @@ export default async function BrandsPage() {
                   </span>
                 </div>
               )}
-              {brand.mostReviewedProduct ? (
+              {brand.bestRatedProduct ? (
                 <div className="flex items-start gap-2">
-                  <MessageSquare className="mt-0.5 h-4 w-4 shrink-0 text-accent" />
+                  <Star className="mt-0.5 h-4 w-4 shrink-0 text-accent" />
                   <span className="line-clamp-1">
-                    Most reviewed: {brand.mostReviewedProduct.name} ({brand.mostReviewedProduct.review_count} reviews)
+                    Best rated: {brand.bestRatedProduct.name} ({brand.bestRatedProduct.avg_overall.toFixed(1)})
                   </span>
                 </div>
               ) : (
                 <div className="flex items-start gap-2">
                   <MessageSquare className="mt-0.5 h-4 w-4 shrink-0 text-white/30" />
-                  <span>No review signal yet</span>
+                  <span>No public score signal yet</span>
                 </div>
               )}
             </div>

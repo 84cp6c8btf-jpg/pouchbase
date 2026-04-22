@@ -1,18 +1,26 @@
 import { supabase } from "@/lib/supabase";
 import { notFound } from "next/navigation";
-import { BurnMeter } from "@/components/BurnMeter";
 import { RatingBadge } from "@/components/RatingBadge";
 import { ReviewSection } from "@/components/ReviewSection";
 import { PriceComparison } from "@/components/PriceComparison";
 import { ProductJsonLd, BreadcrumbJsonLd } from "@/components/JsonLd";
 import { getSiteUrl } from "@/lib/site";
-import { Droplets, ListOrdered, MessageSquare, Package, Ruler, Store, Zap } from "lucide-react";
+import { Droplets, Package, Ruler, Zap } from "lucide-react";
 import type { Metadata } from "next";
 import type { RelationResult } from "@/lib/types";
 import Link from "next/link";
 import { ProductArtwork } from "@/components/ProductArtwork";
 import { BurnMethodology } from "@/components/BurnMethodology";
-import { ReferencePanel } from "@/components/ReferencePanel";
+import { TrustDisclosure } from "@/components/TrustDisclosure";
+import { hasPublicScore } from "@/lib/burn";
+import { ProductBurnSummary } from "@/components/ProductBurnSummary";
+import {
+  getCompareUrl,
+  getRelatedDiscoveryGroups,
+  type ProductWithBrand,
+} from "@/lib/discovery";
+import { RelatedComparisons } from "@/components/RelatedComparisons";
+import { BurnLadder } from "@/components/BurnLadder";
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -72,6 +80,14 @@ export default async function ProductPage({ params }: Props) {
   const lowestPrice = prices?.[0]?.price;
   const highestPrice = prices?.[prices.length - 1]?.price;
   const priceCurrency = prices?.[0]?.currency || "EUR";
+  const publicScoreVisible = hasPublicScore(product.review_count);
+  const { data: relatedProductsData } = await supabase
+    .from("products")
+    .select("id, brand_id, name, slug, flavor, flavor_category, strength_mg, strength_label, format, pouches_per_can, moisture, weight_per_pouch, description, image_url, avg_burn, avg_flavor, avg_longevity, avg_overall, review_count, created_at, brands(name, slug)")
+    .neq("slug", product.slug);
+  const relatedProducts = (relatedProductsData || []) as ProductWithBrand[];
+  const comparisonGroups = getRelatedDiscoveryGroups(product as ProductWithBrand, relatedProducts);
+  const ladderProducts = [product as ProductWithBrand, ...relatedProducts];
 
   return (
     <div className="mx-auto max-w-5xl space-y-8">
@@ -153,55 +169,54 @@ export default async function ProductPage({ params }: Props) {
               <Package className="h-3 w-3 text-white/40" />
               {product.pouches_per_can}/can
             </span>
+            <Link
+              href={getCompareUrl(product.slug)}
+              className="inline-flex items-center gap-1 rounded-md border border-white/10 px-3 py-1.5 text-sm text-white/56 transition hover:text-white"
+            >
+              Compare with another pouch
+            </Link>
+            <Link
+              href="/burn-ladder"
+              className="inline-flex items-center gap-1 rounded-md border border-white/10 px-3 py-1.5 text-sm text-white/56 transition hover:text-white"
+            >
+              Browse burn ladder
+            </Link>
           </div>
 
-          {product.review_count > 0 ? (
-            <>
-              <BurnMeter rating={product.avg_burn} size="lg" />
-              <div className="grid grid-cols-3 gap-2 sm:grid-cols-4">
-                <RatingBadge label="Flavor" value={product.avg_flavor} />
-                <RatingBadge label="Longevity" value={product.avg_longevity} />
-                <RatingBadge label="Overall" value={product.avg_overall} />
-                <div className="px-3 py-2">
-                  <div className="text-xs text-white/40 uppercase tracking-wider">Reviews</div>
-                  <div className="font-display text-2xl font-bold text-white">{product.review_count}</div>
-                </div>
-              </div>
-            </>
-          ) : (
-            <div className="rounded-lg border border-dashed border-white/10 px-4 py-4 text-white/45">
-              No reviews yet — be the first to rate this pouch.
-            </div>
-          )}
+          <ProductBurnSummary
+            rating={product.avg_burn}
+            reviewCount={product.review_count}
+            strengthMg={product.strength_mg}
+          />
         </div>
       </section>
 
+      {publicScoreVisible ? (
+        <section className="grid gap-2 sm:grid-cols-4">
+          <RatingBadge label="Flavor" value={product.avg_flavor} />
+          <RatingBadge label="Longevity" value={product.avg_longevity} />
+          <RatingBadge label="Overall" value={product.avg_overall} />
+          <div className="px-3 py-2">
+            <div className="text-xs uppercase tracking-wider text-white/40">Reviews</div>
+            <div className="font-display text-2xl font-bold text-white">{product.review_count}</div>
+          </div>
+        </section>
+      ) : null}
+
       <section className="grid gap-4 xl:grid-cols-[1.05fr_0.95fr]">
         <BurnMethodology compact />
-        <ReferencePanel
-          title="How this product is presented"
-          items={[
-            {
-              icon: MessageSquare,
-              label: "Community reviews drive the scores",
-              description:
-                "Burn, flavor, longevity, and overall are structured review fields, not retailer claims.",
-            },
-            {
-              icon: ListOrdered,
-              label: "Rankings stay independent",
-              description:
-                "This pouch's placement elsewhere on the site follows review data and review depth, not outbound links.",
-            },
-            {
-              icon: Store,
-              label: "Prices come from external shops",
-              description:
-                "PouchBase doesn't sell pouches. Shop pricing and stock can change independently of this page.",
-            },
-          ]}
-        />
+        <TrustDisclosure context="product" />
       </section>
+
+      <BurnLadder
+        products={ladderProducts}
+        currentSlug={product.slug}
+        compact
+        title="Step down or step up in burn"
+        description="Nearest public-score alternatives above and below this pouch by felt intensity."
+      />
+
+      <RelatedComparisons currentSlug={product.slug} groups={comparisonGroups} />
 
       <div className="grid gap-8 xl:grid-cols-[0.95fr_1.05fr] xl:items-start">
         <PriceComparison productId={product.id} pouchesPerCan={product.pouches_per_can} />

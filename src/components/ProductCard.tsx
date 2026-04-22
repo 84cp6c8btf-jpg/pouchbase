@@ -4,6 +4,12 @@ import { Product, RelationResult } from "@/lib/types";
 import { BurnMeter } from "./BurnMeter";
 import { RatingBadge } from "./RatingBadge";
 import { ProductArtwork } from "./ProductArtwork";
+import {
+  MIN_PUBLIC_SCORE_REVIEWS,
+  formatReviewCount,
+  getReviewsNeededForPublicScore,
+  getScoreState,
+} from "@/lib/burn";
 
 interface ProductCardProps {
   product: Product & { brands?: RelationResult<{ name: string; slug: string }> };
@@ -13,6 +19,8 @@ export function ProductCard({ product }: ProductCardProps) {
   const brand = Array.isArray(product.brands) ? product.brands[0] : product.brands;
   const flavorCategory =
     product.flavor_category.charAt(0).toUpperCase() + product.flavor_category.slice(1);
+  const scoreState = getScoreState(product.review_count);
+  const reviewsNeeded = getReviewsNeededForPublicScore(product.review_count);
 
   return (
     <Link
@@ -55,8 +63,13 @@ export function ProductCard({ product }: ProductCardProps) {
         </div>
 
         <div className="mt-4">
-          {product.review_count > 0 ? (
+          {scoreState === "public" ? (
             <BurnMeter rating={product.avg_burn} size="sm" />
+          ) : scoreState === "early" ? (
+            <div className="rounded-lg border border-dashed border-white/8 px-3 py-2 text-sm text-white/50">
+              {formatReviewCount(product.review_count)} logged. Public burn score unlocks at{" "}
+              {MIN_PUBLIC_SCORE_REVIEWS} reviews.
+            </div>
           ) : (
             <div className="rounded-lg border border-dashed border-white/8 px-3 py-2 text-sm text-white/46">
               No burn score yet
@@ -64,7 +77,7 @@ export function ProductCard({ product }: ProductCardProps) {
           )}
         </div>
 
-        {product.review_count > 0 ? (
+        {scoreState === "public" ? (
           <div className="mt-auto border-t border-white/8 pt-4">
             <div className="grid grid-cols-3 gap-2">
               <RatingBadge label="Flavor" value={product.avg_flavor} size="sm" />
@@ -73,9 +86,14 @@ export function ProductCard({ product }: ProductCardProps) {
             </div>
             <div className="mt-3 flex items-center gap-1.5 text-xs text-white/48">
               <MessageSquare className="h-3 w-3" />
-              {product.review_count} review{product.review_count === 1 ? "" : "s"}
+              {formatReviewCount(product.review_count)}
             </div>
           </div>
+        ) : scoreState === "early" ? (
+          <p className="mt-auto border-t border-white/8 pt-4 text-sm text-white/48">
+            Early signal only. Needs {reviewsNeeded} more {reviewsNeeded === 1 ? "review" : "reviews"} for
+            public scoring.
+          </p>
         ) : (
           <p className="mt-auto border-t border-white/8 pt-4 text-sm text-white/46">
             Be the first to review this one.

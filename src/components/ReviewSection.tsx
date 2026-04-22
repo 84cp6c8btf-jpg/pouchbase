@@ -8,6 +8,10 @@ import { RatingBadge } from "./RatingBadge";
 import { MessageSquare, User } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
+import {
+  MIN_PUBLIC_SCORE_REVIEWS,
+  getBurnLabel,
+} from "@/lib/burn";
 
 interface ReviewSectionProps {
   productId: string;
@@ -127,7 +131,11 @@ export function ReviewSection({ productId }: ReviewSectionProps) {
       <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <div className="mb-2 text-[0.66rem] uppercase tracking-[0.18em] text-white/36">Community</div>
-          <h2 className="font-display text-3xl font-bold text-white">Reviews ({reviews.length})</h2>
+          <h2 className="font-display text-3xl font-bold text-white">Structured reviews ({reviews.length})</h2>
+          <p className="mt-2 max-w-xl text-sm leading-6 text-white/50">
+            Public product scores appear after {MIN_PUBLIC_SCORE_REVIEWS} structured reviews, so early feedback
+            can build without pretending to be settled consensus.
+          </p>
         </div>
         {user ? (
           <button
@@ -156,12 +164,47 @@ export function ReviewSection({ productId }: ReviewSectionProps) {
 
       {showForm && user && (
         <form onSubmit={handleSubmit} className="mb-6 rounded-xl border border-white/8 bg-white/[0.03] p-4 sm:p-5">
+          <div className="mb-4 grid gap-3 rounded-lg border border-white/8 bg-black/15 p-4 sm:grid-cols-2">
+            <div>
+              <div className="text-[0.68rem] uppercase tracking-[0.16em] text-white/40">Structured rating</div>
+              <p className="mt-2 text-sm leading-6 text-white/52">
+                Burn, flavor, longevity, and overall are the fields that power public scores and rankings.
+              </p>
+            </div>
+            <div>
+              <div className="text-[0.68rem] uppercase tracking-[0.16em] text-white/40">Optional notes</div>
+              <p className="mt-2 text-sm leading-6 text-white/52">
+                Add free text if you want context, but the form works even if you just leave structured ratings.
+              </p>
+            </div>
+          </div>
+
           <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
             {[
-              { label: "Burn", value: burn, setter: setBurn },
-              { label: "Flavor", value: flavor, setter: setFlavor },
-              { label: "Longevity", value: longevity, setter: setLongevity },
-              { label: "Overall", value: overall, setter: setOverall },
+              {
+                label: "Burn",
+                value: burn,
+                setter: setBurn,
+                helper: `${getBurnLabel(burn)} · felt lip sting and harshness under the lip`,
+              },
+              {
+                label: "Flavor",
+                value: flavor,
+                setter: setFlavor,
+                helper: "How accurate, satisfying, and usable the flavor feels",
+              },
+              {
+                label: "Longevity",
+                value: longevity,
+                setter: setLongevity,
+                helper: "How long the pouch stays good before dropping off",
+              },
+              {
+                label: "Overall",
+                value: overall,
+                setter: setOverall,
+                helper: "Your combined take after use, independent of brand reputation",
+              },
             ].map((field) => (
               <label key={field.label} className="rounded-lg border border-white/8 bg-black/15 p-3.5">
                 <span className="block text-[0.66rem] uppercase tracking-[0.18em] text-white/38">
@@ -176,16 +219,22 @@ export function ReviewSection({ productId }: ReviewSectionProps) {
                   className="mt-3 w-full accent-orange-500"
                 />
                 <span className="mt-2 block font-display text-3xl font-bold text-white">{field.value}</span>
+                <span className="mt-1 block text-sm leading-6 text-white/48">{field.helper}</span>
               </label>
             ))}
           </div>
 
-          <textarea
-            value={text}
-            onChange={(e) => setText(e.target.value)}
-            placeholder="How did it hit, how long did it last, and would you buy it again?"
-            className="pb-input mt-4 h-28 resize-none px-4 py-3 text-sm"
-          />
+          <label className="mt-4 block">
+            <span className="mb-2 block text-xs uppercase tracking-[0.16em] text-white/40">
+              Notes (optional)
+            </span>
+            <textarea
+              value={text}
+              onChange={(e) => setText(e.target.value)}
+              placeholder="Anything worth adding beyond the structured scores? Flavor edge, throat feel, staying power, buy-again verdict..."
+              className="pb-input h-28 resize-none px-4 py-3 text-sm"
+            />
+          </label>
 
           <div className="mt-4 flex flex-wrap gap-3">
             <button
