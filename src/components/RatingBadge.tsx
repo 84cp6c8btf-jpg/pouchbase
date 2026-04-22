@@ -17,7 +17,7 @@ export function RatingBadge({ label, value, size = "md" }: RatingBadgeProps) {
 
   return (
     <div className={compact ? "px-2 py-1.5" : "px-3 py-2"}>
-      <div className={`text-white/40 ${compact ? "text-[0.65rem]" : "text-xs"} uppercase tracking-wider`}>
+      <div className={`text-white/46 ${compact ? "text-[0.65rem]" : "text-xs"} uppercase tracking-[0.14em]`}>
         {label}
       </div>
       <div className={`font-display font-bold ${compact ? "text-lg" : "text-2xl"} ${getColor(rounded)}`}>

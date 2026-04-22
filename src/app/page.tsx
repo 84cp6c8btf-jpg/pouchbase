@@ -2,15 +2,19 @@ import Link from "next/link";
 import {
   ArrowRight,
   Flame,
-  MessageSquare,
+  ListOrdered,
   Search,
+  ShieldCheck,
   Star,
+  Store,
   Tag,
 } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import { ProductCard } from "@/components/ProductCard";
 import { BurnMeter } from "@/components/BurnMeter";
 import type { Metadata } from "next";
+import { BurnMethodology } from "@/components/BurnMethodology";
+import { ReferencePanel } from "@/components/ReferencePanel";
 
 export const metadata: Metadata = {
   alternates: {
@@ -96,7 +100,7 @@ export default async function Home() {
           Every pouch,<br />
           <span className="text-accent">rated honestly.</span>
         </h1>
-        <p className="mt-6 max-w-xl text-lg leading-relaxed text-white/50">
+        <p className="mt-6 max-w-xl text-lg leading-relaxed text-white/56">
           PouchBase is a review site, not a shop. We track burn, flavor, longevity,
           and price across every mainstream nicotine pouch so you can compare them
           properly before you buy.
@@ -144,7 +148,7 @@ export default async function Home() {
               <h2 className="mt-1 font-display text-2xl font-bold text-white">
                 {burnLeader.name}
               </h2>
-              <p className="mt-1 text-sm text-white/45">{burnBrand?.name} · {burnLeader.flavor} · {burnLeader.strength_mg}mg</p>
+              <p className="mt-1 text-sm text-white/52">{burnBrand?.name} · {burnLeader.flavor} · {burnLeader.strength_mg}mg</p>
             </div>
             <div className="w-full sm:w-64">
               <BurnMeter rating={burnLeader.avg_burn} size="md" />
@@ -170,6 +174,34 @@ export default async function Home() {
             </div>
           </Link>
         ))}
+      </section>
+
+      <section className="grid gap-4 lg:grid-cols-[1.15fr_0.85fr]">
+        <BurnMethodology compact />
+        <ReferencePanel
+          eyebrow="Trust Signals"
+          title="Built to compare, not to sell."
+          items={[
+            {
+              icon: ListOrdered,
+              label: "Rankings follow review data",
+              description:
+                "Top Rated and Highest Burn lists follow community scores and review depth, not commercial placement.",
+            },
+            {
+              icon: Store,
+              label: "Prices come from external shops",
+              description:
+                "PouchBase does not sell pouches. Retailer availability and pricing can change outside the directory.",
+            },
+            {
+              icon: ShieldCheck,
+              label: "Affiliate links stay separate",
+              description:
+                "Retailer links can support the site, but they never change burn scores, reviews, or product order.",
+            },
+          ]}
+        />
       </section>
 
       {/* Top Rated */}
@@ -222,38 +254,6 @@ export default async function Home() {
         </section>
       )}
 
-      {/* What is PouchBase */}
-      <section className="border-t border-white/8 pt-12">
-        <h2 className="font-display text-3xl font-bold text-white sm:text-4xl">
-          Not another affiliate store.
-        </h2>
-        <p className="mt-4 max-w-2xl text-base leading-relaxed text-white/45">
-          Most pouch sites exist to sell you something. We exist to help you compare.
-          Filter by brand, flavor, burn, or strength — and read what real users actually think.
-        </p>
-        <div className="mt-8 grid gap-4 sm:grid-cols-2">
-          <div className="rounded-xl border border-white/8 bg-[#111114] p-5">
-            <div className="flex items-center gap-2 text-sm font-semibold text-white">
-              <Search className="h-4 w-4 text-accent" />
-              Find what fits
-            </div>
-            <p className="mt-2 text-sm leading-relaxed text-white/40">
-              Filter by flavor, strength, burn level, or brand. Compare products side by side
-              instead of scrolling through store pages.
-            </p>
-          </div>
-          <div className="rounded-xl border border-white/8 bg-[#111114] p-5">
-            <div className="flex items-center gap-2 text-sm font-semibold text-white">
-              <MessageSquare className="h-4 w-4 text-accent" />
-              Real reviews
-            </div>
-            <p className="mt-2 text-sm leading-relaxed text-white/40">
-              Every review scores burn, flavor, longevity, and overall. No vague testimonials —
-              actual ratings you can compare across products.
-            </p>
-          </div>
-        </div>
-      </section>
     </div>
   );
 }

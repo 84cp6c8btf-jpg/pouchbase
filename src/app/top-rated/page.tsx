@@ -1,6 +1,9 @@
 import { supabase } from "@/lib/supabase";
 import { ProductCard } from "@/components/ProductCard";
 import type { Metadata } from "next";
+import { PageIntro } from "@/components/PageIntro";
+import { ReferencePanel } from "@/components/ReferencePanel";
+import { MessageSquare, ShieldCheck } from "lucide-react";
 
 export const revalidate = 60;
 export const metadata: Metadata = {
@@ -24,18 +27,31 @@ export default async function TopRatedPage() {
 
   return (
     <div className="space-y-6">
-      <section className="pt-2 sm:pt-6">
-        <h1 className="font-display text-[clamp(2.5rem,5vw,4.5rem)] font-bold leading-[0.92] text-white">
-          The best pouches right now.
-        </h1>
-        <p className="mt-3 max-w-xl text-base leading-relaxed text-white/45">
-          Ranked by overall community score. Products with more reviews rank higher when
-          scores are tied, so well-tested favorites rise to the top.
-        </p>
-        <p className="mt-4 text-sm text-white/30">
-          {rankedProducts.length} products ranked
-        </p>
-      </section>
+      <PageIntro
+        eyebrow="Rankings"
+        title="The best pouches right now."
+        description="Ranked by overall community score. When products are tied, the better-tested one stays ahead."
+        meta={`${rankedProducts.length} products ranked`}
+      />
+
+      <ReferencePanel
+        title="How this list works"
+        columns={2}
+        items={[
+          {
+            icon: MessageSquare,
+            label: "Review data leads",
+            description:
+              "Overall rankings follow community scores, with more-reviewed products breaking ties.",
+          },
+          {
+            icon: ShieldCheck,
+            label: "Retail links stay separate",
+            description:
+              "Affiliate or retailer relationships never change rank order. This list is review-led, not sponsored placement.",
+          },
+        ]}
+      />
 
       {rankedProducts.length > 0 ? (
         <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
@@ -44,9 +60,9 @@ export default async function TopRatedPage() {
           ))}
         </div>
       ) : (
-        <div className="rounded-xl border border-white/8 bg-[#111114] px-6 py-12 text-center">
+        <div className="rounded-xl border border-white/8 bg-card px-6 py-12 text-center">
           <h2 className="font-display text-2xl font-bold text-white">No ranked products yet</h2>
-          <p className="mt-2 text-sm text-white/40">
+          <p className="mt-2 text-sm text-white/48">
             Once reviews come in, the community favorites will show up here.
           </p>
         </div>

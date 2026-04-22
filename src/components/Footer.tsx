@@ -13,7 +13,7 @@ export function Footer() {
                 Pouch<span className="text-accent">Base</span>
               </span>
             </Link>
-            <p className="text-sm leading-relaxed text-white/40">
+            <p className="text-sm leading-relaxed text-white/48">
               Independent nicotine pouch reviews for adults. We don&apos;t sell pouches — we help
               you compare them with honest ratings, burn scores, and price info.
             </p>
@@ -21,7 +21,7 @@ export function Footer() {
 
           <div>
             <h3 className="mb-3 text-sm font-semibold text-white/60">Explore</h3>
-            <ul className="space-y-2 text-sm text-white/40">
+            <ul className="space-y-2 text-sm text-white/48">
               <li><Link href="/pouches" className="transition hover:text-white">All Pouches</Link></li>
               <li><Link href="/brands" className="transition hover:text-white">Brands</Link></li>
               <li><Link href="/top-rated" className="transition hover:text-white">Top Rated</Link></li>
@@ -31,7 +31,7 @@ export function Footer() {
 
           <div>
             <h3 className="mb-3 text-sm font-semibold text-white/60">By Flavor</h3>
-            <ul className="space-y-2 text-sm text-white/40">
+            <ul className="space-y-2 text-sm text-white/48">
               <li><Link href="/pouches?category=mint" className="transition hover:text-white">Mint</Link></li>
               <li><Link href="/pouches?category=fruit" className="transition hover:text-white">Fruit</Link></li>
               <li><Link href="/pouches?category=coffee" className="transition hover:text-white">Coffee</Link></li>
@@ -41,7 +41,7 @@ export function Footer() {
 
           <div>
             <h3 className="mb-3 text-sm font-semibold text-white/60">About</h3>
-            <ul className="space-y-2 text-sm text-white/40">
+            <ul className="space-y-2 text-sm text-white/48">
               <li><Link href="/about" className="transition hover:text-white">About</Link></li>
               <li><Link href="/privacy" className="transition hover:text-white">Privacy</Link></li>
               <li><Link href="/terms" className="transition hover:text-white">Terms</Link></li>

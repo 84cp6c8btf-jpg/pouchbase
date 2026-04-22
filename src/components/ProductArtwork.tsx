@@ -49,46 +49,65 @@ export function ProductArtwork({
   flavor,
   flavorCategory,
   strengthMg,
+  format,
   imageUrl,
   size = "card",
 }: ProductArtworkProps) {
+  const isHero = size === "hero";
+
   if (imageUrl) {
     return (
-      <div className={size === "hero" ? "w-full sm:w-48 h-48 shrink-0" : "w-full h-36"}>
+      <div className={isHero ? "h-48 w-full shrink-0 sm:w-48" : "h-20 w-full"}>
         <img src={imageUrl} alt={name} className="w-full h-full object-cover rounded-lg" />
       </div>
     );
   }
 
   const bg = getBg(`${brandSlug || brand || name}-${flavor}`, flavorCategory);
-  const isHero = size === "hero";
 
   return (
     <div
       className={`relative overflow-hidden rounded-lg ${
-        isHero ? "w-full sm:w-48 h-48 shrink-0" : "w-full h-36"
+        isHero ? "h-48 w-full shrink-0 sm:w-48" : "h-20 w-full"
       }`}
       style={bg}
     >
-      <div className="relative h-full flex flex-col justify-between p-3.5">
-        <div className="flex items-start justify-between">
-          <span className="text-[10px] font-medium uppercase tracking-wider text-white/50">
-            {brand || "Pouch"}
-          </span>
-          <span className="text-[10px] font-medium uppercase tracking-wider text-white/50">
-            {flavor}
-          </span>
-        </div>
+      <div className="absolute inset-0 bg-black/14" />
+      {isHero ? (
+        <div className="relative flex h-full flex-col justify-between p-3.5">
+          <div className="flex items-start justify-between">
+            <span className="text-[10px] font-medium uppercase tracking-wider text-white/56">
+              {brand || "Pouch"}
+            </span>
+            <span className="text-[10px] font-medium uppercase tracking-wider text-white/56">
+              {flavor}
+            </span>
+          </div>
 
-        <div>
-          <div className={`font-display font-bold text-white leading-none ${isHero ? "text-4xl" : "text-3xl"}`}>
-            {strengthMg}<span className="text-lg text-white/50">mg</span>
-          </div>
-          <div className="mt-1 text-sm font-medium text-white/70 leading-tight line-clamp-2">
-            {name}
+          <div>
+            <div className="font-display text-4xl font-bold leading-none text-white">
+              {strengthMg}<span className="text-lg text-white/56">mg</span>
+            </div>
+            <div className="mt-1 line-clamp-2 text-sm leading-tight text-white/76">
+              {name}
+            </div>
           </div>
         </div>
-      </div>
+      ) : (
+        <div className="relative flex h-full flex-col justify-between p-3">
+          <div className="flex items-start justify-between gap-3 text-[10px] font-medium uppercase tracking-[0.16em] text-white/52">
+            <span>{flavorCategory || brand || "Pouch"}</span>
+            <span>{format || "Slim"}</span>
+          </div>
+          <div className="flex items-end justify-between gap-3">
+            <div className="min-w-0">
+              <div className="truncate text-sm font-medium text-white/88">{flavor}</div>
+              <div className="truncate text-xs text-white/52">{brand || "Nicotine pouch"}</div>
+            </div>
+            <div className="shrink-0 text-sm font-semibold text-white/70">{strengthMg}mg</div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

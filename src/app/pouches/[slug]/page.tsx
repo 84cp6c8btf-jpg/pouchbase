@@ -6,11 +6,13 @@ import { ReviewSection } from "@/components/ReviewSection";
 import { PriceComparison } from "@/components/PriceComparison";
 import { ProductJsonLd, BreadcrumbJsonLd } from "@/components/JsonLd";
 import { getSiteUrl } from "@/lib/site";
-import { Droplets, Package, Ruler, Zap } from "lucide-react";
+import { Droplets, ListOrdered, MessageSquare, Package, Ruler, Store, Zap } from "lucide-react";
 import type { Metadata } from "next";
 import type { RelationResult } from "@/lib/types";
 import Link from "next/link";
 import { ProductArtwork } from "@/components/ProductArtwork";
+import { BurnMethodology } from "@/components/BurnMethodology";
+import { ReferencePanel } from "@/components/ReferencePanel";
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -128,7 +130,7 @@ export default async function ProductPage({ params }: Props) {
             <h1 className="mt-1 font-display text-[clamp(2.2rem,4vw,3.5rem)] font-bold leading-[0.95] text-white">
               {product.name}
             </h1>
-            <p className="mt-3 max-w-xl text-base leading-relaxed text-white/50">
+            <p className="mt-3 max-w-xl text-base leading-relaxed text-white/56">
               {product.description || `${brand?.name} ${product.name} — ${product.flavor}, ${product.strength_mg}mg nicotine pouch.`}
             </p>
           </div>
@@ -172,6 +174,33 @@ export default async function ProductPage({ params }: Props) {
             </div>
           )}
         </div>
+      </section>
+
+      <section className="grid gap-4 xl:grid-cols-[1.05fr_0.95fr]">
+        <BurnMethodology compact />
+        <ReferencePanel
+          title="How this product is presented"
+          items={[
+            {
+              icon: MessageSquare,
+              label: "Community reviews drive the scores",
+              description:
+                "Burn, flavor, longevity, and overall are structured review fields, not retailer claims.",
+            },
+            {
+              icon: ListOrdered,
+              label: "Rankings stay independent",
+              description:
+                "This pouch's placement elsewhere on the site follows review data and review depth, not outbound links.",
+            },
+            {
+              icon: Store,
+              label: "Prices come from external shops",
+              description:
+                "PouchBase doesn't sell pouches. Shop pricing and stock can change independently of this page.",
+            },
+          ]}
+        />
       </section>
 
       <div className="grid gap-8 xl:grid-cols-[0.95fr_1.05fr] xl:items-start">

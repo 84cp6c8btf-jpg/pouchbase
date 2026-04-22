@@ -112,9 +112,9 @@ export function PriceComparison({ productId, pouchesPerCan }: PriceComparisonPro
         })}
       </div>
 
-      <p className="mt-4 text-xs leading-6 text-white/38">
-        Prices can change fast. Some outbound links may be affiliate links, which helps support the
-        directory without turning it into a store.
+      <p className="mt-4 text-xs leading-6 text-white/42">
+        Prices come from external shops and can change quickly. Some outbound links may be affiliate
+        links, but retailer relationships never affect product rankings.
       </p>
     </section>
   );

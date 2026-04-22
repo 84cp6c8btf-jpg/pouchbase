@@ -1,6 +1,8 @@
 import { supabase } from "@/lib/supabase";
 import { ProductCard } from "@/components/ProductCard";
 import type { Metadata } from "next";
+import { BurnMethodology } from "@/components/BurnMethodology";
+import { PageIntro } from "@/components/PageIntro";
 
 export const revalidate = 60;
 export const metadata: Metadata = {
@@ -24,18 +26,14 @@ export default async function HighestBurnPage() {
 
   return (
     <div className="space-y-6">
-      <section className="pt-2 sm:pt-6">
-        <h1 className="font-display text-[clamp(2.5rem,5vw,4.5rem)] font-bold leading-[0.92] text-white">
-          The ones that bite.
-        </h1>
-        <p className="mt-3 max-w-xl text-base leading-relaxed text-white/45">
-          Ranked by burn score — the felt intensity under your lip, not just nicotine milligrams.
-          If you want heat, start here.
-        </p>
-        <p className="mt-4 text-sm text-white/30">
-          {hottestProducts.length} products ranked
-        </p>
-      </section>
+      <PageIntro
+        eyebrow="Burn Rankings"
+        title="The ones that bite."
+        description="Ranked by felt intensity under the lip, not just nicotine milligrams. If you want heat, start here."
+        meta={`${hottestProducts.length} products ranked by burn`}
+      />
+
+      <BurnMethodology compact />
 
       {hottestProducts.length > 0 ? (
         <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
@@ -44,9 +42,9 @@ export default async function HighestBurnPage() {
           ))}
         </div>
       ) : (
-        <div className="rounded-xl border border-white/8 bg-[#111114] px-6 py-12 text-center">
+        <div className="rounded-xl border border-white/8 bg-card px-6 py-12 text-center">
           <h2 className="font-display text-2xl font-bold text-white">No burn leaders yet</h2>
-          <p className="mt-2 text-sm text-white/40">
+          <p className="mt-2 text-sm text-white/48">
             As burn scores come in, the hottest pouches will show up here.
           </p>
         </div>

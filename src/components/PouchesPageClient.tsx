@@ -5,6 +5,7 @@ import { supabase } from "@/lib/supabase";
 import { Product, FLAVOR_CATEGORIES } from "@/lib/types";
 import { ProductCard } from "@/components/ProductCard";
 import { Flame, Search, SlidersHorizontal, X } from "lucide-react";
+import { PageIntro } from "@/components/PageIntro";
 
 type SortOption = "overall" | "burn" | "strength" | "reviews" | "newest";
 
@@ -23,6 +24,7 @@ export function PouchesPageClient() {
     let ignore = false;
 
     async function fetchProducts() {
+      setLoading(true);
       let query = supabase.from("products").select("*, brands(name, slug)");
 
       if (selectedBrand) {
@@ -90,177 +92,166 @@ export function PouchesPageClient() {
   const hasActiveFilters = Boolean(selectedBrand || selectedCategory || selectedBurnMin > 0 || search);
 
   return (
-    <div className="space-y-6">
-      {/* Header */}
-      <section className="pt-2 sm:pt-6">
-        <h1 className="font-display text-[clamp(2.5rem,5vw,4.5rem)] font-bold leading-[0.92] text-white">
-          Find your next pouch.
-        </h1>
-        <p className="mt-3 max-w-xl text-base leading-relaxed text-white/45">
-          Search by name or flavor, filter by brand and burn level, and sort however
-          you like. Every product has ratings, prices, and real reviews.
-        </p>
-      </section>
+    <div className="space-y-5">
+      <PageIntro
+        eyebrow="Directory"
+        title="Find your next pouch."
+        description="Search by name or flavor, filter by brand and felt burn, and sort the catalog around the signals that matter."
+        meta={loading ? "Refreshing catalog..." : `${products.length} pouch${products.length === 1 ? "" : "es"} shown`}
+      />
 
-      <div className="grid gap-6 xl:grid-cols-[16rem_minmax(0,1fr)]">
-        {/* Sidebar filters */}
-        <aside className="space-y-3 xl:sticky xl:top-24 xl:self-start">
-          <button
-            onClick={() => setShowFilters((open) => !open)}
-            className={`flex w-full items-center justify-center gap-2 rounded-lg border px-4 py-3 text-sm font-medium transition xl:hidden ${
-              showFilters || hasActiveFilters
-                ? "border-accent/35 bg-accent/10 text-accent"
-                : "border-white/10 text-white/60"
-            }`}
-          >
-            <SlidersHorizontal className="h-4 w-4" />
-            Filters
-          </button>
+      <section className="rounded-xl border border-white/8 bg-card p-4 sm:p-5">
+        <div className="flex flex-col gap-3 lg:flex-row lg:items-center">
+          <label className="relative block flex-1">
+            <span className="mb-1.5 block text-xs uppercase tracking-[0.14em] text-white/42">Search</span>
+            <Search className="absolute left-3 top-[calc(50%+10px)] h-4 w-4 -translate-y-1/2 text-white/34" />
+            <input
+              type="text"
+              placeholder="Search by product or flavor"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="pb-input py-2.5 pl-9 pr-3 text-sm"
+            />
+          </label>
 
-          <div className={`${showFilters ? "block" : "hidden"} xl:block`}>
-            <div className="rounded-xl border border-white/8 bg-[#111114] p-4 space-y-4">
-              <div className="flex items-center justify-between">
-                <h2 className="text-sm font-semibold text-white">Filters</h2>
-                {hasActiveFilters && (
-                  <button
-                    onClick={clearFilters}
-                    className="inline-flex items-center gap-1 text-xs text-accent hover:text-accent-hover transition"
-                  >
-                    <X className="h-3 w-3" />
-                    Reset
-                  </button>
-                )}
-              </div>
+          <div className="grid gap-3 sm:grid-cols-[minmax(0,1fr)_auto] lg:w-[22rem]">
+            <label className="block">
+              <span className="mb-1.5 block text-xs uppercase tracking-[0.14em] text-white/42">Sort</span>
+              <select
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value as SortOption)}
+                className="pb-input px-3 py-2.5 text-sm"
+              >
+                <option value="overall">Highest rated</option>
+                <option value="burn">Highest burn</option>
+                <option value="strength">Strongest (mg)</option>
+                <option value="reviews">Most reviewed</option>
+                <option value="newest">Newest</option>
+              </select>
+            </label>
 
-              <div>
-                <label className="mb-1.5 block text-xs text-white/40">Search</label>
-                <div className="relative">
-                  <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-white/30" />
-                  <input
-                    type="text"
-                    placeholder="Name or flavor"
-                    value={search}
-                    onChange={(e) => setSearch(e.target.value)}
-                    className="w-full rounded-lg border border-white/8 bg-black/30 py-2.5 pl-9 pr-3 text-sm text-white outline-none focus:border-accent/40 transition"
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label className="mb-1.5 block text-xs text-white/40">Brand</label>
-                <select
-                  value={selectedBrand}
-                  onChange={(e) => setSelectedBrand(e.target.value)}
-                  className="w-full rounded-lg border border-white/8 bg-black/30 px-3 py-2.5 text-sm text-white outline-none focus:border-accent/40 transition"
-                >
-                  <option value="">All brands</option>
-                  {brands.map((brand) => (
-                    <option key={brand.id} value={brand.id}>
-                      {brand.name}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              <div>
-                <label className="mb-1.5 block text-xs text-white/40">Flavor</label>
-                <select
-                  value={selectedCategory}
-                  onChange={(e) => setSelectedCategory(e.target.value)}
-                  className="w-full rounded-lg border border-white/8 bg-black/30 px-3 py-2.5 text-sm text-white outline-none focus:border-accent/40 transition"
-                >
-                  <option value="">All flavors</option>
-                  {FLAVOR_CATEGORIES.map((category) => (
-                    <option key={category} value={category}>
-                      {category.charAt(0).toUpperCase() + category.slice(1)}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              <div>
-                <label className="mb-1.5 flex items-center gap-1.5 text-xs text-white/40">
-                  <Flame className="h-3 w-3 text-accent" />
-                  Min burn
-                </label>
-                <select
-                  value={selectedBurnMin}
-                  onChange={(e) => setSelectedBurnMin(Number(e.target.value))}
-                  className="w-full rounded-lg border border-white/8 bg-black/30 px-3 py-2.5 text-sm text-white outline-none focus:border-accent/40 transition"
-                >
-                  <option value={0}>Any</option>
-                  <option value={3}>3+ Warm</option>
-                  <option value={5}>5+ Sharp</option>
-                  <option value={7}>7+ Intense</option>
-                  <option value={9}>9+ Inferno</option>
-                </select>
-              </div>
-
-              <div>
-                <label className="mb-1.5 block text-xs text-white/40">Sort by</label>
-                <select
-                  value={sortBy}
-                  onChange={(e) => setSortBy(e.target.value as SortOption)}
-                  className="w-full rounded-lg border border-white/8 bg-black/30 px-3 py-2.5 text-sm text-white outline-none focus:border-accent/40 transition"
-                >
-                  <option value="overall">Highest rated</option>
-                  <option value="burn">Highest burn</option>
-                  <option value="strength">Strongest (mg)</option>
-                  <option value="reviews">Most reviewed</option>
-                  <option value="newest">Newest</option>
-                </select>
-              </div>
+            <div className="flex items-end">
+              <button
+                onClick={() => setShowFilters((open) => !open)}
+                className={`flex w-full items-center justify-center gap-2 rounded-lg border px-4 py-3 text-sm font-medium transition md:hidden ${
+                  showFilters || hasActiveFilters
+                    ? "border-accent/35 bg-accent/10 text-accent"
+                    : "border-white/10 text-white/60"
+                }`}
+              >
+                <SlidersHorizontal className="h-4 w-4" />
+                Filters
+              </button>
             </div>
           </div>
-        </aside>
+        </div>
 
-        {/* Results */}
-        <section className="space-y-4">
-          <div className="flex items-center justify-between gap-3">
-            <p className="text-sm text-white/40">
-              {loading ? "Loading…" : `${products.length} pouch${products.length === 1 ? "" : "es"}`}
-            </p>
+        <div className={`${showFilters ? "grid" : "hidden"} mt-4 gap-3 md:grid md:grid-cols-3`}>
+          <label className="block">
+            <span className="mb-1.5 block text-xs uppercase tracking-[0.14em] text-white/42">Brand</span>
+            <select
+              value={selectedBrand}
+              onChange={(e) => setSelectedBrand(e.target.value)}
+              className="pb-input px-3 py-2.5 text-sm"
+            >
+              <option value="">All brands</option>
+              {brands.map((brand) => (
+                <option key={brand.id} value={brand.id}>
+                  {brand.name}
+                </option>
+              ))}
+            </select>
+          </label>
+
+          <label className="block">
+            <span className="mb-1.5 block text-xs uppercase tracking-[0.14em] text-white/42">Flavor</span>
+            <select
+              value={selectedCategory}
+              onChange={(e) => setSelectedCategory(e.target.value)}
+              className="pb-input px-3 py-2.5 text-sm"
+            >
+              <option value="">All flavors</option>
+              {FLAVOR_CATEGORIES.map((category) => (
+                <option key={category} value={category}>
+                  {category.charAt(0).toUpperCase() + category.slice(1)}
+                </option>
+              ))}
+            </select>
+          </label>
+
+          <label className="block">
+            <span className="mb-1.5 flex items-center gap-1.5 text-xs uppercase tracking-[0.14em] text-white/42">
+              <Flame className="h-3 w-3 text-accent" />
+              Min burn
+            </span>
+            <select
+              value={selectedBurnMin}
+              onChange={(e) => setSelectedBurnMin(Number(e.target.value))}
+              className="pb-input px-3 py-2.5 text-sm"
+            >
+              <option value={0}>Any</option>
+              <option value={3}>3+ Warm</option>
+              <option value={5}>5+ Sharp</option>
+              <option value={7}>7+ Intense</option>
+              <option value={9}>9+ Inferno</option>
+            </select>
+          </label>
+        </div>
+
+        <div className="mt-4 flex flex-col gap-3 border-t border-white/8 pt-4 md:flex-row md:items-center md:justify-between">
+          <div className="flex flex-wrap gap-1.5">
+            {selectedCategory && <span className="pb-tag-soft">{selectedCategory}</span>}
+            {selectedBrand && <span className="pb-tag-soft">brand filtered</span>}
+            {selectedBurnMin > 0 && <span className="pb-tag-soft">burn {selectedBurnMin}+</span>}
+            {search && <span className="pb-tag-soft">&quot;{search}&quot;</span>}
             {hasActiveFilters && (
-              <div className="flex flex-wrap gap-1.5">
-                {selectedCategory && <span className="pb-tag-soft">{selectedCategory}</span>}
-                {selectedBrand && <span className="pb-tag-soft">brand filtered</span>}
-                {selectedBurnMin > 0 && <span className="pb-tag-soft">burn {selectedBurnMin}+</span>}
-                {search && <span className="pb-tag-soft">&quot;{search}&quot;</span>}
-              </div>
+              <button
+                onClick={clearFilters}
+                className="inline-flex items-center gap-1 rounded-md border border-white/10 px-2.5 py-1 text-xs text-white/52 transition hover:text-white"
+              >
+                <X className="h-3 w-3" />
+                Reset
+              </button>
             )}
           </div>
 
-          {loading ? (
-            <div className="grid gap-3 sm:grid-cols-2 2xl:grid-cols-3">
-              {[...Array(6)].map((_, index) => (
-                <div
-                  key={index}
-                  className="h-80 animate-pulse rounded-xl border border-white/6 bg-white/[0.02]"
-                />
-              ))}
-            </div>
-          ) : products.length > 0 ? (
-            <div className="grid gap-3 sm:grid-cols-2 2xl:grid-cols-3">
-              {products.map((product) => (
-                <ProductCard key={product.id} product={product} />
-              ))}
-            </div>
-          ) : (
-            <div className="rounded-xl border border-white/8 bg-[#111114] px-6 py-12 text-center">
-              <h3 className="font-display text-2xl font-bold text-white">Nothing matches those filters.</h3>
-              <p className="mt-2 text-sm text-white/40">
-                Try removing a filter or broadening your search.
-              </p>
-              <button
-                onClick={clearFilters}
-                className="mt-5 rounded-lg bg-accent px-5 py-2.5 text-sm font-semibold text-black transition hover:bg-accent-hover"
-              >
-                Reset filters
-              </button>
-            </div>
-          )}
-        </section>
-      </div>
+          <p className="text-xs leading-6 text-white/40">
+            Browse by community data, not retailer placement. Burn and ranking signals come from product reviews.
+          </p>
+        </div>
+      </section>
+
+      <section className="space-y-4">
+        {loading ? (
+          <div className="grid gap-3 sm:grid-cols-2 2xl:grid-cols-3">
+            {[...Array(6)].map((_, index) => (
+              <div
+                key={index}
+                className="h-72 animate-pulse rounded-xl border border-white/6 bg-white/[0.02]"
+              />
+            ))}
+          </div>
+        ) : products.length > 0 ? (
+          <div className="grid gap-3 sm:grid-cols-2 2xl:grid-cols-3">
+            {products.map((product) => (
+              <ProductCard key={product.id} product={product} />
+            ))}
+          </div>
+        ) : (
+          <div className="rounded-xl border border-white/8 bg-card px-6 py-12 text-center">
+            <h3 className="font-display text-2xl font-bold text-white">Nothing matches those filters.</h3>
+            <p className="mt-2 text-sm text-white/48">
+              Try removing a filter or broadening your search.
+            </p>
+            <button
+              onClick={clearFilters}
+              className="mt-5 rounded-lg bg-accent px-5 py-2.5 text-sm font-semibold text-black transition hover:bg-accent-hover"
+            >
+              Reset filters
+            </button>
+          </div>
+        )}
+      </section>
     </div>
   );
 }

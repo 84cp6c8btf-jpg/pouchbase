@@ -1,5 +1,3 @@
-"use client";
-
 import { Flame } from "lucide-react";
 
 interface BurnMeterProps {
@@ -8,7 +6,15 @@ interface BurnMeterProps {
   showLabel?: boolean;
 }
 
-function getLabel(rating: number) {
+export const BURN_SCALE = [
+  { label: "Soft", range: "0-2.4" },
+  { label: "Warm", range: "2.5-4.4" },
+  { label: "Sharp", range: "4.5-6.4" },
+  { label: "Intense", range: "6.5-8.4" },
+  { label: "Inferno", range: "8.5-10" },
+] as const;
+
+export function getBurnLabel(rating: number) {
   if (rating < 2.5) return "Soft";
   if (rating < 4.5) return "Warm";
   if (rating < 6.5) return "Sharp";
@@ -40,12 +46,12 @@ export function BurnMeter({ rating, size = "md", showLabel = true }: BurnMeterPr
           <span className={`font-display font-bold ${color.text} ${large ? "text-2xl" : compact ? "text-base" : "text-lg"}`}>
             {rounded.toFixed(1)}
           </span>
-          <span className={`text-white/50 ${compact ? "text-xs" : "text-sm"}`}>
+          <span className={`text-white/58 ${compact ? "text-xs" : "text-sm"}`}>
             / 10
           </span>
           {showLabel && (
-            <span className={`text-white/50 ${compact ? "text-xs" : "text-sm"}`}>
-              · {getLabel(rounded)}
+            <span className={`text-white/58 ${compact ? "text-xs" : "text-sm"}`}>
+              · {getBurnLabel(rounded)}
             </span>
           )}
         </div>

@@ -1,8 +1,9 @@
 import Link from "next/link";
 import { supabase } from "@/lib/supabase";
-import { ArrowRight, Globe } from "lucide-react";
+import { Flame, Globe, MessageSquare, Star, Zap } from "lucide-react";
 import type { Metadata } from "next";
 import { BrandArtwork } from "@/components/BrandArtwork";
+import { PageIntro } from "@/components/PageIntro";
 
 export const revalidate = 60;
 export const metadata: Metadata = {
@@ -22,68 +23,150 @@ type BrandRow = {
   website_url: string | null;
 };
 
+type BrandProductRow = {
+  brand_id: string;
+  name: string;
+  strength_mg: number;
+  avg_burn: number;
+  avg_overall: number;
+  review_count: number;
+};
+
 export default async function BrandsPage() {
   const [{ data: brands }, { data: products }] = await Promise.all([
     supabase.from("brands").select("id, name, slug, country, description, website_url").order("name"),
-    supabase.from("products").select("brand_id"),
+    supabase
+      .from("products")
+      .select("brand_id, name, strength_mg, avg_burn, avg_overall, review_count"),
   ]);
 
-  const counts = new Map<string, number>();
-  for (const product of products || []) {
-    counts.set(product.brand_id, (counts.get(product.brand_id) || 0) + 1);
+  const productRows = (products || []) as BrandProductRow[];
+  const brandProducts = new Map<string, BrandProductRow[]>();
+
+  for (const product of productRows) {
+    const current = brandProducts.get(product.brand_id) || [];
+    current.push(product);
+    brandProducts.set(product.brand_id, current);
   }
 
   const enrichedBrands = ((brands || []) as BrandRow[])
     .map((brand) => ({
       ...brand,
-      productCount: counts.get(brand.id) || 0,
+      products: brandProducts.get(brand.id) || [],
     }))
+    .map((brand) => {
+      const reviewedProducts = brand.products.filter((product) => product.review_count > 0);
+      const totalReviews = reviewedProducts.reduce((sum, product) => sum + product.review_count, 0);
+      const weightedOverall =
+        totalReviews > 0
+          ? reviewedProducts.reduce((sum, product) => sum + product.avg_overall * product.review_count, 0) / totalReviews
+          : null;
+      const weightedBurn =
+        totalReviews > 0
+          ? reviewedProducts.reduce((sum, product) => sum + product.avg_burn * product.review_count, 0) / totalReviews
+          : null;
+      const strongestProduct = [...brand.products].sort(
+        (a, b) => b.strength_mg - a.strength_mg || b.review_count - a.review_count
+      )[0];
+      const mostReviewedProduct = [...reviewedProducts].sort((a, b) => b.review_count - a.review_count)[0];
+
+      return {
+        ...brand,
+        productCount: brand.products.length,
+        reviewCount: totalReviews,
+        avgOverall: weightedOverall,
+        avgBurn: weightedBurn,
+        strongestProduct,
+        mostReviewedProduct,
+      };
+    })
     .sort((a, b) => b.productCount - a.productCount || a.name.localeCompare(b.name));
 
   return (
     <div className="space-y-6">
-      <section className="pt-2 sm:pt-6">
-        <h1 className="font-display text-[clamp(2.5rem,5vw,4.5rem)] font-bold leading-[0.92] text-white">
-          Every brand we track.
-        </h1>
-        <p className="mt-3 max-w-xl text-base leading-relaxed text-white/45">
-          From ZYN and VELO to Pablo and Siberia. Pick a brand to see all their pouches,
-          ratings, and reviews in one place.
-        </p>
-      </section>
+      <PageIntro
+        eyebrow="Brand Directory"
+        title="Every brand we track."
+        description="A comparative directory of pouch catalogs, review depth, and brand-level burn and rating signals."
+        meta={`${enrichedBrands.length} brands · ${productRows.length} products tracked`}
+      />
 
       <section className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
         {enrichedBrands.map((brand) => (
           <Link
             key={brand.id}
             href={`/brands/${brand.slug}`}
-            className="group flex items-start gap-4 rounded-xl border border-white/8 bg-[#111114] p-5 transition hover:border-white/16"
+            className="group flex h-full flex-col rounded-xl border border-white/8 bg-card p-5 transition hover:border-white/16"
           >
-            <BrandArtwork name={brand.name} slug={brand.slug} country={brand.country} size="card" />
-            <div className="min-w-0 flex-1">
-              <div className="flex items-start justify-between gap-2">
-                <div>
-                  <p className="text-xs text-white/35">{brand.country || "Global"}</p>
-                  <h2 className="font-display text-xl font-bold text-white group-hover:text-accent transition-colors">
-                    {brand.name}
-                  </h2>
+            <div className="flex items-start gap-4">
+              <BrandArtwork name={brand.name} slug={brand.slug} country={brand.country} size="card" />
+              <div className="min-w-0 flex-1">
+                <p className="text-[0.68rem] uppercase tracking-[0.16em] text-white/42">
+                  {brand.country || "Global"}
+                </p>
+                <h2 className="font-display text-xl font-bold text-white transition-colors group-hover:text-accent">
+                  {brand.name}
+                </h2>
+              </div>
+            </div>
+
+            <p className="mt-3 text-sm leading-relaxed text-white/50 line-clamp-2">
+              {brand.description || `${brand.name} nicotine pouches.`}
+            </p>
+
+            <div className="mt-4 grid grid-cols-3 gap-3 border-t border-white/8 pt-4">
+              <div>
+                <div className="text-[0.68rem] uppercase tracking-[0.14em] text-white/38">Catalog</div>
+                <div className="mt-1 font-display text-xl font-bold text-white">{brand.productCount}</div>
+              </div>
+              <div>
+                <div className="text-[0.68rem] uppercase tracking-[0.14em] text-white/38">Overall</div>
+                <div className="mt-1 inline-flex items-center gap-1.5 font-display text-xl font-bold text-white">
+                  <Star className="h-4 w-4 text-accent" />
+                  {brand.avgOverall ? brand.avgOverall.toFixed(1) : "—"}
                 </div>
-                <ArrowRight className="mt-1 h-4 w-4 shrink-0 text-white/20 group-hover:text-accent transition-colors" />
               </div>
-              <p className="mt-2 text-sm leading-relaxed text-white/40 line-clamp-2">
-                {brand.description || `${brand.name} nicotine pouches.`}
-              </p>
-              <div className="mt-3 flex items-center gap-3 text-sm">
-                <span className="text-white/50">
-                  {brand.productCount} pouch{brand.productCount !== 1 ? "es" : ""}
-                </span>
-                {brand.website_url && (
-                  <span className="inline-flex items-center gap-1 text-white/30">
-                    <Globe className="h-3 w-3" />
-                    Website
+              <div>
+                <div className="text-[0.68rem] uppercase tracking-[0.14em] text-white/38">Burn</div>
+                <div className="mt-1 inline-flex items-center gap-1.5 font-display text-xl font-bold text-white">
+                  <Flame className="h-4 w-4 text-accent" />
+                  {brand.avgBurn ? brand.avgBurn.toFixed(1) : "—"}
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-4 space-y-2 text-sm text-white/50">
+              {brand.strongestProduct && (
+                <div className="flex items-start gap-2">
+                  <Zap className="mt-0.5 h-4 w-4 shrink-0 text-accent" />
+                  <span className="line-clamp-1">
+                    Strongest: {brand.strongestProduct.name} ({brand.strongestProduct.strength_mg}mg)
                   </span>
-                )}
-              </div>
+                </div>
+              )}
+              {brand.mostReviewedProduct ? (
+                <div className="flex items-start gap-2">
+                  <MessageSquare className="mt-0.5 h-4 w-4 shrink-0 text-accent" />
+                  <span className="line-clamp-1">
+                    Most reviewed: {brand.mostReviewedProduct.name} ({brand.mostReviewedProduct.review_count} reviews)
+                  </span>
+                </div>
+              ) : (
+                <div className="flex items-start gap-2">
+                  <MessageSquare className="mt-0.5 h-4 w-4 shrink-0 text-white/30" />
+                  <span>No review signal yet</span>
+                </div>
+              )}
+            </div>
+
+            <div className="mt-auto flex items-center justify-between border-t border-white/8 pt-4 text-xs text-white/44">
+              <span>{brand.reviewCount} community review{brand.reviewCount === 1 ? "" : "s"}</span>
+              {brand.website_url && (
+                <span className="inline-flex items-center gap-1 text-white/40">
+                  <Globe className="h-3 w-3" />
+                  Brand site
+                </span>
+              )}
             </div>
           </Link>
         ))}
