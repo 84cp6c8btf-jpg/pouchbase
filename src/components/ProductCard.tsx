@@ -39,7 +39,9 @@ export function ProductCard({ product }: ProductCardProps) {
             {formatFlavorCategory(product.flavor_category)}
           </span>
           <span className="pb-chip-soft backdrop-blur-sm">
-            {product.review_count > 0 ? `${product.review_count} reviews` : "New listing"}
+            {product.review_count > 0
+              ? `${product.review_count} review${product.review_count === 1 ? "" : "s"}`
+              : "No reviews yet"}
           </span>
         </div>
       </div>
@@ -71,7 +73,7 @@ export function ProductCard({ product }: ProductCardProps) {
             <BurnMeter rating={product.avg_burn} size="sm" />
           ) : (
             <div className="rounded-2xl border border-dashed border-white/10 px-4 py-3 text-sm text-white/56">
-              No community burn signal yet.
+              No burn score yet
             </div>
           )}
         </div>
@@ -90,7 +92,7 @@ export function ProductCard({ product }: ProductCardProps) {
           </div>
         ) : (
           <div className="mt-auto rounded-[1.35rem] border border-white/8 bg-black/15 p-3.5 text-sm text-white/56">
-            Structured scores unlock once the first reviews land.
+            Be the first to review this one.
           </div>
         )}
       </div>

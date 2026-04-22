@@ -29,14 +29,14 @@ export default async function TopRatedPage() {
         <div className="relative z-10">
           <div className="pb-kicker mb-5">
             <Star className="h-3.5 w-3.5" />
-            Ranked by Signal
+            Top Rated
           </div>
           <h1 className="font-display text-[clamp(2.8rem,6vw,5.5rem)] font-bold leading-[0.92] text-white">
-            Top rated pouches.
+            The best pouches right now.
           </h1>
           <p className="mt-4 max-w-3xl text-base leading-8 text-white/60">
-            Ranked by overall score with review count acting as confidence, so the best performers
-            rise without the page reading like a shop landing page.
+            Ranked by overall community score. Products with more reviews rank higher when
+            scores are tied, so well-tested favorites rise to the top.
           </p>
           <div className="mt-6 inline-flex rounded-full border border-white/10 bg-white/[0.04] px-4 py-2 text-sm text-white/64">
             {rankedProducts.length} products currently ranked

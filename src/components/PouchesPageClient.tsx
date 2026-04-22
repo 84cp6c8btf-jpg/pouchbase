@@ -87,16 +87,16 @@ export function PouchesPageClient() {
         <div className="relative z-10">
           <div className="pb-kicker mb-5">
             <Sparkles className="h-3.5 w-3.5" />
-            Structured Catalog
+            All Pouches
           </div>
           <div className="grid gap-6 lg:grid-cols-[1.05fr_0.95fr] lg:items-end">
             <div>
               <h1 className="font-display text-[clamp(2.9rem,6vw,5.8rem)] font-bold leading-[0.92] text-white">
-                Browse pouches with actual signal.
+                Find your next pouch.
               </h1>
               <p className="mt-4 max-w-2xl text-base leading-8 text-white/62">
-                Search by flavor, filter by burn, sort by review confidence, and scan the catalog
-                like a database instead of a store shelf.
+                Search by name or flavor, filter by brand and burn level, and sort however
+                you like. Every product has ratings, prices, and real reviews.
               </p>
             </div>
             <div className="grid gap-3 sm:grid-cols-3">
@@ -139,8 +139,8 @@ export function PouchesPageClient() {
             <div className="pb-data-panel p-4 sm:p-5">
               <div className="mb-4 flex items-center justify-between gap-3">
                 <div>
-                  <div className="text-[0.66rem] uppercase tracking-[0.22em] text-white/36">Controls</div>
-                  <h2 className="mt-1 font-display text-2xl font-bold text-white">Filter set</h2>
+                  <div className="text-[0.66rem] uppercase tracking-[0.22em] text-white/36">Narrow it down</div>
+                  <h2 className="mt-1 font-display text-2xl font-bold text-white">Filters</h2>
                 </div>
                 {hasActiveFilters && (
                   <button
@@ -249,7 +249,7 @@ export function PouchesPageClient() {
           <div className="pb-data-panel px-4 py-4 sm:px-5">
             <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
               <div>
-                <div className="text-[0.66rem] uppercase tracking-[0.22em] text-white/36">Results Layer</div>
+                <div className="text-[0.66rem] uppercase tracking-[0.22em] text-white/36">Showing</div>
                 <h2 className="mt-1 font-display text-3xl font-bold text-white">
                   {loading ? "Loading catalog" : `${products.length} pouch${products.length === 1 ? "" : "es"} found`}
                 </h2>
@@ -285,12 +285,12 @@ export function PouchesPageClient() {
               <div className="relative z-10 mx-auto max-w-xl">
                 <div className="pb-kicker mb-5">
                   <Sparkles className="h-3.5 w-3.5" />
-                  Empty Result
+                  No Results
                 </div>
-                <h3 className="font-display text-4xl font-bold text-white">No pouches match that mix.</h3>
+                <h3 className="font-display text-4xl font-bold text-white">Nothing matches those filters.</h3>
                 <p className="mt-4 text-sm leading-7 text-white/58">
-                  Clear the current filters and start wider. Flavor + burn combinations can get very
-                  specific fast.
+                  Try removing a filter or broadening your search. Some combinations are
+                  pretty specific.
                 </p>
                 <button
                   onClick={clearFilters}

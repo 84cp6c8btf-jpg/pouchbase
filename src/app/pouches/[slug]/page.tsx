@@ -135,7 +135,7 @@ export default async function ProductPage({ params }: Props) {
                 {product.name}
               </h1>
               <p className="mt-4 max-w-2xl text-base leading-8 text-white/62">
-                {product.description || `Structured review entry for ${product.name}.`}
+                {product.description || `${brand?.name} ${product.name} — ${product.flavor}, ${product.strength_mg}mg nicotine pouch.`}
               </p>
             </div>
 
@@ -173,7 +173,7 @@ export default async function ProductPage({ params }: Props) {
               </div>
             ) : (
               <div className="rounded-[1.5rem] border border-dashed border-white/12 px-5 py-5 text-white/58">
-                No community reviews yet. This entry is ready for the first structured rating.
+                No reviews yet — be the first to rate this pouch.
               </div>
             )}
 

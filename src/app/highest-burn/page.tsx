@@ -29,14 +29,14 @@ export default async function HighestBurnPage() {
         <div className="relative z-10">
           <div className="pb-kicker mb-5">
             <Flame className="h-3.5 w-3.5" />
-            Signature Metric
+            Highest Burn
           </div>
           <h1 className="font-display text-[clamp(2.8rem,6vw,5.5rem)] font-bold leading-[0.92] text-white">
-            Highest burn.
+            The ones that bite.
           </h1>
           <p className="mt-4 max-w-3xl text-base leading-8 text-white/60">
-            This ranking is about felt intensity, not just nicotine strength. It surfaces the
-            products users describe as sharp, hot, and impossible to ignore.
+            Ranked by burn score — the felt intensity under your lip, not just nicotine milligrams.
+            If you want heat, start here.
           </p>
           <div className="mt-6 inline-flex rounded-full border border-white/10 bg-white/[0.04] px-4 py-2 text-sm text-white/64">
             {hottestProducts.length} products currently ranked

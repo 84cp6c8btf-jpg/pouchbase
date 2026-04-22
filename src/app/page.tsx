@@ -64,19 +64,19 @@ const EDITORIAL_LINKS = [
   {
     href: "/top-rated",
     title: "Top Rated",
-    description: "Start with the community favorites that already feel proven.",
+    description: "The highest-scored pouches across all brands, ranked by real user reviews.",
     icon: Star,
   },
   {
     href: "/highest-burn",
-    title: "Burn Index",
-    description: "Track the pouches that actually bite back on the lip.",
+    title: "Highest Burn",
+    description: "The pouches that hit hardest. Ranked by lip sting, not just milligrams.",
     icon: Flame,
   },
   {
     href: "/brands",
-    title: "Brand Atlas",
-    description: "Map the catalogs behind the category instead of shopping blind.",
+    title: "All Brands",
+    description: "Browse every brand we cover — from mainstream giants to cult favorites.",
     icon: Tag,
   },
 ];
@@ -106,13 +106,13 @@ export default async function Home() {
               Independent Pouch Encyclopedia
             </div>
             <h1 className="font-display text-[clamp(3.5rem,8vw,7.5rem)] font-bold leading-[0.9] tracking-[-0.07em] text-white">
-              Flavor-led discovery.
-              <span className="mt-2 block text-accent">Authority-first structure.</span>
+              Every pouch,
+              <span className="mt-2 block text-accent">rated honestly.</span>
             </h1>
             <p className="mt-6 max-w-2xl text-lg leading-8 text-white/66 sm:text-xl">
-              PouchBase is built like a review index, not a merch shop: structured ratings, a
-              signature burn metric, real user signal, and side-by-side price context for adults
-              comparing nicotine pouches seriously.
+              PouchBase is a review site, not a shop. We track burn, flavor, longevity,
+              and price across every mainstream nicotine pouch so you can compare them
+              properly before you buy.
             </p>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
               <Link
@@ -131,9 +131,9 @@ export default async function Home() {
               </Link>
             </div>
             <div className="mt-8 flex flex-wrap gap-2.5">
-              <span className="pb-chip-soft">Structured community scores</span>
-              <span className="pb-chip-soft">Flavor-first browsing</span>
-              <span className="pb-chip-soft">Independent price comparison</span>
+              <span className="pb-chip-soft">Community ratings</span>
+              <span className="pb-chip-soft">Burn scores</span>
+              <span className="pb-chip-soft">Price comparison</span>
             </div>
           </div>
 
@@ -143,7 +143,7 @@ export default async function Home() {
                 <div className="mb-4 flex items-center justify-between gap-3">
                   <div>
                     <div className="text-[0.68rem] uppercase tracking-[0.24em] text-white/42">
-                      Featured Catalog Entry
+                      Top Rated
                     </div>
                     <h2 className="mt-1 font-display text-2xl font-bold text-white">
                       {featuredProduct.name}
@@ -178,7 +178,7 @@ export default async function Home() {
                       <BurnMeter rating={featuredProduct.avg_burn} size="md" />
                     ) : (
                       <div className="rounded-2xl border border-dashed border-white/10 px-4 py-3 text-sm text-white/56">
-                        Burn signal starts once reviews come in.
+                        No burn score yet — needs reviews.
                       </div>
                     )}
                     <div className="grid grid-cols-2 gap-3">
@@ -226,19 +226,19 @@ export default async function Home() {
 
       <section className="grid gap-4 md:grid-cols-3">
         <div className="pb-stat-tile">
-          <div className="mb-2 text-[0.68rem] uppercase tracking-[0.22em] text-white/38">Catalog</div>
+          <div className="mb-2 text-[0.68rem] uppercase tracking-[0.22em] text-white/38">Pouches</div>
           <div className="font-display text-5xl font-bold text-accent">{stats.products}</div>
-          <p className="mt-2 text-sm text-white/55">Pouches tracked across mainstream and cult brands.</p>
+          <p className="mt-2 text-sm text-white/55">Products tracked across mainstream and niche brands.</p>
         </div>
         <div className="pb-stat-tile">
-          <div className="mb-2 text-[0.68rem] uppercase tracking-[0.22em] text-white/38">Signal</div>
+          <div className="mb-2 text-[0.68rem] uppercase tracking-[0.22em] text-white/38">Reviews</div>
           <div className="font-display text-5xl font-bold text-accent">{stats.reviews}</div>
-          <p className="mt-2 text-sm text-white/55">Published review entries shaping flavor and burn rankings.</p>
+          <p className="mt-2 text-sm text-white/55">Community reviews with burn, flavor, and longevity scores.</p>
         </div>
         <div className="pb-stat-tile">
-          <div className="mb-2 text-[0.68rem] uppercase tracking-[0.22em] text-white/38">Coverage</div>
+          <div className="mb-2 text-[0.68rem] uppercase tracking-[0.22em] text-white/38">Brands</div>
           <div className="font-display text-5xl font-bold text-accent">{stats.brands}</div>
-          <p className="mt-2 text-sm text-white/55">Brands covered with structured, comparable product data.</p>
+          <p className="mt-2 text-sm text-white/55">From ZYN and VELO to Pablo, Siberia, and beyond.</p>
         </div>
       </section>
 
@@ -267,12 +267,11 @@ export default async function Home() {
             <div>
               <div className="pb-kicker mb-4">
                 <Star className="h-3.5 w-3.5" />
-                Editorial Picks
+                Community Favorites
               </div>
               <h2 className="font-display text-4xl font-bold text-white sm:text-5xl">Top Rated right now</h2>
               <p className="mt-3 max-w-2xl text-white/60">
-                High-confidence favorites with structured scoring, readable cards, and enough signal
-                to compare them properly.
+                The pouches people keep coming back to, sorted by overall score.
               </p>
             </div>
             <Link
@@ -296,12 +295,12 @@ export default async function Home() {
             <div>
               <div className="pb-kicker mb-4">
                 <Flame className="h-3.5 w-3.5" />
-                Signature Metric
+                Burn Leaders
               </div>
-              <h2 className="font-display text-4xl font-bold text-white sm:text-5xl">Burn worth tracking</h2>
+              <h2 className="font-display text-4xl font-bold text-white sm:text-5xl">Highest burn right now</h2>
               <p className="mt-3 max-w-2xl text-white/60">
-                The burn rating is our differentiator: not just nicotine strength, but the felt lip
-                sting users actually talk about.
+                Burn measures the actual lip sting — not just nicotine strength. These are the ones
+                that hit hardest.
               </p>
             </div>
             <Link
@@ -316,14 +315,14 @@ export default async function Home() {
               <div className="relative">
                 <div className="pb-kicker mb-5">
                   <Sparkles className="h-3.5 w-3.5" />
-                  Read it fast
+                  What is burn?
                 </div>
                 <h3 className="font-display text-4xl font-bold leading-[0.95] text-white">
-                  Stronger than strength alone.
+                  More than just milligrams.
                 </h3>
                 <p className="mt-4 text-sm leading-7 text-white/58">
-                  Burn captures the feeling users chase or avoid. It gives the catalog a more
-                  culturally honest language than milligrams by themselves.
+                  Two pouches with the same nicotine can feel completely different under your lip.
+                  Burn captures that — the sting, the heat, the intensity people actually care about.
                 </p>
               </div>
             </div>
@@ -343,30 +342,32 @@ export default async function Home() {
             Why PouchBase
           </div>
           <h2 className="font-display text-4xl font-bold text-white sm:text-5xl">
-            Structured enough to trust.
+            Not another affiliate store.
           </h2>
           <p className="mt-4 max-w-2xl text-base leading-8 text-white/60">
-            Browse by brand, flavor, burn signal, or review confidence without falling into the
-            usual affiliate-store clutter. It is product discovery with an encyclopedia mindset.
+            Most pouch sites exist to sell you something. We exist to help you compare.
+            Filter by brand, flavor, burn, or strength — and read what real users actually think.
           </p>
         </div>
         <div className="grid gap-3">
           <div className="pb-data-card p-4">
             <div className="mb-2 flex items-center gap-2 text-sm font-semibold text-white">
               <Search className="h-4 w-4 text-accent" />
-              Discovery layer
+              Find what fits
             </div>
             <p className="text-sm leading-7 text-white/56">
-              Filters, flavor worlds, and ranking pages make the catalog easy to scan quickly.
+              Filter by flavor, strength, burn level, or brand. Compare products side by side
+              instead of scrolling through store pages.
             </p>
           </div>
           <div className="pb-data-card p-4">
             <div className="mb-2 flex items-center gap-2 text-sm font-semibold text-white">
               <MessageSquare className="h-4 w-4 text-accent" />
-              Review layer
+              Real reviews
             </div>
             <p className="text-sm leading-7 text-white/56">
-              Community posts feed structured product scores instead of loose testimonial clutter.
+              Every review scores burn, flavor, longevity, and overall. No vague testimonials —
+              actual ratings you can compare across products.
             </p>
           </div>
         </div>

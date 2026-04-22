@@ -46,14 +46,14 @@ export default async function BrandsPage() {
         <div className="relative z-10">
           <div className="pb-kicker mb-5">
             <Layers className="h-3.5 w-3.5" />
-            Brand Atlas
+            All Brands
           </div>
           <h1 className="font-display text-[clamp(2.8rem,6vw,5.6rem)] font-bold leading-[0.92] text-white">
-            Browse the catalogs behind the category.
+            Every brand we track.
           </h1>
           <p className="mt-4 max-w-3xl text-base leading-8 text-white/60">
-            Compare pouch brands as structured product families, from mainstream mint staples to
-            high-burn cult names and flavor-led experimenters.
+            From ZYN and VELO to Pablo and Siberia. Pick a brand to see all their pouches,
+            ratings, and reviews in one place.
           </p>
         </div>
       </section>

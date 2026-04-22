@@ -16,13 +16,13 @@ export function Footer() {
                   Pouch<span className="text-accent">Base</span>
                 </div>
                 <div className="text-[0.62rem] uppercase tracking-[0.28em] text-white/38">
-                  Encyclopedia Layer
+                  Review Index
                 </div>
               </div>
             </Link>
             <p className="text-sm leading-7 text-white/56">
-              Independent nicotine pouch discovery for adults who want something more useful than
-              shop-owned rankings. Real reviews, structured scores, burn signal, and price context.
+              Independent nicotine pouch reviews for adults. We don&apos;t sell pouches — we help
+              you compare them with honest ratings, burn scores, and price info.
             </p>
           </div>
 
@@ -37,7 +37,7 @@ export function Footer() {
           </div>
 
           <div>
-            <h3 className="mb-4 font-display text-lg font-bold">Flavor Worlds</h3>
+            <h3 className="mb-4 font-display text-lg font-bold">By Flavor</h3>
             <ul className="space-y-3 text-sm text-white/56">
               <li><Link href="/pouches?category=mint" className="transition hover:text-white">Mint</Link></li>
               <li><Link href="/pouches?category=fruit" className="transition hover:text-white">Fruit</Link></li>
@@ -47,7 +47,7 @@ export function Footer() {
           </div>
 
           <div>
-            <h3 className="mb-4 font-display text-lg font-bold">House Rules</h3>
+            <h3 className="mb-4 font-display text-lg font-bold">About</h3>
             <ul className="space-y-3 text-sm text-white/56">
               <li><Link href="/about" className="transition hover:text-white">About</Link></li>
               <li><Link href="/privacy" className="transition hover:text-white">Privacy Policy</Link></li>
@@ -61,7 +61,7 @@ export function Footer() {
 
         <div className="mt-10 flex flex-col gap-3 border-t border-white/6 pt-6 text-xs text-white/38 sm:flex-row sm:items-center sm:justify-between">
           <p>&copy; {new Date().getFullYear()} PouchBase. Independent reviews, not brand-owned hype.</p>
-          <p>Built for scanability, comparison, and actual product discovery.</p>
+          <p>Built for people who actually care about what they put in their lip.</p>
         </div>
       </div>
     </footer>
