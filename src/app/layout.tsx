@@ -6,6 +6,7 @@ import { Header } from "@/components/layout/Header";
 import { AgeGate } from "@/components/layout/AgeGate";
 import { OrganizationJsonLd, WebSiteJsonLd } from "@/components/seo/JsonLd";
 import { getSiteUrl, SITE_DESCRIPTION, SITE_NAME } from "@/lib/site";
+import { Analytics } from "@vercel/analytics/next";
 
 const manrope = Manrope({
   subsets: ["latin"],
@@ -69,6 +70,7 @@ export default function RootLayout({
           {children}
         </main>
         <Footer />
+        <Analytics />
       </body>
     </html>
   );
