@@ -2,9 +2,9 @@ import Link from "next/link";
 import { supabase } from "@/lib/supabase";
 import { Flame, Globe, MessageSquare, Star, Zap } from "lucide-react";
 import type { Metadata } from "next";
-import { BrandArtwork } from "@/components/BrandArtwork";
-import { PageIntro } from "@/components/PageIntro";
-import { hasPublicScore } from "@/lib/burn";
+import { BrandArtwork } from "@/components/catalog/BrandArtwork";
+import { PageIntro } from "@/components/common/PageIntro";
+import { hasPublicScore } from "@/lib/catalog/burn";
 
 export const revalidate = 60;
 export const metadata: Metadata = {

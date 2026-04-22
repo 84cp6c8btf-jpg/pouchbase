@@ -1,11 +1,11 @@
-import type { Product, RelationResult } from "@/lib/types";
+import { unwrapRelation, type Product, type RelationResult } from "@/lib/types";
 import {
   formatBurnRating,
   formatReviewCount,
   getBurnLabel,
   getScoreState,
   hasPublicScore,
-} from "@/lib/burn";
+} from "@/lib/catalog/burn";
 
 export type ProductBrand = {
   name: string;
@@ -37,8 +37,7 @@ export type DiscoveryGroup = {
 };
 
 export function getBrand(product: ProductWithBrand) {
-  if (Array.isArray(product.brands)) return product.brands[0] ?? null;
-  return product.brands ?? null;
+  return unwrapRelation(product.brands);
 }
 
 export function getPublicScoredProducts<T extends Product>(products: T[]) {
@@ -71,7 +70,7 @@ export function buildPriceSummaryMap(rows: PriceRowLite[]) {
 }
 
 export function formatPriceSummary(summary?: PriceSummary) {
-  if (!summary?.lowestPrice || !summary.currency) return "No live price";
+  if (summary?.lowestPrice == null || !summary.currency) return "No live price";
   return `${summary.currency} ${summary.lowestPrice.toFixed(2)}`;
 }
 

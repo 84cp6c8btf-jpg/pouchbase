@@ -6,8 +6,8 @@ import {
   getBurnLabel,
   getReviewsNeededForPublicScore,
   getScoreState,
-} from "@/lib/burn";
-import { BurnMeter } from "@/components/BurnMeter";
+} from "@/lib/catalog/burn";
+import { BurnMeter } from "@/components/burn/BurnMeter";
 
 interface ProductBurnSummaryProps {
   rating: number;

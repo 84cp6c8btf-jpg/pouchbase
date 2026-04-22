@@ -1,14 +1,14 @@
 import Link from "next/link";
-import { getBurnLabel, formatBurnRating } from "@/lib/burn";
+import { formatBurnRating, getBurnLabel } from "@/lib/catalog/burn";
 import {
   getBrand,
   type ProductWithBrand,
-} from "@/lib/discovery";
+} from "@/lib/catalog/discovery";
 import {
   getBurnStrengthPoints,
   getBurnStrengthSignalLabel,
   getBurnStrengthSignalTone,
-} from "@/lib/intelligence";
+} from "@/lib/catalog/intelligence";
 
 interface BurnVsStrengthMapProps {
   products: ProductWithBrand[];

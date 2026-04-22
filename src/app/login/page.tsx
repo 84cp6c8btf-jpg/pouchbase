@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { LoginPageClient } from "@/components/LoginPageClient";
+import { LoginPageClient } from "./_components/LoginPageClient";
 
 export const metadata: Metadata = {
   title: "Sign In — PouchBase",

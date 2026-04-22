@@ -4,7 +4,7 @@ import {
   getBurnDisplay,
   getCompareUrl,
   type DiscoveryGroup,
-} from "@/lib/discovery";
+} from "@/lib/catalog/discovery";
 
 interface RelatedComparisonsProps {
   currentSlug: string;

@@ -1,21 +1,22 @@
 import { supabase } from "@/lib/supabase";
-import { ProductCard } from "@/components/ProductCard";
 import type { Metadata } from "next";
-import { BurnMethodology } from "@/components/BurnMethodology";
-import { PageIntro } from "@/components/PageIntro";
-import { ReviewSignalSection } from "@/components/ReviewSignalSection";
-import { TrustDisclosure } from "@/components/TrustDisclosure";
-import { MIN_PUBLIC_SCORE_REVIEWS } from "@/lib/burn";
-import { BurnLadder } from "@/components/BurnLadder";
+import { BurnLadder } from "@/components/burn/BurnLadder";
+import { BurnMethodology } from "@/components/burn/BurnMethodology";
+import { BurnRankSection } from "@/components/burn/BurnRankSection";
+import { BurnVsStrengthMap } from "@/components/burn/BurnVsStrengthMap";
+import { ProductCard } from "@/components/catalog/ProductCard";
+import { ReviewSignalSection } from "@/components/catalog/ReviewSignalSection";
+import { PageIntro } from "@/components/common/PageIntro";
+import { TrustDisclosure } from "@/components/common/TrustDisclosure";
 import Link from "next/link";
-import type { ProductWithBrand } from "@/lib/discovery";
-import { BurnRankSection } from "@/components/BurnRankSection";
-import { BurnVsStrengthMap } from "@/components/BurnVsStrengthMap";
+import { MIN_PUBLIC_SCORE_REVIEWS } from "@/lib/catalog/burn";
+import type { ProductWithBrand } from "@/lib/catalog/discovery";
+import { PRODUCT_WITH_BRAND_SELECT } from "@/lib/catalog/selects";
 import {
   getBurnIntelligenceModules,
   getProductsWithAnyReviews,
   sortProductsByAdjustedMetric,
-} from "@/lib/intelligence";
+} from "@/lib/catalog/intelligence";
 
 export const revalidate = 60;
 export const metadata: Metadata = {
@@ -30,13 +31,13 @@ export default async function HighestBurnPage() {
   const [{ data: products }, { data: reviewedProductsData }] = await Promise.all([
     supabase
       .from("products")
-      .select("*, brands(name, slug)")
+      .select(PRODUCT_WITH_BRAND_SELECT)
       .gte("review_count", MIN_PUBLIC_SCORE_REVIEWS)
       .order("review_count", { ascending: false })
       .limit(160),
     supabase
       .from("products")
-      .select("*, brands(name, slug)")
+      .select(PRODUCT_WITH_BRAND_SELECT)
       .gt("review_count", 0)
       .order("review_count", { ascending: false })
       .limit(24),

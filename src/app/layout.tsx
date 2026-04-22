@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
 import { Manrope, Space_Grotesk } from "next/font/google";
 import "./globals.css";
-import { Header } from "@/components/Header";
-import { Footer } from "@/components/Footer";
+import { Footer } from "@/components/layout/Footer";
+import { Header } from "@/components/layout/Header";
+import { AgeGate } from "@/components/layout/AgeGate";
+import { OrganizationJsonLd, WebSiteJsonLd } from "@/components/seo/JsonLd";
 import { getSiteUrl, SITE_DESCRIPTION, SITE_NAME } from "@/lib/site";
-import { AgeGate } from "@/components/AgeGate";
-import { OrganizationJsonLd, WebSiteJsonLd } from "@/components/JsonLd";
 
 const manrope = Manrope({
   subsets: ["latin"],

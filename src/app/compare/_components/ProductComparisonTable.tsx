@@ -8,10 +8,10 @@ import {
   getMetricHighlight,
   type PriceSummary,
   type ProductWithBrand,
-} from "@/lib/discovery";
-import { BurnMeter } from "@/components/BurnMeter";
-import { ProductArtwork } from "@/components/ProductArtwork";
-import { formatReviewCount, getScoreState, hasPublicScore } from "@/lib/burn";
+} from "@/lib/catalog/discovery";
+import { BurnMeter } from "@/components/burn/BurnMeter";
+import { ProductArtwork } from "@/components/catalog/ProductArtwork";
+import { formatReviewCount, getScoreState, hasPublicScore } from "@/lib/catalog/burn";
 
 interface ProductComparisonTableProps {
   left: ProductWithBrand;

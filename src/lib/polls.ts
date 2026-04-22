@@ -1,5 +1,6 @@
-import { getBrand, type ProductWithBrand } from "@/lib/discovery";
-import type { PollCategory, PollStatus } from "@/lib/types";
+import { getBrand, type ProductWithBrand } from "@/lib/catalog/discovery";
+import { POLL_OPTION_WITH_PRODUCT_SELECT } from "@/lib/catalog/selects";
+import { unwrapRelation, type PollCategory, type PollStatus } from "@/lib/types";
 import { createSupabaseServerClient } from "@/lib/supabase";
 
 type PollRow = {
@@ -54,8 +55,7 @@ export type PollResultRow = {
 };
 
 function normalizeProduct(product: PollOptionRow["products"]) {
-  if (Array.isArray(product)) return product[0] ?? null;
-  return product ?? null;
+  return unwrapRelation(product);
 }
 
 function normalizeOption(option: PollOptionRow): PollOption {
@@ -132,9 +132,7 @@ export async function getActiveWeeklyPoll() {
 
   const { data: optionRows } = await supabase
     .from("poll_options")
-    .select(
-      "id, poll_id, label, sort_order, product_id, products(id, brand_id, name, slug, flavor, flavor_category, strength_mg, strength_label, format, pouches_per_can, moisture, weight_per_pouch, description, image_url, avg_burn, avg_flavor, avg_longevity, avg_overall, review_count, created_at, brands(name, slug))"
-    )
+    .select(POLL_OPTION_WITH_PRODUCT_SELECT)
     .eq("poll_id", poll.id)
     .order("sort_order", { ascending: true });
 

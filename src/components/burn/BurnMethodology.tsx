@@ -1,5 +1,5 @@
 import { Flame } from "lucide-react";
-import { BURN_SCALE, MIN_PUBLIC_SCORE_REVIEWS } from "@/lib/burn";
+import { BURN_SCALE, MIN_PUBLIC_SCORE_REVIEWS } from "@/lib/catalog/burn";
 
 interface BurnMethodologyProps {
   compact?: boolean;

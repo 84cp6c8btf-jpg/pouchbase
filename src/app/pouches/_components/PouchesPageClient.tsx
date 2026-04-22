@@ -3,11 +3,16 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
 import { Product, FLAVOR_CATEGORIES } from "@/lib/types";
-import { ProductCard } from "@/components/ProductCard";
+import { ProductCard } from "@/components/catalog/ProductCard";
 import { Flame, Search, SlidersHorizontal, X } from "lucide-react";
-import { PageIntro } from "@/components/PageIntro";
-import { MIN_PUBLIC_SCORE_REVIEWS, getScoreState } from "@/lib/burn";
-import { compareProductsByReviewSignal } from "@/lib/intelligence";
+import { PageIntro } from "@/components/common/PageIntro";
+import {
+  MIN_PUBLIC_SCORE_REVIEWS,
+  compareScoreStates,
+  getScoreState,
+} from "@/lib/catalog/burn";
+import { PRODUCT_WITH_BRAND_SELECT } from "@/lib/catalog/selects";
+import { compareProductsByReviewSignal } from "@/lib/catalog/intelligence";
 
 type SortOption = "overall" | "burn" | "strength" | "reviews" | "newest" | "name";
 type SignalFilter = "all" | "public" | "early" | "none";
@@ -29,7 +34,7 @@ export function PouchesPageClient() {
 
     async function fetchProducts() {
       setLoading(true);
-      let query = supabase.from("products").select("*, brands(name, slug)");
+      let query = supabase.from("products").select(PRODUCT_WITH_BRAND_SELECT);
 
       if (selectedBrand) {
         query = query.eq("brand_id", selectedBrand);
@@ -95,8 +100,7 @@ export function PouchesPageClient() {
       const leftState = getScoreState(left.review_count);
       const rightState = getScoreState(right.review_count);
       if (leftState !== rightState) {
-        const stateWeight = { none: 0, early: 1, public: 2 } as const;
-        return stateWeight[rightState] - stateWeight[leftState];
+        return compareScoreStates(leftState, rightState);
       }
       if (leftState === "public" && right.avg_overall !== left.avg_overall) {
         return right.avg_overall - left.avg_overall;
@@ -108,8 +112,7 @@ export function PouchesPageClient() {
       const leftState = getScoreState(left.review_count);
       const rightState = getScoreState(right.review_count);
       if (leftState !== rightState) {
-        const stateWeight = { none: 0, early: 1, public: 2 } as const;
-        return stateWeight[rightState] - stateWeight[leftState];
+        return compareScoreStates(leftState, rightState);
       }
       if (leftState === "public" && right.avg_burn !== left.avg_burn) {
         return right.avg_burn - left.avg_burn;

@@ -8,8 +8,8 @@ import {
   getStrengthBurnContext,
   sortByBurn,
   type ProductWithBrand,
-} from "@/lib/discovery";
-import { getBurnLabel } from "@/lib/burn";
+} from "@/lib/catalog/discovery";
+import { getBurnLabel } from "@/lib/catalog/burn";
 
 interface BurnLadderProps {
   products: ProductWithBrand[];

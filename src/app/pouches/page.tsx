@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { PouchesPageClient } from "@/components/PouchesPageClient";
+import { PouchesPageClient } from "./_components/PouchesPageClient";
 
 export const metadata: Metadata = {
   title: "Browse Nicotine Pouches — PouchBase",

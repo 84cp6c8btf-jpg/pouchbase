@@ -2,7 +2,7 @@
  * JSON-LD structured data components for SEO.
  * These help Google show rich results (star ratings, prices, breadcrumbs).
  */
-import { hasPublicScore } from "@/lib/burn";
+import { hasPublicScore } from "@/lib/catalog/burn";
 
 interface ProductJsonLdProps {
   name: string;

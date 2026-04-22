@@ -1,3 +1,5 @@
+/* eslint-disable @next/next/no-img-element */
+
 type ProductArtworkProps = {
   brand?: string | null;
   brandSlug?: string | null;

@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { Flame, LockKeyhole, Swords } from "lucide-react";
 import { usePathname } from "next/navigation";
-import { ProductArtwork } from "@/components/ProductArtwork";
+import { ProductArtwork } from "@/components/catalog/ProductArtwork";
 import {
   getPollCompareHref,
   getPollEyebrow,
@@ -14,6 +14,7 @@ import {
   type PollResults,
   type WeeklyPoll,
 } from "@/lib/polls";
+import { getBrand } from "@/lib/catalog/discovery";
 import { supabase } from "@/lib/supabase";
 
 interface WeeklyPollCardProps {
@@ -227,9 +228,7 @@ export function WeeklyPollCard({ poll }: WeeklyPollCardProps) {
           const isSelected = option.id === selectedOptionId;
           const optionResults = results.options[option.id] || { percentage: 0, voteCount: 0 };
           const submitting = submittingOptionId === option.id;
-          const brand = Array.isArray(option.product?.brands)
-            ? option.product.brands[0]
-            : option.product?.brands;
+          const brand = option.product ? getBrand(option.product) : null;
 
           return (
             <button

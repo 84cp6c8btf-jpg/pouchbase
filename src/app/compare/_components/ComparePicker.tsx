@@ -1,4 +1,4 @@
-import { getBrand, type ProductWithBrand } from "@/lib/discovery";
+import { getBrand, type ProductWithBrand } from "@/lib/catalog/discovery";
 
 interface ComparePickerProps {
   products: ProductWithBrand[];

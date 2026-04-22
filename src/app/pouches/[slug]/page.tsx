@@ -1,50 +1,48 @@
 import { supabase } from "@/lib/supabase";
 import { notFound } from "next/navigation";
-import { RatingBadge } from "@/components/RatingBadge";
-import { ReviewSection } from "@/components/ReviewSection";
-import { PriceComparison } from "@/components/PriceComparison";
-import { ProductJsonLd, BreadcrumbJsonLd } from "@/components/JsonLd";
+import { RatingBadge } from "@/components/catalog/RatingBadge";
+import { ProductArtwork } from "@/components/catalog/ProductArtwork";
+import { TrustDisclosure } from "@/components/common/TrustDisclosure";
+import { BurnLadder } from "@/components/burn/BurnLadder";
+import { BurnMethodology } from "@/components/burn/BurnMethodology";
+import { ProductJsonLd, BreadcrumbJsonLd } from "@/components/seo/JsonLd";
 import { getSiteUrl } from "@/lib/site";
 import { Droplets, Package, Ruler, Zap } from "lucide-react";
 import type { Metadata } from "next";
-import type { RelationResult } from "@/lib/types";
+import { unwrapRelation, type RelationResult } from "@/lib/types";
 import Link from "next/link";
-import { ProductArtwork } from "@/components/ProductArtwork";
-import { BurnMethodology } from "@/components/BurnMethodology";
-import { TrustDisclosure } from "@/components/TrustDisclosure";
-import { hasPublicScore } from "@/lib/burn";
-import { ProductBurnSummary } from "@/components/ProductBurnSummary";
-import { ReferencePanel } from "@/components/ReferencePanel";
+import { hasPublicScore } from "@/lib/catalog/burn";
 import {
   getCompareUrl,
   getRelatedDiscoveryGroups,
   type ProductWithBrand,
-} from "@/lib/discovery";
-import { RelatedComparisons } from "@/components/RelatedComparisons";
-import { BurnLadder } from "@/components/BurnLadder";
+} from "@/lib/catalog/discovery";
+import {
+  PRODUCT_CATALOG_SELECT,
+  PRODUCT_METADATA_SELECT,
+  PRODUCT_WITH_BRAND_COUNTRY_SELECT,
+} from "@/lib/catalog/selects";
+import { PriceComparison } from "./_components/PriceComparison";
+import { ProductBurnSummary } from "./_components/ProductBurnSummary";
+import { ReferencePanel } from "./_components/ReferencePanel";
+import { RelatedComparisons } from "./_components/RelatedComparisons";
+import { ReviewSection } from "./_components/ReviewSection";
 
 interface Props {
   params: Promise<{ slug: string }>;
-}
-
-type BrandSummary = { name: string; slug?: string; country?: string | null };
-
-function getSingleBrand<T extends BrandSummary>(brand: RelationResult<T>): T | null {
-  if (Array.isArray(brand)) return brand[0] ?? null;
-  return brand ?? null;
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const { data: product } = await supabase
     .from("products")
-    .select("name, flavor, strength_mg, avg_overall, review_count, brands(name)")
+    .select(PRODUCT_METADATA_SELECT)
     .eq("slug", slug)
     .single();
 
   if (!product) return { title: "Product Not Found" };
 
-  const brandName = getSingleBrand(product.brands as RelationResult<{ name: string }>)?.name || "";
+  const brandName = unwrapRelation(product.brands as RelationResult<{ name: string }>)?.name || "";
   const publicScoreVisible = hasPublicScore(product.review_count);
   const description = publicScoreVisible
     ? `Read real reviews of ${brandName} ${product.name} (${product.flavor}, ${product.strength_mg}mg). Burn rating, flavor score, and price comparison. Currently ${product.avg_overall.toFixed(1)}/10 from structured community reviews.`
@@ -63,13 +61,13 @@ export default async function ProductPage({ params }: Props) {
 
   const { data: product } = await supabase
     .from("products")
-    .select("*, brands(name, slug, country)")
+    .select(PRODUCT_WITH_BRAND_COUNTRY_SELECT)
     .eq("slug", slug)
     .single();
 
   if (!product) notFound();
 
-  const brand = getSingleBrand(
+  const brand = unwrapRelation(
     product.brands as RelationResult<{ name: string; slug: string; country: string | null }>
   );
 
@@ -88,7 +86,7 @@ export default async function ProductPage({ params }: Props) {
   const publicScoreVisible = hasPublicScore(product.review_count);
   const { data: relatedProductsData } = await supabase
     .from("products")
-    .select("id, brand_id, name, slug, flavor, flavor_category, strength_mg, strength_label, format, pouches_per_can, moisture, weight_per_pouch, description, image_url, avg_burn, avg_flavor, avg_longevity, avg_overall, review_count, created_at, brands(name, slug)")
+    .select(PRODUCT_CATALOG_SELECT)
     .neq("slug", product.slug);
   const relatedProducts = (relatedProductsData || []) as ProductWithBrand[];
   const comparisonGroups = getRelatedDiscoveryGroups(product as ProductWithBrand, relatedProducts);

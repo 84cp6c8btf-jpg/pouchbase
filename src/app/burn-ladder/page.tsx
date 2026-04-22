@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { supabase } from "@/lib/supabase";
-import { BurnLadder } from "@/components/BurnLadder";
-import { BurnMethodology } from "@/components/BurnMethodology";
-import { PageIntro } from "@/components/PageIntro";
-import { TrustDisclosure } from "@/components/TrustDisclosure";
-import { MIN_PUBLIC_SCORE_REVIEWS } from "@/lib/burn";
-import type { ProductWithBrand } from "@/lib/discovery";
+import { BurnLadder } from "@/components/burn/BurnLadder";
+import { BurnMethodology } from "@/components/burn/BurnMethodology";
+import { PageIntro } from "@/components/common/PageIntro";
+import { TrustDisclosure } from "@/components/common/TrustDisclosure";
+import { MIN_PUBLIC_SCORE_REVIEWS } from "@/lib/catalog/burn";
+import type { ProductWithBrand } from "@/lib/catalog/discovery";
+import { PRODUCT_CATALOG_SELECT } from "@/lib/catalog/selects";
 
 export const metadata: Metadata = {
   title: "Burn Ladder — PouchBase",
@@ -21,7 +22,7 @@ export const revalidate = 60;
 export default async function BurnLadderPage() {
   const { data } = await supabase
     .from("products")
-    .select("id, brand_id, name, slug, flavor, flavor_category, strength_mg, strength_label, format, pouches_per_can, moisture, weight_per_pouch, description, image_url, avg_burn, avg_flavor, avg_longevity, avg_overall, review_count, created_at, brands(name, slug)")
+    .select(PRODUCT_CATALOG_SELECT)
     .gte("review_count", MIN_PUBLIC_SCORE_REVIEWS)
     .order("avg_burn", { ascending: true })
     .order("avg_overall", { ascending: false });

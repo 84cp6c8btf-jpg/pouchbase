@@ -1,36 +1,47 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# PouchBase
 
-## Getting Started
+PouchBase is an editorial/reference site for nicotine pouches. It is not a store. The product is built around trust-first comparison: structured reviews, public-score thresholds, burn analysis, and retailer pricing kept separate from rankings.
 
-First, run the development server:
+## Stack
+
+- Next.js 16 App Router
+- TypeScript + React 19
+- Tailwind CSS v4
+- Supabase for database and auth
+- Lucide React for icons
+
+## Local Development
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Useful checks:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+npm run typecheck
+npm run lint
+npm run build
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Repo Guide
 
-## Learn More
+- `src/app` — routes, metadata files, route handlers, and route-private `_components`
+- `src/components` — shared UI grouped by concern (`layout`, `burn`, `catalog`, `common`, `polls`, `seo`)
+- `src/lib` — shared utilities and domain logic
+- `src/lib/catalog` — burn thresholds, catalog discovery helpers, ranking logic, and shared select strings
+- `public` — public assets only when actually used
+- `supabase-*.sql` — schema, seed, migration, and cleanup SQL
 
-To learn more about Next.js, take a look at the following resources:
+## Project Docs
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- [POUCHBASE-BRIEF.md](./POUCHBASE-BRIEF.md) — primary project brief and source of truth
+- [BUILD_STATUS.md](./BUILD_STATUS.md) — current implementation/status snapshot
+- [AGENTS.md](./AGENTS.md) — repo-specific guidance for coding agents
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Notes
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Public scores only appear after enough structured reviews exist.
+- Rankings use confidence weighting, not raw averages alone.
+- No automated test suite is currently present in the repo.

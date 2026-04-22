@@ -1,13 +1,14 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { supabase } from "@/lib/supabase";
-import { ProductCard } from "@/components/ProductCard";
+import { ProductCard } from "@/components/catalog/ProductCard";
 import { Flame, Globe, Layers, Star, Zap } from "lucide-react";
 import type { Metadata } from "next";
-import { BrandArtwork } from "@/components/BrandArtwork";
-import { hasPublicScore, MIN_PUBLIC_SCORE_REVIEWS } from "@/lib/burn";
-import { sortProductsByReviewSignal } from "@/lib/intelligence";
-import type { ProductWithBrand } from "@/lib/discovery";
+import { BrandArtwork } from "@/components/catalog/BrandArtwork";
+import { hasPublicScore, MIN_PUBLIC_SCORE_REVIEWS } from "@/lib/catalog/burn";
+import type { ProductWithBrand } from "@/lib/catalog/discovery";
+import { PRODUCT_WITH_BRAND_SELECT } from "@/lib/catalog/selects";
+import { sortProductsByReviewSignal } from "@/lib/catalog/intelligence";
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -47,7 +48,7 @@ export default async function BrandDetailPage({ params }: Props) {
 
   const { data: products } = await supabase
     .from("products")
-    .select("*, brands(name, slug)")
+    .select(PRODUCT_WITH_BRAND_SELECT)
     .eq("brand_id", brand.id)
     .order("review_count", { ascending: false })
     .order("strength_mg", { ascending: false });

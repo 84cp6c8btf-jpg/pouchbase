@@ -3,15 +3,15 @@
 import { useCallback, useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
 import { Review } from "@/lib/types";
-import { BurnMeter } from "./BurnMeter";
-import { RatingBadge } from "./RatingBadge";
+import { BurnMeter } from "@/components/burn/BurnMeter";
+import { RatingBadge } from "@/components/catalog/RatingBadge";
 import { MessageSquare, User } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import {
   MIN_PUBLIC_SCORE_REVIEWS,
   getBurnLabel,
-} from "@/lib/burn";
+} from "@/lib/catalog/burn";
 
 interface ReviewSectionProps {
   productId: string;

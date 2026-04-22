@@ -1,22 +1,22 @@
 import Link from "next/link";
 import { MessageSquare, Zap } from "lucide-react";
-import { Product, RelationResult } from "@/lib/types";
-import { BurnMeter } from "./BurnMeter";
-import { RatingBadge } from "./RatingBadge";
-import { ProductArtwork } from "./ProductArtwork";
+import { BurnMeter } from "@/components/burn/BurnMeter";
+import { ProductArtwork } from "@/components/catalog/ProductArtwork";
+import { RatingBadge } from "@/components/catalog/RatingBadge";
 import {
   MIN_PUBLIC_SCORE_REVIEWS,
   formatReviewCount,
   getReviewsNeededForPublicScore,
   getScoreState,
-} from "@/lib/burn";
+} from "@/lib/catalog/burn";
+import { getBrand, type ProductWithBrand } from "@/lib/catalog/discovery";
 
 interface ProductCardProps {
-  product: Product & { brands?: RelationResult<{ name: string; slug: string }> };
+  product: ProductWithBrand;
 }
 
 export function ProductCard({ product }: ProductCardProps) {
-  const brand = Array.isArray(product.brands) ? product.brands[0] : product.brands;
+  const brand = getBrand(product);
   const flavorCategory =
     product.flavor_category.charAt(0).toUpperCase() + product.flavor_category.slice(1);
   const scoreState = getScoreState(product.review_count);

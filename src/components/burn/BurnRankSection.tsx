@@ -1,6 +1,6 @@
 import Link from "next/link";
-import { getBurnLabel } from "@/lib/burn";
-import { getBrand, type ProductWithBrand } from "@/lib/discovery";
+import { getBurnLabel } from "@/lib/catalog/burn";
+import { getBrand, type ProductWithBrand } from "@/lib/catalog/discovery";
 
 interface BurnRankSectionProps {
   eyebrow?: string;

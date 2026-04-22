@@ -1,5 +1,5 @@
 import { Flame } from "lucide-react";
-import { formatBurnRating, getBurnLabel, getBurnUiTone } from "@/lib/burn";
+import { formatBurnRating, getBurnLabel, getBurnUiTone } from "@/lib/catalog/burn";
 
 interface BurnMeterProps {
   rating: number;

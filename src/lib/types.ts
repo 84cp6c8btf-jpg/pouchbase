@@ -10,6 +10,11 @@ export interface Brand {
 
 export type RelationResult<T> = T | T[] | null;
 
+export function unwrapRelation<T>(relation: RelationResult<T> | undefined): T | null {
+  if (Array.isArray(relation)) return relation[0] ?? null;
+  return relation ?? null;
+}
+
 export interface Product {
   id: string;
   brand_id: string;

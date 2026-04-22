@@ -1,5 +1,5 @@
 import { ListOrdered, MessageSquare, ShieldCheck, Store } from "lucide-react";
-import { MIN_PUBLIC_SCORE_REVIEWS } from "@/lib/burn";
+import { MIN_PUBLIC_SCORE_REVIEWS } from "@/lib/catalog/burn";
 
 interface TrustDisclosureProps {
   context?: "discovery" | "ranking" | "product";

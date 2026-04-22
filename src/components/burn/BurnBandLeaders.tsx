@@ -1,6 +1,6 @@
 import Link from "next/link";
-import { getBurnScaleEntry } from "@/lib/burn";
-import { getBrand, type ProductWithBrand } from "@/lib/discovery";
+import { getBurnScaleEntry } from "@/lib/catalog/burn";
+import { getBrand, type ProductWithBrand } from "@/lib/catalog/discovery";
 
 type BurnBandLeader = {
   key: string;

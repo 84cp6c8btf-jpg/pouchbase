@@ -54,6 +54,11 @@ export const BURN_SCALE = [
 ] as const;
 
 export type ScoreState = "none" | "early" | "public";
+export const SCORE_STATE_WEIGHTS: Record<ScoreState, number> = {
+  none: 0,
+  early: 1,
+  public: 2,
+};
 
 export function formatBurnRating(rating: number) {
   return (Math.round(rating * 10) / 10).toFixed(1);
@@ -81,6 +86,10 @@ export function getScoreState(reviewCount: number): ScoreState {
   if (reviewCount <= 0) return "none";
   if (reviewCount < MIN_PUBLIC_SCORE_REVIEWS) return "early";
   return "public";
+}
+
+export function compareScoreStates(left: ScoreState, right: ScoreState) {
+  return SCORE_STATE_WEIGHTS[right] - SCORE_STATE_WEIGHTS[left];
 }
 
 export function hasPublicScore(reviewCount: number) {

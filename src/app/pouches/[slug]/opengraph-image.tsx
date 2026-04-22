@@ -6,7 +6,9 @@ import {
   getBurnUiTone,
   hasPublicScore,
   MIN_PUBLIC_SCORE_REVIEWS,
-} from "@/lib/burn";
+} from "@/lib/catalog/burn";
+import { PRODUCT_OG_SELECT } from "@/lib/catalog/selects";
+import { unwrapRelation } from "@/lib/types";
 
 export const runtime = "edge";
 export const alt = "PouchBase — Nicotine Pouch Review";
@@ -18,7 +20,7 @@ export default async function OgImage({ params }: { params: Promise<{ slug: stri
 
   const { data: product } = await supabase
     .from("products")
-    .select("name, flavor, strength_mg, strength_label, avg_burn, avg_overall, review_count, brands(name)")
+    .select(PRODUCT_OG_SELECT)
     .eq("slug", slug)
     .single();
 
@@ -44,9 +46,7 @@ export default async function OgImage({ params }: { params: Promise<{ slug: stri
       { ...size }
     );
   }
-
-  const brandRaw = product.brands;
-  const brandName = Array.isArray(brandRaw) ? brandRaw[0]?.name : (brandRaw as { name: string } | null)?.name || "";
+  const brandName = unwrapRelation(product.brands as { name: string }[] | { name: string } | null)?.name || "";
   const burnColor = getBurnUiTone(product.avg_burn).ogColor;
   const burnLabel = getBurnLabel(product.avg_burn).toUpperCase();
   const publicScoreVisible = hasPublicScore(product.review_count);

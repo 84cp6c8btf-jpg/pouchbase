@@ -1,14 +1,15 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { BurnBandLeaders } from "@/components/BurnBandLeaders";
-import { BurnMethodology } from "@/components/BurnMethodology";
-import { BurnRankSection } from "@/components/BurnRankSection";
-import { BurnVsStrengthMap } from "@/components/BurnVsStrengthMap";
-import { PageIntro } from "@/components/PageIntro";
-import { TrustDisclosure } from "@/components/TrustDisclosure";
+import { BurnBandLeaders } from "@/components/burn/BurnBandLeaders";
+import { BurnMethodology } from "@/components/burn/BurnMethodology";
+import { BurnRankSection } from "@/components/burn/BurnRankSection";
+import { BurnVsStrengthMap } from "@/components/burn/BurnVsStrengthMap";
+import { PageIntro } from "@/components/common/PageIntro";
+import { TrustDisclosure } from "@/components/common/TrustDisclosure";
 import { supabase } from "@/lib/supabase";
-import type { ProductWithBrand } from "@/lib/discovery";
-import { getBurnIntelligenceModules, getPublicProducts } from "@/lib/intelligence";
+import type { ProductWithBrand } from "@/lib/catalog/discovery";
+import { PRODUCT_WITH_BRAND_SELECT } from "@/lib/catalog/selects";
+import { getBurnIntelligenceModules, getPublicProducts } from "@/lib/catalog/intelligence";
 
 export const revalidate = 60;
 
@@ -24,7 +25,7 @@ export const metadata: Metadata = {
 export default async function BurnVsMgPage() {
   const { data } = await supabase
     .from("products")
-    .select("*, brands(name, slug)")
+    .select(PRODUCT_WITH_BRAND_SELECT)
     .order("review_count", { ascending: false })
     .limit(160);
 

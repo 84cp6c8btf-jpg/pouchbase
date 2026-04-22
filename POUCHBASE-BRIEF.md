@@ -29,7 +29,6 @@ PouchBase is an independent nicotine pouch review and comparison site — like F
   "next": "16.2.4",
   "react": "19.2.4",
   "@supabase/supabase-js": "^2.104.0",
-  "@supabase/ssr": "^0.10.2",
   "lucide-react": "^1.8.0",
   "tailwindcss": "^4"
 }
@@ -143,43 +142,54 @@ opengraph-image.tsx          — Default site OG image
 sitemap.ts, robots.ts        — SEO
 ```
 
-### Components (src/components/)
+### Shared Components (src/components/)
 ```
-Header.tsx              — Sticky nav with auth state
-Footer.tsx              — Site footer
-AgeGate.tsx             — 18+ verification overlay (localStorage)
-ProductCard.tsx         — Product grid card with scores
-ProductArtwork.tsx      — Colored placeholder artwork for products
-BurnMeter.tsx           — Burn score bar with color coding
-RatingBadge.tsx         — Score display (flavor/longevity/overall)
-BrandArtwork.tsx        — Brand card artwork
-PageIntro.tsx           — Reusable page header (eyebrow, title, description, meta)
-PouchesPageClient.tsx   — Client-side browse page with filters
-ReviewSection.tsx       — Reviews list on product page
-PriceComparison.tsx     — Price comparison table on product page
-LoginPageClient.tsx     — Login form (Google + magic link)
-JsonLd.tsx              — SEO structured data components
-BurnMethodology.tsx     — Explains burn scoring methodology
-TrustDisclosure.tsx     — Transparency disclosure
-BurnLadder.tsx          — Step-through burn visualization
-BurnVsStrengthMap.tsx   — Burn vs mg scatter plot
-BurnBandLeaders.tsx     — Leaders per burn band
-BurnRankSection.tsx     — Ranked section for burn intelligence
-ComparePicker.tsx       — Product comparison selector
-ProductComparisonTable.tsx — Side-by-side comparison
-ProductBurnSummary.tsx  — Burn context on product page
-RelatedComparisons.tsx  — Related product suggestions
-ReferencePanel.tsx      — Reference/methodology info
+layout/AgeGate.tsx          — 18+ verification overlay
+layout/Header.tsx           — Sticky nav with auth state
+layout/Footer.tsx           — Site footer
+
+burn/BurnMeter.tsx          — Burn score bar with color coding
+burn/BurnMethodology.tsx    — Burn scoring explanation
+burn/BurnLadder.tsx         — Step-through burn visualization
+burn/BurnVsStrengthMap.tsx  — Burn vs mg scatter plot
+burn/BurnBandLeaders.tsx    — Leaders per burn band
+burn/BurnRankSection.tsx    — Ranked section for burn intelligence
+
+catalog/ProductCard.tsx         — Product grid card with scores
+catalog/ProductArtwork.tsx      — Colored placeholder artwork for products
+catalog/BrandArtwork.tsx        — Brand artwork/fallback mark
+catalog/RatingBadge.tsx         — Score display (flavor/longevity/overall)
+catalog/ReviewSignalSection.tsx — Reusable most-reviewed section
+
+common/PageIntro.tsx        — Reusable page header
+common/TrustDisclosure.tsx  — Transparency disclosure
+
+polls/WeeklyPollCard.tsx    — Weekly burn battle card
+seo/JsonLd.tsx              — Structured data helpers
+```
+
+### Route-Private Components (src/app/**/_components)
+```
+src/app/login/_components/LoginPageClient.tsx
+src/app/pouches/_components/PouchesPageClient.tsx
+src/app/compare/_components/ComparePicker.tsx
+src/app/compare/_components/ProductComparisonTable.tsx
+src/app/pouches/[slug]/_components/*
+  Product-detail-specific UI: price comparison, review form/list, burn summary,
+  related comparisons, and low-data reference panel
 ```
 
 ### Libraries (src/lib/)
 ```
-types.ts         — TypeScript interfaces (Brand, Product, Review, Profile, Shop, Price)
-supabase.ts      — Supabase client initialization
-site.ts          — getSiteUrl() helper, SITE_NAME, SITE_DESCRIPTION constants
-burn.ts          — Burn scale, score states, formatting, public score threshold
-discovery.ts     — Product relationships, comparison logic, price summaries
-intelligence.ts  — Confidence-weighted rankings, burn-strength analysis
+types.ts                 — Shared domain types and relation unwrapping helper
+supabase.ts              — Supabase client initialization
+site.ts                  — getSiteUrl() helper, SITE_NAME, SITE_DESCRIPTION constants
+polls.ts                 — Weekly poll helpers
+
+catalog/burn.ts          — Burn scale, score states, formatting, public score threshold
+catalog/discovery.ts     — Product relationships, comparison logic, price summaries
+catalog/intelligence.ts  — Confidence-weighted rankings, burn-strength analysis
+catalog/selects.ts       — Shared Supabase select strings for catalog queries
 ```
 
 ### SQL Files (root)

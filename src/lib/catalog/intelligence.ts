@@ -1,5 +1,11 @@
-import { BURN_SCALE, getScoreState, hasAnyReviews, hasPublicScore } from "@/lib/burn";
-import type { ProductWithBrand } from "@/lib/discovery";
+import {
+  BURN_SCALE,
+  compareScoreStates,
+  getScoreState,
+  hasAnyReviews,
+  hasPublicScore,
+} from "@/lib/catalog/burn";
+import type { ProductWithBrand } from "@/lib/catalog/discovery";
 
 export const RANKING_PRIOR_REVIEW_COUNT = 5;
 export const HIGH_CONFIDENCE_REVIEW_COUNT = 6;
@@ -61,11 +67,12 @@ export function getPublicProducts(products: ProductWithBrand[]) {
 }
 
 export function compareProductsByReviewSignal(left: ProductWithBrand, right: ProductWithBrand) {
-  const stateWeight = { none: 0, early: 1, public: 2 } as const;
-  const leftState = stateWeight[getScoreState(left.review_count)];
-  const rightState = stateWeight[getScoreState(right.review_count)];
+  const stateOrder = compareScoreStates(
+    getScoreState(left.review_count),
+    getScoreState(right.review_count)
+  );
 
-  if (rightState !== leftState) return rightState - leftState;
+  if (stateOrder !== 0) return stateOrder;
   if (right.review_count !== left.review_count) return right.review_count - left.review_count;
   if (right.strength_mg !== left.strength_mg) return right.strength_mg - left.strength_mg;
   return left.name.localeCompare(right.name);

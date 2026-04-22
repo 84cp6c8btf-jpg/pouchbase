@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { ArrowRight, MessageSquare } from "lucide-react";
-import { ProductCard } from "@/components/ProductCard";
-import type { ProductWithBrand } from "@/lib/discovery";
+import { ProductCard } from "@/components/catalog/ProductCard";
+import type { ProductWithBrand } from "@/lib/catalog/discovery";
 
 interface ReviewSignalSectionProps {
   eyebrow?: string;

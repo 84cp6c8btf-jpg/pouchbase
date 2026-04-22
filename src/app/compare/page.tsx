@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
 import { supabase } from "@/lib/supabase";
-import { ComparePicker } from "@/components/ComparePicker";
-import { PageIntro } from "@/components/PageIntro";
-import { ProductComparisonTable } from "@/components/ProductComparisonTable";
+import { PageIntro } from "@/components/common/PageIntro";
 import {
   buildPriceSummaryMap,
   type ProductWithBrand,
-} from "@/lib/discovery";
+} from "@/lib/catalog/discovery";
+import { PRODUCT_CATALOG_SELECT } from "@/lib/catalog/selects";
+import { ComparePicker } from "./_components/ComparePicker";
+import { ProductComparisonTable } from "./_components/ProductComparisonTable";
 
 export const metadata: Metadata = {
   title: "Compare Nicotine Pouches — PouchBase",
@@ -26,12 +27,12 @@ export default async function ComparePage({ searchParams }: Props) {
   const [allProductsResult, selectedProductsResult] = await Promise.all([
     supabase
       .from("products")
-      .select("id, brand_id, name, slug, flavor, flavor_category, strength_mg, strength_label, format, pouches_per_can, moisture, weight_per_pouch, description, image_url, avg_burn, avg_flavor, avg_longevity, avg_overall, review_count, created_at, brands(name, slug)")
+      .select(PRODUCT_CATALOG_SELECT)
       .order("name"),
     params.left && params.right && params.left !== params.right
       ? supabase
           .from("products")
-          .select("id, brand_id, name, slug, flavor, flavor_category, strength_mg, strength_label, format, pouches_per_can, moisture, weight_per_pouch, description, image_url, avg_burn, avg_flavor, avg_longevity, avg_overall, review_count, created_at, brands(name, slug)")
+          .select(PRODUCT_CATALOG_SELECT)
           .in("slug", [params.left, params.right])
       : Promise.resolve({ data: [] as ProductWithBrand[] }),
   ]);

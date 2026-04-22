@@ -1,24 +1,22 @@
 import Link from "next/link";
-import {
-  ArrowRight,
-  Flame,
-  Search,
-  Star,
-  Tag,
-} from "lucide-react";
+import { ArrowRight, Flame, Search, Star, Tag } from "lucide-react";
 import { supabase } from "@/lib/supabase";
-import { ProductCard } from "@/components/ProductCard";
-import { BurnMeter } from "@/components/BurnMeter";
 import type { Metadata } from "next";
-import { BurnMethodology } from "@/components/BurnMethodology";
-import { TrustDisclosure } from "@/components/TrustDisclosure";
-import { MIN_PUBLIC_SCORE_REVIEWS } from "@/lib/burn";
-import { BurnVsStrengthMap } from "@/components/BurnVsStrengthMap";
-import type { ProductWithBrand } from "@/lib/discovery";
-import { ReviewSignalSection } from "@/components/ReviewSignalSection";
-import { getProductsWithAnyReviews, sortProductsByAdjustedMetric } from "@/lib/intelligence";
+import { BurnMeter } from "@/components/burn/BurnMeter";
+import { BurnMethodology } from "@/components/burn/BurnMethodology";
+import { BurnVsStrengthMap } from "@/components/burn/BurnVsStrengthMap";
+import { ProductCard } from "@/components/catalog/ProductCard";
+import { ReviewSignalSection } from "@/components/catalog/ReviewSignalSection";
+import { TrustDisclosure } from "@/components/common/TrustDisclosure";
+import { WeeklyPollCard } from "@/components/polls/WeeklyPollCard";
+import { MIN_PUBLIC_SCORE_REVIEWS } from "@/lib/catalog/burn";
+import { getBrand, type ProductWithBrand } from "@/lib/catalog/discovery";
+import { PRODUCT_WITH_BRAND_SELECT } from "@/lib/catalog/selects";
+import {
+  getProductsWithAnyReviews,
+  sortProductsByAdjustedMetric,
+} from "@/lib/catalog/intelligence";
 import { getActiveWeeklyPoll } from "@/lib/polls";
-import { WeeklyPollCard } from "@/components/WeeklyPollCard";
 
 export const metadata: Metadata = {
   alternates: {
@@ -31,7 +29,7 @@ export const revalidate = 60;
 async function getTopProducts() {
   const { data } = await supabase
     .from("products")
-    .select("*, brands(name, slug)")
+    .select(PRODUCT_WITH_BRAND_SELECT)
     .gte("review_count", MIN_PUBLIC_SCORE_REVIEWS)
     .order("review_count", { ascending: false })
     .limit(80);
@@ -41,7 +39,7 @@ async function getTopProducts() {
 async function getHighestBurn() {
   const { data } = await supabase
     .from("products")
-    .select("*, brands(name, slug)")
+    .select(PRODUCT_WITH_BRAND_SELECT)
     .gte("review_count", MIN_PUBLIC_SCORE_REVIEWS)
     .order("review_count", { ascending: false })
     .limit(80);
@@ -51,7 +49,7 @@ async function getHighestBurn() {
 async function getBurnPool() {
   const { data } = await supabase
     .from("products")
-    .select("*, brands(name, slug)")
+    .select(PRODUCT_WITH_BRAND_SELECT)
     .gte("review_count", MIN_PUBLIC_SCORE_REVIEWS)
     .order("review_count", { ascending: false })
     .limit(120);
@@ -62,7 +60,7 @@ async function getBurnPool() {
 async function getMostReviewed() {
   const { data } = await supabase
     .from("products")
-    .select("*, brands(name, slug)")
+    .select(PRODUCT_WITH_BRAND_SELECT)
     .gt("review_count", 0)
     .order("review_count", { ascending: false })
     .limit(12);
@@ -126,7 +124,7 @@ export default async function Home() {
   ]);
 
   const burnLeader = highestBurn[0];
-  const burnBrand = Array.isArray(burnLeader?.brands) ? burnLeader.brands[0] : burnLeader?.brands;
+  const burnBrand = burnLeader ? getBrand(burnLeader) : null;
 
   return (
     <div className="space-y-16 pb-8">
