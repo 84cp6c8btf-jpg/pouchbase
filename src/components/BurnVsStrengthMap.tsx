@@ -25,7 +25,27 @@ export function BurnVsStrengthMap({
 }: BurnVsStrengthMapProps) {
   const points = getBurnStrengthPoints(products);
 
-  if (points.length === 0) return null;
+  if (points.length === 0) {
+    return (
+      <section className="rounded-xl border border-white/8 bg-card p-5 sm:p-6">
+        <div className="max-w-3xl">
+          <div className="text-[0.68rem] uppercase tracking-[0.18em] text-accent/85">
+            Burn Intelligence
+          </div>
+          <h2 className="mt-2 font-display text-2xl font-bold text-white">{title}</h2>
+          <p className="mt-2 text-sm leading-6 text-white/54">{description}</p>
+        </div>
+
+        <div className="mt-5 rounded-lg border border-dashed border-white/10 bg-white/[0.02] px-4 py-5">
+          <p className="text-sm leading-7 text-white/56">
+            Not enough real public-score review data yet to map burn against nicotine strength.
+            This surface turns on once products reach the structured-review threshold and there are
+            enough nearby-strength comparisons to say something honest.
+          </p>
+        </div>
+      </section>
+    );
+  }
 
   const width = 720;
   const height = compact ? 260 : 320;

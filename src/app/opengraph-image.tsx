@@ -64,7 +64,7 @@ export default function OgImage() {
             lineHeight: 1.4,
           }}
         >
-          The independent encyclopedia for nicotine pouches. Real reviews. Real burn ratings. Best prices.
+          Real product data, retailer pricing where available, and community reviews where enough rating volume exists.
         </span>
 
         {/* Stats bar */}
@@ -80,7 +80,7 @@ export default function OgImage() {
           }}
         >
           <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-            <span style={{ color: "#f97316", fontSize: "36px", fontWeight: 800 }}>59+</span>
+            <span style={{ color: "#f97316", fontSize: "36px", fontWeight: 800 }}>89</span>
             <span style={{ color: "rgba(255,255,255,0.4)", fontSize: "14px", letterSpacing: "0.15em" }}>
               POUCHES
             </span>
@@ -92,7 +92,7 @@ export default function OgImage() {
             </span>
           </div>
           <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-            <span style={{ color: "#f97316", fontSize: "36px", fontWeight: 800 }}>1-50mg</span>
+            <span style={{ color: "#f97316", fontSize: "36px", fontWeight: 800 }}>3-50mg</span>
             <span style={{ color: "rgba(255,255,255,0.4)", fontSize: "14px", letterSpacing: "0.15em" }}>
               STRENGTH RANGE
             </span>

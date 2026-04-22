@@ -20,8 +20,8 @@ export interface Product {
   strength_mg: number;
   strength_label: string | null;
   format: string;
-  pouches_per_can: number;
-  moisture: string;
+  pouches_per_can: number | null;
+  moisture: string | null;
   weight_per_pouch: number | null;
   description: string | null;
   image_url: string | null;

@@ -7,7 +7,7 @@ import { ExternalLink, Tag } from "lucide-react";
 
 interface PriceComparisonProps {
   productId: string;
-  pouchesPerCan: number;
+  pouchesPerCan: number | null;
 }
 
 export function PriceComparison({ productId, pouchesPerCan }: PriceComparisonProps) {
@@ -65,7 +65,8 @@ export function PriceComparison({ productId, pouchesPerCan }: PriceComparisonPro
 
       <div className="space-y-3">
         {prices.map((price, index) => {
-          const pricePerPouch = price.price / (price.pouches_in_can || pouchesPerCan);
+          const pouchCount = price.pouches_in_can || pouchesPerCan || 20;
+          const pricePerPouch = price.price / pouchCount;
           const isCheapest = index === 0;
 
           return (

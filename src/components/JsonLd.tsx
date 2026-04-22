@@ -2,6 +2,7 @@
  * JSON-LD structured data components for SEO.
  * These help Google show rich results (star ratings, prices, breadcrumbs).
  */
+import { hasPublicScore } from "@/lib/burn";
 
 interface ProductJsonLdProps {
   name: string;
@@ -59,7 +60,7 @@ export function ProductJsonLd({
     ],
   };
 
-  if (reviewCount > 0) {
+  if (hasPublicScore(reviewCount)) {
     data.aggregateRating = {
       "@type": "AggregateRating",
       ratingValue: (avgOverall / 2).toFixed(1), // Convert 1-10 to 1-5 for schema
@@ -120,7 +121,7 @@ export function OrganizationJsonLd({ siteUrl }: { siteUrl: string }) {
     name: "PouchBase",
     url: siteUrl,
     description:
-      "The independent encyclopedia for nicotine pouches. Compare prices, read real reviews, and find the perfect pouch with our burn rating system.",
+      "The independent encyclopedia for nicotine pouches. Compare real product data, retailer pricing where available, and read real community reviews where enough rating volume exists.",
     foundingDate: "2026",
   };
 

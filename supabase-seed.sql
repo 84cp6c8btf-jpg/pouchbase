@@ -1,7 +1,8 @@
 -- PouchBase starter seed
 -- Safe to run multiple times. Existing rows are updated by slug/name.
--- This seed intentionally sets aggregate rating fields on products so the
--- homepage has content before real user reviews are added.
+-- Product rating aggregates are recalculated from the real reviews table at
+-- the end of this script. Seed products should never ship with invented
+-- community review counts or averages.
 
 begin;
 
@@ -221,74 +222,62 @@ set
   updated_at = now();
 
 -- ============================================
--- PRICES
+-- REVIEW AGGREGATES (REAL REVIEWS ONLY)
 -- ============================================
-with seed_prices (
-  product_slug,
-  shop_slug,
-  price,
-  pouches_in_can,
-  currency,
-  affiliate_url,
-  in_stock
-) as (
-  values
-    ('zyn-cool-mint-mini-3mg', 'swenico', 4.49, 20, 'EUR', 'https://www.swenico.com/search?q=zyn+cool+mint', true),
-    ('zyn-cool-mint-mini-3mg', 'snuscore', 4.79, 20, 'EUR', 'https://snuscore.com/search?q=zyn+cool+mint', true),
-    ('zyn-citrus-mini-6mg', 'swenico', 4.59, 20, 'EUR', 'https://www.swenico.com/search?q=zyn+citrus', true),
-    ('zyn-citrus-mini-6mg', 'snuscore', 4.89, 20, 'EUR', 'https://snuscore.com/search?q=zyn+citrus', true),
-    ('velo-freeze-max-17mg', 'swenico', 5.29, 20, 'EUR', 'https://www.swenico.com/search?q=velo+freeze+max', true),
-    ('velo-freeze-max-17mg', 'snusmania', 5.19, 20, 'EUR', 'https://www.snusmania.eu/search?type=product&q=velo+freeze+max', true),
-    ('velo-lime-flame-10mg', 'swenico', 5.09, 20, 'EUR', 'https://www.swenico.com/search?q=velo+lime+flame', true),
-    ('velo-lime-flame-10mg', 'snuscore', 5.25, 20, 'EUR', 'https://snuscore.com/search?q=velo+lime+flame', true),
-    ('loop-jalapeno-lime-strong', 'swenico', 5.39, 20, 'EUR', 'https://www.swenico.com/search?q=loop+jalapeno+lime', true),
-    ('loop-jalapeno-lime-strong', 'snuscore', 5.59, 20, 'EUR', 'https://snuscore.com/search?q=loop+jalapeno+lime', true),
-    ('loop-mint-mania-hyper-strong', 'swenico', 5.49, 20, 'EUR', 'https://www.swenico.com/search?q=loop+mint+mania', true),
-    ('loop-mint-mania-hyper-strong', 'snusmania', 5.65, 20, 'EUR', 'https://www.snusmania.eu/search?type=product&q=loop+mint+mania', true),
-    ('pablo-ice-cold-30mg', 'snusmania', 4.79, 20, 'EUR', 'https://www.snusmania.eu/search?type=product&q=pablo+ice+cold', true),
-    ('pablo-ice-cold-30mg', 'nicopods-uk', 4.99, 20, 'GBP', 'https://www.nicopodsuk.com/search?q=pablo+ice+cold', true),
-    ('pablo-red-24mg', 'snusmania', 4.69, 20, 'EUR', 'https://www.snusmania.eu/search?type=product&q=pablo+red', true),
-    ('pablo-red-24mg', 'nicopods-uk', 4.89, 20, 'GBP', 'https://www.nicopodsuk.com/search?q=pablo+red', true),
-    ('siberia-extremely-strong-slim', 'snusmania', 5.29, 20, 'EUR', 'https://www.snusmania.eu/search?type=product&q=siberia+extremely+strong', true),
-    ('siberia-extremely-strong-slim', 'nicopods-uk', 5.49, 20, 'GBP', 'https://www.nicopodsuk.com/search?q=siberia+extremely+strong', true),
-    ('white-fox-full-charge', 'swenico', 5.19, 20, 'EUR', 'https://www.swenico.com/search?q=white+fox+full+charge', true),
-    ('white-fox-full-charge', 'snuscore', 5.35, 20, 'EUR', 'https://snuscore.com/search?q=white+fox+full+charge', true),
-    ('killa-cold-mint', 'snusmania', 4.39, 20, 'EUR', 'https://www.snusmania.eu/search?type=product&q=killa+cold+mint', true),
-    ('killa-cold-mint', 'nicopods-uk', 4.59, 20, 'GBP', 'https://www.nicopodsuk.com/search?q=killa+cold+mint', true),
-    ('killa-blueberry', 'snusmania', 4.49, 20, 'EUR', 'https://www.snusmania.eu/search?type=product&q=killa+blueberry', true),
-    ('killa-blueberry', 'nicopods-uk', 4.69, 20, 'GBP', 'https://www.nicopodsuk.com/search?q=killa+blueberry', true),
-    ('xqs-tropical-strong', 'swenico', 4.99, 20, 'EUR', 'https://www.swenico.com/search?q=xqs+tropical', true),
-    ('xqs-tropical-strong', 'snuscore', 5.15, 20, 'EUR', 'https://snuscore.com/search?q=xqs+tropical', true),
-    ('ace-spearmint', 'swenico', 4.85, 20, 'EUR', 'https://www.swenico.com/search?q=ace+spearmint', true),
-    ('ace-spearmint', 'snuscore', 5.05, 20, 'EUR', 'https://snuscore.com/search?q=ace+spearmint', true)
+with review_rollup as (
+  select
+    product_id,
+    coalesce(avg(burn_rating), 0) as avg_burn,
+    coalesce(avg(flavor_rating), 0) as avg_flavor,
+    coalesce(avg(longevity_rating), 0) as avg_longevity,
+    coalesce(avg(overall_rating), 0) as avg_overall,
+    count(*)::integer as review_count
+  from reviews
+  group by product_id
 )
-insert into prices (
-  product_id,
-  shop_id,
-  price,
-  pouches_in_can,
-  currency,
-  affiliate_url,
-  in_stock
-)
-select
-  p.id,
-  s.id,
-  sp.price,
-  sp.pouches_in_can,
-  sp.currency,
-  sp.affiliate_url,
-  sp.in_stock
-from seed_prices sp
-join products p on p.slug = sp.product_slug
-join shops s on s.slug = sp.shop_slug
-on conflict (product_id, shop_id) do update
+update products p
 set
-  price = excluded.price,
-  pouches_in_can = excluded.pouches_in_can,
-  currency = excluded.currency,
-  affiliate_url = excluded.affiliate_url,
-  in_stock = excluded.in_stock,
-  last_checked = now();
+  avg_burn = coalesce(rr.avg_burn, 0),
+  avg_flavor = coalesce(rr.avg_flavor, 0),
+  avg_longevity = coalesce(rr.avg_longevity, 0),
+  avg_overall = coalesce(rr.avg_overall, 0),
+  review_count = coalesce(rr.review_count, 0),
+  updated_at = now()
+from review_rollup rr
+where p.id = rr.product_id;
+
+update products p
+set
+  avg_burn = 0,
+  avg_flavor = 0,
+  avg_longevity = 0,
+  avg_overall = 0,
+  review_count = 0,
+  updated_at = now()
+where not exists (
+  select 1
+  from reviews r
+  where r.product_id = p.id
+);
+
+-- ============================================
+-- CANONICAL DATA SAFETY
+-- ============================================
+-- Base seed rows keep structured product facts only. Narrative descriptions and
+-- retailer prices must come from verified sources, so they are not seeded here.
+update brands
+set
+  description = null;
+
+update shops
+set
+  shipping_info = null;
+
+delete from prices;
+
+update products
+set
+  description = null,
+  updated_at = now();
 
 commit;

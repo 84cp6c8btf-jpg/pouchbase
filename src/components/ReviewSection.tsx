@@ -301,11 +301,11 @@ export function ReviewSection({ productId }: ReviewSectionProps) {
           <div className="mx-auto max-w-lg">
             <div className="mb-4 inline-flex items-center gap-2 text-sm text-white/38">
               <MessageSquare className="h-4 w-4 text-accent" />
-              No reviews yet
+              No real reviews yet
             </div>
             <h3 className="font-display text-3xl font-bold text-white">Be the first to rate it.</h3>
             <p className="mt-4 text-sm leading-7 text-white/58">
-              Add burn, flavor, longevity, and overall score to get this pouch onto the board.
+              Add burn, flavor, longevity, and overall score to start the real community signal for this pouch.
             </p>
           </div>
         </div>

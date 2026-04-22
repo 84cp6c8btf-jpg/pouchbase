@@ -19,7 +19,7 @@ const siteUrl = getSiteUrl();
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
-  title: `${SITE_NAME} — Rate, Review & Compare Nicotine Pouches`,
+  title: `${SITE_NAME} — Compare Nicotine Pouches`,
   description: SITE_DESCRIPTION,
   keywords: [
     "nicotine pouches",
@@ -39,8 +39,8 @@ export const metadata: Metadata = {
     follow: true,
   },
   openGraph: {
-    title: `${SITE_NAME} — Rate, Review & Compare Nicotine Pouches`,
-    description: "The independent encyclopedia for nicotine pouches. Real reviews. Real burn ratings. Best prices.",
+    title: `${SITE_NAME} — Compare Nicotine Pouches`,
+    description: "The independent encyclopedia for nicotine pouches. Real product data, retailer pricing where available, and community reviews where enough rating volume exists.",
     url: "/",
     siteName: SITE_NAME,
     type: "website",
@@ -48,7 +48,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: `${SITE_NAME} — Rate, Review & Compare Nicotine Pouches`,
+    title: `${SITE_NAME} — Compare Nicotine Pouches`,
     description: SITE_DESCRIPTION,
   },
 };

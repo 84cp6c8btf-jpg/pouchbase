@@ -10,7 +10,7 @@ import {
 
 export const metadata: Metadata = {
   title: "Compare Nicotine Pouches — PouchBase",
-  description: "Compare two nicotine pouches side by side across burn, ratings, nicotine, and live price context.",
+  description: "Compare two nicotine pouches side by side across burn, ratings, nicotine, and retailer price context where available.",
   robots: {
     index: false,
     follow: false,
@@ -58,7 +58,7 @@ export default async function ComparePage({ searchParams }: Props) {
       <PageIntro
         eyebrow="Comparison"
         title="Head-to-head pouch comparison."
-        description="Compare two products side by side across burn, nicotine, structured ratings, review depth, and live price context."
+        description="Compare two products side by side across burn, nicotine, structured ratings, review depth, and retailer price context where available."
         meta="Shareable URL state via query params"
       />
 

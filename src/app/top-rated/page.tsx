@@ -10,7 +10,7 @@ import type { ProductWithBrand } from "@/lib/discovery";
 export const revalidate = 60;
 export const metadata: Metadata = {
   title: "Top Rated Nicotine Pouches — PouchBase",
-  description: "See the best-reviewed nicotine pouches ranked by overall score.",
+  description: "See the best-rated nicotine pouches once enough real structured reviews exist to rank them credibly.",
   alternates: {
     canonical: "/top-rated",
   },
@@ -51,7 +51,7 @@ export default async function TopRatedPage() {
         <div className="rounded-xl border border-white/8 bg-card px-6 py-12 text-center">
           <h2 className="font-display text-2xl font-bold text-white">No ranked products yet</h2>
           <p className="mt-2 text-sm text-white/48">
-            Once reviews come in, the community favorites will show up here.
+            This page turns on once products reach the real-review threshold for public scoring.
           </p>
         </div>
       )}

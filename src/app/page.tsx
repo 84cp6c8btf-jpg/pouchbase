@@ -78,13 +78,13 @@ const NAV_LINKS = [
   {
     href: "/top-rated",
     title: "Top Rated",
-    description: "The highest-scored pouches across all brands, ranked by real user reviews.",
+    description: "The highest-scored pouches once enough real structured reviews exist to rank them honestly.",
     icon: Star,
   },
   {
     href: "/highest-burn",
     title: "Highest Burn",
-    description: "The pouches that hit hardest. Ranked by lip sting, not just milligrams.",
+    description: "The pouches that hit hardest once there is enough real burn data to compare them credibly.",
     icon: Flame,
   },
   {
@@ -123,7 +123,8 @@ export default async function Home() {
         <p className="mt-6 max-w-xl text-lg leading-relaxed text-white/56">
           PouchBase is a review site, not a shop. We track burn, flavor, longevity,
           and price across every mainstream nicotine pouch so you can compare them
-          properly before you buy.
+          properly before you buy. Public scores only appear once enough real
+          structured reviews exist to support them.
         </p>
         <div className="mt-8 flex flex-wrap gap-3">
           <Link
@@ -207,6 +208,23 @@ export default async function Home() {
         title="Burn vs nicotine at a glance"
         description="Some products punch harder than their milligrams suggest, while others stay smoother than nearby-strength peers. This map makes that visible fast."
       />
+
+      {topProducts.length === 0 && highestBurn.length === 0 && (
+        <section className="rounded-xl border border-white/8 bg-card p-5 sm:p-6">
+          <div className="max-w-2xl">
+            <div className="text-[0.68rem] uppercase tracking-[0.18em] text-accent/85">
+              Rankings
+            </div>
+            <h2 className="mt-2 font-display text-2xl font-bold text-white">
+              Real ranking pages are waiting on real review volume.
+            </h2>
+            <p className="mt-2 text-sm leading-6 text-white/54">
+              The catalog, pricing, and product specs are live now. Top Rated and Highest Burn
+              stay quiet until enough authentic structured reviews exist to avoid fake certainty.
+            </p>
+          </div>
+        </section>
+      )}
 
       {/* Top Rated */}
       {topProducts.length > 0 && (

@@ -37,16 +37,20 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const { data: product } = await supabase
     .from("products")
-    .select("name, flavor, strength_mg, avg_overall, brands(name)")
+    .select("name, flavor, strength_mg, avg_overall, review_count, brands(name)")
     .eq("slug", slug)
     .single();
 
   if (!product) return { title: "Product Not Found" };
 
   const brandName = getSingleBrand(product.brands as RelationResult<{ name: string }>)?.name || "";
+  const publicScoreVisible = hasPublicScore(product.review_count);
+  const description = publicScoreVisible
+    ? `Read real reviews of ${brandName} ${product.name} (${product.flavor}, ${product.strength_mg}mg). Burn rating, flavor score, and price comparison. Currently ${product.avg_overall.toFixed(1)}/10 from structured community reviews.`
+    : `Read product details, retailer pricing where available, and early community feedback for ${brandName} ${product.name} (${product.flavor}, ${product.strength_mg}mg). Public scoring appears after enough real reviews.`;
   return {
     title: `${brandName} ${product.name} Review — PouchBase`,
-    description: `Read real reviews of ${brandName} ${product.name} (${product.flavor}, ${product.strength_mg}mg). Burn rating, flavor score, and price comparison. Rated ${product.avg_overall}/10 by the community.`,
+    description,
     alternates: {
       canonical: `/pouches/${slug}`,
     },
@@ -157,18 +161,24 @@ export default async function ProductPage({ params }: Props) {
               {product.strength_mg}mg{product.strength_label ? ` · ${product.strength_label}` : ""}
             </span>
             <span className="pb-tag">{product.flavor}</span>
-            <span className="pb-tag">
-              <Ruler className="h-3 w-3 text-white/40" />
-              {product.format}
-            </span>
-            <span className="pb-tag">
-              <Droplets className="h-3 w-3 text-white/40" />
-              {product.moisture}
-            </span>
-            <span className="pb-tag">
-              <Package className="h-3 w-3 text-white/40" />
-              {product.pouches_per_can}/can
-            </span>
+            {product.format && (
+              <span className="pb-tag">
+                <Ruler className="h-3 w-3 text-white/40" />
+                {product.format}
+              </span>
+            )}
+            {product.moisture && (
+              <span className="pb-tag">
+                <Droplets className="h-3 w-3 text-white/40" />
+                {product.moisture}
+              </span>
+            )}
+            {product.pouches_per_can ? (
+              <span className="pb-tag">
+                <Package className="h-3 w-3 text-white/40" />
+                {product.pouches_per_can}/can
+              </span>
+            ) : null}
             <Link
               href={getCompareUrl(product.slug)}
               className="inline-flex items-center gap-1 rounded-md border border-white/10 px-3 py-1.5 text-sm text-white/56 transition hover:text-white"

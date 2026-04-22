@@ -1,4 +1,5 @@
 import Link from "next/link";
+import type { ReactNode } from "react";
 import {
   formatPriceSummary,
   getBrand,
@@ -10,7 +11,7 @@ import {
 } from "@/lib/discovery";
 import { BurnMeter } from "@/components/BurnMeter";
 import { ProductArtwork } from "@/components/ProductArtwork";
-import { formatReviewCount, hasPublicScore } from "@/lib/burn";
+import { formatReviewCount, getScoreState, hasPublicScore } from "@/lib/burn";
 
 interface ProductComparisonTableProps {
   left: ProductWithBrand;
@@ -45,6 +46,16 @@ export function ProductComparisonTable({
   leftPrice,
   rightPrice,
 }: ProductComparisonTableProps) {
+  const formatStructuredValue = (
+    product: ProductWithBrand,
+    value: ReactNode
+  ) => {
+    const state = getScoreState(product.review_count);
+    if (state === "public") return value;
+    if (state === "early") return "Early signal";
+    return "Not enough ratings yet";
+  };
+
   const insights = getComparisonInsights(left, right);
   const leftBrand = getBrand(left);
   const rightBrand = getBrand(right);
@@ -84,26 +95,26 @@ export function ProductComparisonTable({
     },
     {
       label: "Burn",
-      left: hasPublicScore(left.review_count) ? <BurnMeter rating={left.avg_burn} size="sm" /> : "Early signal",
-      right: hasPublicScore(right.review_count) ? <BurnMeter rating={right.avg_burn} size="sm" /> : "Early signal",
+      left: formatStructuredValue(left, <BurnMeter rating={left.avg_burn} size="sm" />),
+      right: formatStructuredValue(right, <BurnMeter rating={right.avg_burn} size="sm" />),
       winner: burnWinner,
     },
     {
       label: "Flavor score",
-      left: hasPublicScore(left.review_count) ? left.avg_flavor.toFixed(1) : "Early signal",
-      right: hasPublicScore(right.review_count) ? right.avg_flavor.toFixed(1) : "Early signal",
+      left: formatStructuredValue(left, left.avg_flavor.toFixed(1)),
+      right: formatStructuredValue(right, right.avg_flavor.toFixed(1)),
       winner: flavorWinner,
     },
     {
       label: "Longevity",
-      left: hasPublicScore(left.review_count) ? left.avg_longevity.toFixed(1) : "Early signal",
-      right: hasPublicScore(right.review_count) ? right.avg_longevity.toFixed(1) : "Early signal",
+      left: formatStructuredValue(left, left.avg_longevity.toFixed(1)),
+      right: formatStructuredValue(right, right.avg_longevity.toFixed(1)),
       winner: longevityWinner,
     },
     {
       label: "Overall",
-      left: hasPublicScore(left.review_count) ? left.avg_overall.toFixed(1) : "Early signal",
-      right: hasPublicScore(right.review_count) ? right.avg_overall.toFixed(1) : "Early signal",
+      left: formatStructuredValue(left, left.avg_overall.toFixed(1)),
+      right: formatStructuredValue(right, right.avg_overall.toFixed(1)),
       winner: overallWinner,
     },
     {

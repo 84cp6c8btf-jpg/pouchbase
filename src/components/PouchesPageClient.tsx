@@ -217,7 +217,7 @@ export function PouchesPageClient() {
           </div>
 
           <p className="text-xs leading-6 text-white/40">
-            Browse by community data, not retailer placement. Public scores appear after {MIN_PUBLIC_SCORE_REVIEWS} structured reviews.
+            Browse by real community data where it exists, not retailer placement. Public scores appear after {MIN_PUBLIC_SCORE_REVIEWS} structured reviews.
           </p>
         </div>
       </section>

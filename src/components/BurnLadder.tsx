@@ -39,7 +39,25 @@ export function BurnLadder({
           : ladder.slice(0, 8)
         : ladder;
 
-  if (visible.length === 0) return null;
+  if (visible.length === 0) {
+    return (
+      <section className="rounded-xl border border-white/8 bg-card p-5 sm:p-6">
+        <div className="mb-5 max-w-2xl">
+          <div className="text-[0.68rem] uppercase tracking-[0.18em] text-accent/85">Burn ladder</div>
+          <h2 className="mt-2 font-display text-2xl font-bold text-white">{title}</h2>
+          <p className="mt-2 text-sm leading-6 text-white/54">{description}</p>
+        </div>
+
+        <div className="rounded-lg border border-dashed border-white/10 bg-white/[0.02] px-4 py-5">
+          <p className="text-sm leading-7 text-white/56">
+            Not enough real public-score review data yet to build a trustworthy burn ladder. Once
+            more products reach the structured-review threshold, step-up and step-down discovery
+            will appear here.
+          </p>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className="rounded-xl border border-white/8 bg-card p-5 sm:p-6">

@@ -10,7 +10,7 @@ import type { ProductWithBrand } from "@/lib/discovery";
 
 export const metadata: Metadata = {
   title: "Burn Ladder — PouchBase",
-  description: "Explore nicotine pouches by felt intensity, stepping up or down the catalog by burn rather than brand.",
+  description: "Explore nicotine pouches by felt intensity once enough real public burn data exists to support step-up and step-down discovery.",
   alternates: {
     canonical: "/burn-ladder",
   },

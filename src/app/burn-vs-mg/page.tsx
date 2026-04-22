@@ -15,7 +15,7 @@ export const revalidate = 60;
 export const metadata: Metadata = {
   title: "Burn vs Nicotine — PouchBase",
   description:
-    "See how felt burn compares with nicotine strength across the pouch catalog, including smooth outliers, hard-hitting products, and burn-band leaders.",
+    "See how felt burn compares with nicotine strength across the pouch catalog once enough real review data exists to support honest burn analysis.",
   alternates: {
     canonical: "/burn-vs-mg",
   },

@@ -1,5 +1,8 @@
 -- PouchBase Expansion Seed — takes the catalog from 14 → 55+ products
 -- Safe to run multiple times (upserts by slug).
+-- Product rating aggregates are recalculated from the real reviews table at
+-- the end of this script so expansion products do not inherit fake community
+-- numbers.
 
 begin;
 
@@ -116,7 +119,46 @@ with seed_products (
 
     -- Grant's (new brand)
     ('grants', 'Ice Cool', 'grants-ice-cool', 'Ice Cool', 'mint', 8, 'normal', 'slim', 20, 'normal', 0.7, 'Straightforward ice mint at a budget-friendly price. No frills, does the job.', 5.0, 7.4, 6.8, 7.2, 14),
-    ('grants', 'Wild Berry', 'grants-wild-berry', 'Wild Berry', 'fruit', 8, 'normal', 'slim', 20, 'normal', 0.7, 'Mixed berry blend that leans sweet. A solid budget option for fruit lovers.', 4.6, 7.6, 6.5, 7.3, 11)
+    ('grants', 'Wild Berry', 'grants-wild-berry', 'Wild Berry', 'fruit', 8, 'normal', 'slim', 20, 'normal', 0.7, 'Mixed berry blend that leans sweet. A solid budget option for fruit lovers.', 4.6, 7.6, 6.5, 7.3, 11),
+
+    -- 2026 sourced launch additions
+    -- Sources:
+    -- - Official ZYN product pages on zyn.com (UK/Europe)
+    -- - Official VELO UK product pages on velo.com
+    -- - Official Nordic Spirit UK product pages on nordicspirit.co.uk
+
+    -- ZYN
+    ('zyn', 'Black Cherry Mini 3mg', 'zyn-black-cherry-mini-3mg', 'Black Cherry', 'fruit', 3, 'light', 'mini', 20, 'dry', null, 'Mini dry pouch with black cherry flavor and notes of forest berries and vanilla.', 0, 0, 0, 0, 0),
+    ('zyn', 'Black Cherry Mini 6mg', 'zyn-black-cherry-mini-6mg', 'Black Cherry', 'fruit', 6, 'normal', 'mini', 20, 'dry', null, 'Mini dry pouch with black cherry flavor and notes of forest berries and vanilla.', 0, 0, 0, 0, 0),
+    ('zyn', 'Apple Mint Mini 6mg', 'zyn-apple-mint-mini-6mg', 'Apple Mint', 'fruit', 6, 'normal', 'mini', 20, 'dry', null, 'Mini dry pouch with green apple, peppermint, and spearmint notes.', 0, 0, 0, 0, 0),
+    ('zyn', 'Guava Spice 11mg', 'zyn-guava-spice-11mg', 'Guava Spice', 'other', 11, 'strong', 'regular', 21, 'moist', null, 'Regular pouch with guava and chili flavor.', 0, 0, 0, 0, 0),
+    ('zyn', 'Cool Mint 11mg', 'zyn-cool-mint-11mg', 'Cool Mint', 'mint', 11, 'strong', 'regular', 21, 'moist', null, 'Regular pouch with peppermint and menthol flavor.', 0, 0, 0, 0, 0),
+
+    -- VELO
+    ('velo', 'Crispy Peppermint 6mg', 'velo-crispy-peppermint-6mg', 'Crispy Peppermint', 'mint', 6, 'normal', 'slim', 20, null, null, 'Slim pouch with peppermint flavor and a cooling aftertaste.', 0, 0, 0, 0, 0),
+    ('velo', 'Crispy Peppermint 10mg', 'velo-crispy-peppermint-10mg', 'Crispy Peppermint', 'mint', 10, 'strong', 'slim', 20, null, null, 'Slim pouch with peppermint flavor and a cooling aftertaste.', 0, 0, 0, 0, 0),
+    ('velo', 'Icy Berries 10mg', 'velo-icy-berries-10mg', 'Icy Berries', 'fruit', 10, 'strong', 'slim', 20, null, null, 'Slim pouch with blueberry, raspberry, and blackberry flavor plus cooling.', 0, 0, 0, 0, 0),
+    ('velo', 'Icy Berries 14mg', 'velo-icy-berries-14mg', 'Icy Berries', 'fruit', 14, 'extra-strong', 'slim', 20, null, null, 'Slim pouch with blueberry, raspberry, and blackberry flavor plus cooling.', 0, 0, 0, 0, 0),
+    ('velo', 'Icy Berries 17mg', 'velo-icy-berries-17mg', 'Icy Berries', 'fruit', 17, 'extra-strong', 'slim', 20, null, null, 'Slim pouch with blueberry, raspberry, and blackberry flavor plus cooling.', 0, 0, 0, 0, 0),
+    ('velo', 'Tropical Mango 6mg', 'velo-tropical-mango-6mg', 'Tropical Mango', 'fruit', 6, 'normal', 'slim', 20, null, null, 'Slim pouch with mandarin, passionfruit, and mango flavors.', 0, 0, 0, 0, 0),
+    ('velo', 'Tropical Mango 10mg', 'velo-tropical-mango-10mg', 'Tropical Mango', 'fruit', 10, 'strong', 'slim', 20, null, null, 'Slim pouch with mandarin, passionfruit, and mango flavors.', 0, 0, 0, 0, 0),
+    ('velo', 'Strawberry Ice Mini 6mg', 'velo-strawberry-ice-mini-6mg', 'Strawberry Ice', 'fruit', 6, 'normal', 'mini', 15, null, null, 'Mini pouch with strawberry flavor and cooling effect.', 0, 0, 0, 0, 0),
+    ('velo', 'Strawberry Ice 10mg', 'velo-strawberry-ice-10mg', 'Strawberry Ice', 'fruit', 10, 'strong', 'slim', 20, null, null, 'Slim pouch with strawberry flavor and cooling effect.', 0, 0, 0, 0, 0),
+    ('velo', 'Orange Ice 10mg', 'velo-orange-ice-10mg', 'Orange Ice', 'fruit', 10, 'strong', 'slim', 20, null, null, 'Slim pouch with orange flavor and cooling effect.', 0, 0, 0, 0, 0),
+    ('velo', 'Mango Flame 10mg', 'velo-mango-flame-10mg', 'Mango Flame', 'fruit', 10, 'strong', 'slim', 20, null, null, 'Slim pouch with ripe mango flavor.', 0, 0, 0, 0, 0),
+    ('velo', 'Mango Ice 10mg', 'velo-mango-ice-10mg', 'Mango Ice', 'fruit', 10, 'strong', 'slim', 20, null, null, 'Slim pouch with cooling mango flavor.', 0, 0, 0, 0, 0),
+
+    -- Nordic Spirit
+    ('nordic-spirit', 'Mint Mini 3mg', 'nordic-spirit-mint-mini-3mg', 'Mint', 'mint', 3, 'light', 'mini', 20, null, null, 'Mini pouch with menthol and peppermint flavor.', 0, 0, 0, 0, 0),
+    ('nordic-spirit', 'Mint 6mg', 'nordic-spirit-mint-6mg', 'Mint', 'mint', 6, 'normal', 'regular', 20, null, null, 'Standard pouch with menthol and peppermint flavor.', 0, 0, 0, 0, 0),
+    ('nordic-spirit', 'Mint 9mg', 'nordic-spirit-mint-9mg', 'Mint', 'mint', 9, 'strong', 'regular', 20, null, null, 'Standard pouch with menthol and peppermint flavor.', 0, 0, 0, 0, 0),
+    ('nordic-spirit', 'Mint 11mg', 'nordic-spirit-mint-11mg', 'Mint', 'mint', 11, 'strong', 'regular', 20, null, null, 'Standard pouch with menthol and peppermint flavor.', 0, 0, 0, 0, 0),
+    ('nordic-spirit', 'Spearmint Mini 3mg', 'nordic-spirit-spearmint-mini-3mg', 'Spearmint', 'mint', 3, 'light', 'mini', 20, null, null, 'Mini pouch with sweet spearmint and menthol flavor.', 0, 0, 0, 0, 0),
+    ('nordic-spirit', 'Spearmint 6mg', 'nordic-spirit-spearmint-6mg', 'Spearmint', 'mint', 6, 'normal', 'regular', 20, null, null, 'Standard pouch with sweet spearmint and menthol flavor.', 0, 0, 0, 0, 0),
+    ('nordic-spirit', 'Spearmint 9mg', 'nordic-spirit-spearmint-9mg', 'Spearmint', 'mint', 9, 'strong', 'regular', 20, null, null, 'Standard pouch with sweet spearmint and menthol flavor.', 0, 0, 0, 0, 0),
+    ('nordic-spirit', 'Spearmint 11mg', 'nordic-spirit-spearmint-11mg', 'Spearmint', 'mint', 11, 'strong', 'regular', 20, null, null, 'Standard pouch with sweet spearmint and menthol flavor.', 0, 0, 0, 0, 0),
+    ('nordic-spirit', 'Bergamot Wildberry 6mg', 'nordic-spirit-bergamot-wildberry-6mg', 'Bergamot Wildberry', 'fruit', 6, 'normal', 'regular', 20, null, null, 'Standard pouch with wild berry flavor and bergamot citrus aftertaste.', 0, 0, 0, 0, 0),
+    ('nordic-spirit', 'Bergamot Wildberry 11mg', 'nordic-spirit-bergamot-wildberry-11mg', 'Bergamot Wildberry', 'fruit', 11, 'strong', 'regular', 20, null, null, 'Standard pouch with wild berry flavor and bergamot citrus aftertaste.', 0, 0, 0, 0, 0)
 )
 insert into products (
   brand_id, name, slug, flavor, flavor_category, strength_mg, strength_label,
@@ -150,95 +192,88 @@ set
   updated_at = now();
 
 -- ============================================
--- EXPANSION PRICES
+-- CANONICAL DATA SAFETY
 -- ============================================
-with seed_prices (product_slug, shop_slug, price, pouches_in_can, currency, affiliate_url, in_stock) as (
-  values
-    -- ZYN expansion
-    ('zyn-spearmint-6mg', 'swenico', 4.59, 20, 'EUR', 'https://www.swenico.com/search?q=zyn+spearmint', true),
-    ('zyn-spearmint-6mg', 'snuscore', 4.85, 20, 'EUR', 'https://snuscore.com/search?q=zyn+spearmint', true),
-    ('zyn-espressino-6mg', 'swenico', 4.59, 20, 'EUR', 'https://www.swenico.com/search?q=zyn+espressino', true),
-    ('zyn-cool-mint-strong-9mg', 'swenico', 4.79, 20, 'EUR', 'https://www.swenico.com/search?q=zyn+cool+mint+strong', true),
-    ('zyn-cool-mint-strong-9mg', 'snuscore', 5.09, 20, 'EUR', 'https://snuscore.com/search?q=zyn+cool+mint+strong', true),
-    ('zyn-bellini-6mg', 'swenico', 4.59, 20, 'EUR', 'https://www.swenico.com/search?q=zyn+bellini', true),
-
-    -- VELO expansion
-    ('velo-ice-cool-10mg', 'swenico', 5.09, 20, 'EUR', 'https://www.swenico.com/search?q=velo+ice+cool', true),
-    ('velo-ice-cool-10mg', 'snusmania', 5.19, 20, 'EUR', 'https://www.snusmania.eu/search?type=product&q=velo+ice+cool', true),
-    ('velo-berry-frost-10mg', 'swenico', 5.09, 20, 'EUR', 'https://www.swenico.com/search?q=velo+berry+frost', true),
-    ('velo-tropic-breeze-6mg', 'swenico', 4.89, 20, 'EUR', 'https://www.swenico.com/search?q=velo+tropic+breeze', true),
-    ('velo-ruby-berry-17mg', 'snusmania', 5.39, 20, 'EUR', 'https://www.snusmania.eu/search?type=product&q=velo+ruby+berry', true),
-
-    -- LOOP expansion
-    ('loop-red-chili-melon-strong', 'swenico', 5.39, 20, 'EUR', 'https://www.swenico.com/search?q=loop+red+chili+melon', true),
-    ('loop-sicily-spritz-strong', 'swenico', 5.39, 20, 'EUR', 'https://www.swenico.com/search?q=loop+sicily+spritz', true),
-    ('loop-salty-ludicris', 'swenico', 5.49, 20, 'EUR', 'https://www.swenico.com/search?q=loop+salty+ludicris', true),
-
-    -- Pablo expansion
-    ('pablo-banana-ice-30mg', 'snusmania', 4.79, 20, 'EUR', 'https://www.snusmania.eu/search?type=product&q=pablo+banana+ice', true),
-    ('pablo-banana-ice-30mg', 'nicopods-uk', 4.99, 20, 'GBP', 'https://www.nicopodsuk.com/search?q=pablo+banana+ice', true),
-    ('pablo-mango-ice-30mg', 'snusmania', 4.79, 20, 'EUR', 'https://www.snusmania.eu/search?type=product&q=pablo+mango+ice', true),
-    ('pablo-frosted-mint-50mg', 'snusmania', 5.29, 20, 'EUR', 'https://www.snusmania.eu/search?type=product&q=pablo+frosted+mint', true),
-    ('pablo-frosted-mint-50mg', 'nicopods-uk', 5.49, 20, 'GBP', 'https://www.nicopodsuk.com/search?q=pablo+frosted+mint', true),
-
-    -- KILLA expansion
-    ('killa-watermelon', 'snusmania', 4.39, 20, 'EUR', 'https://www.snusmania.eu/search?type=product&q=killa+watermelon', true),
-    ('killa-apple', 'snusmania', 4.39, 20, 'EUR', 'https://www.snusmania.eu/search?type=product&q=killa+apple', true),
-    ('killa-banana-ice', 'snusmania', 4.39, 20, 'EUR', 'https://www.snusmania.eu/search?type=product&q=killa+banana+ice', true),
-    ('killa-banana-ice', 'nicopods-uk', 4.59, 20, 'GBP', 'https://www.nicopodsuk.com/search?q=killa+banana+ice', true),
-
-    -- Nordic Spirit
-    ('nordic-spirit-mint', 'swenico', 5.19, 20, 'EUR', 'https://www.swenico.com/search?q=nordic+spirit+mint', true),
-    ('nordic-spirit-mint', 'snuscore', 5.35, 20, 'EUR', 'https://snuscore.com/search?q=nordic+spirit+mint', true),
-    ('nordic-spirit-bergamot-wildberry', 'swenico', 5.19, 20, 'EUR', 'https://www.swenico.com/search?q=nordic+spirit+bergamot', true),
-    ('nordic-spirit-watermelon', 'swenico', 5.09, 20, 'EUR', 'https://www.swenico.com/search?q=nordic+spirit+watermelon', true),
-
-    -- Skruf
-    ('skruf-fresh-mint-3', 'swenico', 4.89, 20, 'EUR', 'https://www.swenico.com/search?q=skruf+fresh+mint', true),
-    ('skruf-frozen-shot-5', 'swenico', 4.99, 20, 'EUR', 'https://www.swenico.com/search?q=skruf+frozen+shot', true),
-    ('skruf-blackcurrant-3', 'swenico', 4.89, 20, 'EUR', 'https://www.swenico.com/search?q=skruf+blackcurrant', true),
-
-    -- Dope
-    ('dope-freeze-crazy-strong', 'snusmania', 4.99, 20, 'EUR', 'https://www.snusmania.eu/search?type=product&q=dope+freeze', true),
-    ('dope-lime-smash', 'snusmania', 4.69, 20, 'EUR', 'https://www.snusmania.eu/search?type=product&q=dope+lime+smash', true),
-
-    -- On!
-    ('on-coffee-6mg', 'swenico', 4.29, 20, 'EUR', 'https://www.swenico.com/search?q=on+coffee', true),
-    ('on-mint-8mg', 'swenico', 4.29, 20, 'EUR', 'https://www.swenico.com/search?q=on+mint', true),
-    ('on-berry-4mg', 'swenico', 4.29, 20, 'EUR', 'https://www.swenico.com/search?q=on+berry', true),
-
-    -- Iceberg
-    ('iceberg-lemon-extra-strong', 'snusmania', 4.59, 20, 'EUR', 'https://www.snusmania.eu/search?type=product&q=iceberg+lemon', true),
-    ('iceberg-grape-extra-strong', 'snusmania', 4.59, 20, 'EUR', 'https://www.snusmania.eu/search?type=product&q=iceberg+grape', true),
-
-    -- Kurwa
-    ('kurwa-fatality-grape-ice', 'snusmania', 5.49, 20, 'EUR', 'https://www.snusmania.eu/search?type=product&q=kurwa+fatality+grape', true),
-    ('kurwa-fatality-strawberry-ice', 'snusmania', 5.49, 20, 'EUR', 'https://www.snusmania.eu/search?type=product&q=kurwa+fatality+strawberry', true),
-
-    -- Volt
-    ('volt-dark-frost', 'swenico', 4.79, 20, 'EUR', 'https://www.swenico.com/search?q=volt+dark+frost', true),
-    ('volt-pearls-spearmint', 'swenico', 4.69, 20, 'EUR', 'https://www.swenico.com/search?q=volt+pearls+spearmint', true),
-
-    -- Cuba
-    ('cuba-bubblegum', 'snusmania', 4.49, 20, 'EUR', 'https://www.snusmania.eu/search?type=product&q=cuba+bubblegum', true),
-    ('cuba-cola', 'snusmania', 4.49, 20, 'EUR', 'https://www.snusmania.eu/search?type=product&q=cuba+cola', true),
-
-    -- Grant's
-    ('grants-ice-cool', 'snusmania', 3.99, 20, 'EUR', 'https://www.snusmania.eu/search?type=product&q=grants+ice+cool', true),
-    ('grants-wild-berry', 'snusmania', 3.99, 20, 'EUR', 'https://www.snusmania.eu/search?type=product&q=grants+wild+berry', true)
-)
-insert into prices (product_id, shop_id, price, pouches_in_can, currency, affiliate_url, in_stock)
-select p.id, s.id, sp.price, sp.pouches_in_can, sp.currency, sp.affiliate_url, sp.in_stock
-from seed_prices sp
-join products p on p.slug = sp.product_slug
-join shops s on s.slug = sp.shop_slug
-on conflict (product_id, shop_id) do update
+-- Expansion rows are kept as structured catalog facts. Unsourced narrative
+-- copy and placeholder retailer prices are intentionally stripped so the app
+-- only publishes data we can stand behind.
+update brands
 set
-  price = excluded.price,
-  pouches_in_can = excluded.pouches_in_can,
-  currency = excluded.currency,
-  affiliate_url = excluded.affiliate_url,
-  in_stock = excluded.in_stock,
-  last_checked = now();
+  description = null;
+
+delete from prices;
+
+update products
+set
+  description = null,
+  updated_at = now()
+where slug not in (
+  'zyn-black-cherry-mini-3mg',
+  'zyn-black-cherry-mini-6mg',
+  'zyn-apple-mint-mini-6mg',
+  'zyn-guava-spice-11mg',
+  'zyn-cool-mint-11mg',
+  'velo-crispy-peppermint-6mg',
+  'velo-crispy-peppermint-10mg',
+  'velo-icy-berries-10mg',
+  'velo-icy-berries-14mg',
+  'velo-icy-berries-17mg',
+  'velo-tropical-mango-6mg',
+  'velo-tropical-mango-10mg',
+  'velo-strawberry-ice-mini-6mg',
+  'velo-strawberry-ice-10mg',
+  'velo-orange-ice-10mg',
+  'velo-mango-flame-10mg',
+  'velo-mango-ice-10mg',
+  'nordic-spirit-mint-mini-3mg',
+  'nordic-spirit-mint-6mg',
+  'nordic-spirit-mint-9mg',
+  'nordic-spirit-mint-11mg',
+  'nordic-spirit-spearmint-mini-3mg',
+  'nordic-spirit-spearmint-6mg',
+  'nordic-spirit-spearmint-9mg',
+  'nordic-spirit-spearmint-11mg',
+  'nordic-spirit-bergamot-wildberry-6mg',
+  'nordic-spirit-bergamot-wildberry-11mg'
+);
+
+-- ============================================
+-- REVIEW AGGREGATES (REAL REVIEWS ONLY)
+-- ============================================
+with review_rollup as (
+  select
+    product_id,
+    coalesce(avg(burn_rating), 0) as avg_burn,
+    coalesce(avg(flavor_rating), 0) as avg_flavor,
+    coalesce(avg(longevity_rating), 0) as avg_longevity,
+    coalesce(avg(overall_rating), 0) as avg_overall,
+    count(*)::integer as review_count
+  from reviews
+  group by product_id
+)
+update products p
+set
+  avg_burn = coalesce(rr.avg_burn, 0),
+  avg_flavor = coalesce(rr.avg_flavor, 0),
+  avg_longevity = coalesce(rr.avg_longevity, 0),
+  avg_overall = coalesce(rr.avg_overall, 0),
+  review_count = coalesce(rr.review_count, 0),
+  updated_at = now()
+from review_rollup rr
+where p.id = rr.product_id;
+
+update products p
+set
+  avg_burn = 0,
+  avg_flavor = 0,
+  avg_longevity = 0,
+  avg_overall = 0,
+  review_count = 0,
+  updated_at = now()
+where not exists (
+  select 1
+  from reviews r
+  where r.product_id = p.id
+);
 
 commit;

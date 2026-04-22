@@ -15,7 +15,7 @@ import { getBurnIntelligenceModules, sortProductsByAdjustedMetric } from "@/lib/
 export const revalidate = 60;
 export const metadata: Metadata = {
   title: "Highest Burn Nicotine Pouches — PouchBase",
-  description: "Discover the nicotine pouches with the highest community burn scores.",
+  description: "Discover the nicotine pouches with the highest public burn scores once enough real review data exists.",
   alternates: {
     canonical: "/highest-burn",
   },
@@ -102,7 +102,7 @@ export default async function HighestBurnPage() {
         <div className="rounded-xl border border-white/8 bg-card px-6 py-12 text-center">
           <h2 className="font-display text-2xl font-bold text-white">No burn leaders yet</h2>
           <p className="mt-2 text-sm text-white/48">
-            As burn scores come in, the hottest pouches will show up here.
+            As real burn scores cross the public threshold, the hardest hitters will show up here.
           </p>
         </div>
       )}

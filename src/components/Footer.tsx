@@ -15,7 +15,7 @@ export function Footer() {
             </Link>
             <p className="text-sm leading-relaxed text-white/48">
               Independent nicotine pouch reviews for adults. We don&apos;t sell pouches — we help
-              you compare them with honest ratings, burn scores, and price info.
+              you compare them with honest product data, burn scoring, live price info, and real community reviews where available.
             </p>
           </div>
 
