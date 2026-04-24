@@ -1,0 +1,874 @@
+{
+  "brands": [
+    {
+      "name": "Pablo",
+      "slug": "pablo",
+      "websiteUrl": "https://pablopouch.com/",
+      "logoUrl": "https://pablopouch.com/cdn/shop/files/logos.png?v=1759041585",
+      "description": "High-strength pouch brand from N.G.P Tobacco with broad fruit, mint, cola, and original-style profiles across multiple strength bands."
+    },
+    {
+      "name": "Iceberg",
+      "slug": "iceberg",
+      "websiteUrl": "https://www.icebergdistribution.com/",
+      "logoUrl": "https://www.icebergdistribution.com/wp-content/uploads/2024/09/cropped-LOGO-ICEBERG-BLUE_BLACK-transparaent-800x800.png",
+      "description": "High-strength nicotine pouch brand distributed through Iceberg Distribution, focused on experienced users and strong fruit and mint profiles."
+    },
+    {
+      "name": "Cuba",
+      "slug": "cuba",
+      "websiteUrl": "https://nicotobacco.eu/",
+      "description": "Mainstream Eastern European pouch brand from Nicotobacco Factory spanning Cuba White, Cuba Ninja, and stronger Cuba Black-style lines."
+    }
+  ],
+  "products": [
+    {
+      "brandSlug": "pablo",
+      "name": "Original X Ice Cold 20mg",
+      "slug": "pablo-original-x-ice-cold-20mg",
+      "flavor": "Original X Ice Cold",
+      "flavorCategory": "mint",
+      "strengthMg": 20,
+      "format": "slim",
+      "description": "Official Pablo nicotine pouch in original x ice cold with 20mg strength."
+    },
+    {
+      "brandSlug": "pablo",
+      "name": "Original Ice Cold 20mg",
+      "slug": "pablo-original-ice-cold-20mg",
+      "flavor": "Original Ice Cold",
+      "flavorCategory": "mint",
+      "strengthMg": 20,
+      "format": "slim",
+      "description": "Official Pablo nicotine pouch in original ice cold with 20mg strength."
+    },
+    {
+      "brandSlug": "pablo",
+      "name": "Blueberry Peach 13mg",
+      "slug": "pablo-blueberry-peach-13mg",
+      "flavor": "Blueberry Peach",
+      "flavorCategory": "fruit",
+      "strengthMg": 13,
+      "format": "slim",
+      "description": "Official Pablo nicotine pouch in blueberry peach with 13mg strength."
+    },
+    {
+      "brandSlug": "pablo",
+      "name": "Double Lemonade 24mg",
+      "slug": "pablo-double-lemonade-24mg",
+      "flavor": "Double Lemonade",
+      "flavorCategory": "fruit",
+      "strengthMg": 24,
+      "format": "slim",
+      "description": "Official Pablo nicotine pouch in double lemonade with 24mg strength."
+    },
+    {
+      "brandSlug": "pablo",
+      "name": "Double Lemonade 13mg",
+      "slug": "pablo-double-lemonade-13mg",
+      "flavor": "Double Lemonade",
+      "flavorCategory": "fruit",
+      "strengthMg": 13,
+      "format": "slim",
+      "description": "Official Pablo nicotine pouch in double lemonade with 13mg strength."
+    },
+    {
+      "brandSlug": "pablo",
+      "name": "Watermelon Gum 13mg",
+      "slug": "pablo-watermelon-gum-13mg",
+      "flavor": "Watermelon Gum",
+      "flavorCategory": "fruit",
+      "strengthMg": 13,
+      "format": "slim",
+      "description": "Official Pablo nicotine pouch in watermelon gum with 13mg strength."
+    },
+    {
+      "brandSlug": "pablo",
+      "name": "Watermelon Gum 24mg",
+      "slug": "pablo-watermelon-gum-24mg",
+      "flavor": "Watermelon Gum",
+      "flavorCategory": "fruit",
+      "strengthMg": 24,
+      "format": "slim",
+      "description": "Official Pablo nicotine pouch in watermelon gum with 24mg strength."
+    },
+    {
+      "brandSlug": "pablo",
+      "name": "Tropical Punch 13mg",
+      "slug": "pablo-tropical-punch-13mg",
+      "flavor": "Tropical Punch",
+      "flavorCategory": "fruit",
+      "strengthMg": 13,
+      "format": "slim",
+      "description": "Official Pablo nicotine pouch in tropical punch with 13mg strength."
+    },
+    {
+      "brandSlug": "pablo",
+      "name": "Tropical Punch 24mg",
+      "slug": "pablo-tropical-punch-24mg",
+      "flavor": "Tropical Punch",
+      "flavorCategory": "fruit",
+      "strengthMg": 24,
+      "format": "slim",
+      "description": "Official Pablo nicotine pouch in tropical punch with 24mg strength."
+    },
+    {
+      "brandSlug": "pablo",
+      "name": "Passion Fruit 13mg",
+      "slug": "pablo-passion-fruit-13mg",
+      "flavor": "Passion Fruit",
+      "flavorCategory": "fruit",
+      "strengthMg": 13,
+      "format": "slim",
+      "description": "Official Pablo nicotine pouch in passion fruit with 13mg strength."
+    },
+    {
+      "brandSlug": "pablo",
+      "name": "Passion Fruit 24mg",
+      "slug": "pablo-passion-fruit-24mg",
+      "flavor": "Passion Fruit",
+      "flavorCategory": "fruit",
+      "strengthMg": 24,
+      "format": "slim",
+      "description": "Official Pablo nicotine pouch in passion fruit with 24mg strength."
+    },
+    {
+      "brandSlug": "pablo",
+      "name": "Original Red 20mg",
+      "slug": "pablo-original-red-20mg",
+      "flavor": "Original Red",
+      "flavorCategory": "tobacco",
+      "strengthMg": 20,
+      "format": "slim",
+      "description": "Official Pablo nicotine pouch in original red with 20mg strength."
+    },
+    {
+      "brandSlug": "pablo",
+      "name": "Vanilla Cola 24mg",
+      "slug": "pablo-vanilla-cola-24mg",
+      "flavor": "Vanilla Cola",
+      "flavorCategory": "other",
+      "strengthMg": 24,
+      "format": "slim",
+      "description": "Official Pablo nicotine pouch in vanilla cola with 24mg strength."
+    },
+    {
+      "brandSlug": "pablo",
+      "name": "Frosted Mint 13mg",
+      "slug": "pablo-frosted-mint-13mg",
+      "flavor": "Frosted Mint",
+      "flavorCategory": "mint",
+      "strengthMg": 13,
+      "format": "slim",
+      "description": "Official Pablo nicotine pouch in frosted mint with 13mg strength."
+    },
+    {
+      "brandSlug": "pablo",
+      "name": "Frosted Ice 13mg",
+      "slug": "pablo-frosted-ice-13mg",
+      "flavor": "Frosted Ice",
+      "flavorCategory": "mint",
+      "strengthMg": 13,
+      "format": "slim",
+      "description": "Official Pablo nicotine pouch in frosted ice with 13mg strength."
+    },
+    {
+      "brandSlug": "pablo",
+      "name": "Frosted Ice 24mg",
+      "slug": "pablo-frosted-ice-24mg",
+      "flavor": "Frosted Ice",
+      "flavorCategory": "mint",
+      "strengthMg": 24,
+      "format": "slim",
+      "description": "Official Pablo nicotine pouch in frosted ice with 24mg strength."
+    },
+    {
+      "brandSlug": "pablo",
+      "name": "Double Cola 13mg",
+      "slug": "pablo-double-cola-13mg",
+      "flavor": "Double Cola",
+      "flavorCategory": "other",
+      "strengthMg": 13,
+      "format": "slim",
+      "description": "Official Pablo nicotine pouch in double cola with 13mg strength."
+    },
+    {
+      "brandSlug": "pablo",
+      "name": "Double Cola 24mg",
+      "slug": "pablo-double-cola-24mg",
+      "flavor": "Double Cola",
+      "flavorCategory": "other",
+      "strengthMg": 24,
+      "format": "slim",
+      "description": "Official Pablo nicotine pouch in double cola with 24mg strength."
+    },
+    {
+      "brandSlug": "pablo",
+      "name": "Mango Ice 13mg",
+      "slug": "pablo-mango-ice-13mg",
+      "flavor": "Mango Ice",
+      "flavorCategory": "fruit",
+      "strengthMg": 13,
+      "format": "slim",
+      "description": "Official Pablo nicotine pouch in mango ice with 13mg strength."
+    },
+    {
+      "brandSlug": "pablo",
+      "name": "Mango Ice 24mg",
+      "slug": "pablo-mango-ice-24mg",
+      "flavor": "Mango Ice",
+      "flavorCategory": "fruit",
+      "strengthMg": 24,
+      "format": "slim",
+      "description": "Official Pablo nicotine pouch in mango ice with 24mg strength."
+    },
+    {
+      "brandSlug": "pablo",
+      "name": "Grape Ice 24mg",
+      "slug": "pablo-grape-ice-24mg",
+      "flavor": "Grape Ice",
+      "flavorCategory": "fruit",
+      "strengthMg": 24,
+      "format": "slim",
+      "description": "Official Pablo nicotine pouch in grape ice with 24mg strength."
+    },
+    {
+      "brandSlug": "pablo",
+      "name": "Grape Ice 13mg",
+      "slug": "pablo-grape-ice-13mg",
+      "flavor": "Grape Ice",
+      "flavorCategory": "fruit",
+      "strengthMg": 13,
+      "format": "slim",
+      "description": "Official Pablo nicotine pouch in grape ice with 13mg strength."
+    },
+    {
+      "brandSlug": "pablo",
+      "name": "Cold Mint 13mg",
+      "slug": "pablo-cold-mint-13mg",
+      "flavor": "Cold Mint",
+      "flavorCategory": "mint",
+      "strengthMg": 13,
+      "format": "slim",
+      "description": "Official Pablo nicotine pouch in cold mint with 13mg strength."
+    },
+    {
+      "brandSlug": "pablo",
+      "name": "Blue Razz 13mg",
+      "slug": "pablo-blue-razz-13mg",
+      "flavor": "Blue Razz",
+      "flavorCategory": "fruit",
+      "strengthMg": 13,
+      "format": "slim",
+      "description": "Official Pablo nicotine pouch in blue razz with 13mg strength."
+    },
+    {
+      "brandSlug": "pablo",
+      "name": "Blue Razz 24mg",
+      "slug": "pablo-blue-razz-24mg",
+      "flavor": "Blue Razz",
+      "flavorCategory": "fruit",
+      "strengthMg": 24,
+      "format": "slim",
+      "description": "Official Pablo nicotine pouch in blue razz with 24mg strength."
+    },
+    {
+      "brandSlug": "pablo",
+      "name": "Cold Mint 9mg",
+      "slug": "pablo-cold-mint-9mg",
+      "flavor": "Cold Mint",
+      "flavorCategory": "mint",
+      "strengthMg": 9,
+      "format": "slim",
+      "description": "Official Pablo nicotine pouch in cold mint with 9mg strength."
+    },
+    {
+      "brandSlug": "pablo",
+      "name": "Original 13mg",
+      "slug": "pablo-original-13mg",
+      "flavor": "Original",
+      "flavorCategory": "tobacco",
+      "strengthMg": 13,
+      "format": "slim",
+      "description": "Official Pablo nicotine pouch in original with 13mg strength."
+    },
+    {
+      "brandSlug": "pablo",
+      "name": "Original 9mg",
+      "slug": "pablo-original-9mg",
+      "flavor": "Original",
+      "flavorCategory": "tobacco",
+      "strengthMg": 9,
+      "format": "slim",
+      "description": "Official Pablo nicotine pouch in original with 9mg strength."
+    },
+    {
+      "brandSlug": "pablo",
+      "name": "Original 6mg",
+      "slug": "pablo-original-6mg",
+      "flavor": "Original",
+      "flavorCategory": "tobacco",
+      "strengthMg": 6,
+      "format": "slim",
+      "description": "Official Pablo nicotine pouch in original with 6mg strength."
+    },
+    {
+      "brandSlug": "pablo",
+      "name": "Original 3mg",
+      "slug": "pablo-original-3mg",
+      "flavor": "Original",
+      "flavorCategory": "tobacco",
+      "strengthMg": 3,
+      "format": "slim",
+      "description": "Official Pablo nicotine pouch in original with 3mg strength."
+    },
+    {
+      "brandSlug": "pablo",
+      "name": "Classic 9mg",
+      "slug": "pablo-classic-9mg",
+      "flavor": "Classic",
+      "flavorCategory": "tobacco",
+      "strengthMg": 9,
+      "format": "slim",
+      "description": "Official Pablo nicotine pouch in classic with 9mg strength."
+    },
+    {
+      "brandSlug": "pablo",
+      "name": "Classic 6mg",
+      "slug": "pablo-classic-6mg",
+      "flavor": "Classic",
+      "flavorCategory": "tobacco",
+      "strengthMg": 6,
+      "format": "slim",
+      "description": "Official Pablo nicotine pouch in classic with 6mg strength."
+    },
+    {
+      "brandSlug": "pablo",
+      "name": "Classic 3mg",
+      "slug": "pablo-classic-3mg",
+      "flavor": "Classic",
+      "flavorCategory": "tobacco",
+      "strengthMg": 3,
+      "format": "slim",
+      "description": "Official Pablo nicotine pouch in classic with 3mg strength."
+    },
+    {
+      "brandSlug": "pablo",
+      "name": "Freeze 13mg",
+      "slug": "pablo-freeze-13mg",
+      "flavor": "Freeze",
+      "flavorCategory": "mint",
+      "strengthMg": 13,
+      "format": "slim",
+      "description": "Official Pablo nicotine pouch in freeze with 13mg strength."
+    },
+    {
+      "brandSlug": "pablo",
+      "name": "Smooth 9mg",
+      "slug": "pablo-smooth-9mg",
+      "flavor": "Smooth",
+      "flavorCategory": "tobacco",
+      "strengthMg": 9,
+      "format": "slim",
+      "description": "Official Pablo nicotine pouch in smooth with 9mg strength."
+    },
+    {
+      "brandSlug": "pablo",
+      "name": "Smooth 6mg",
+      "slug": "pablo-smooth-6mg",
+      "flavor": "Smooth",
+      "flavorCategory": "tobacco",
+      "strengthMg": 6,
+      "format": "slim",
+      "description": "Official Pablo nicotine pouch in smooth with 6mg strength."
+    },
+    {
+      "brandSlug": "pablo",
+      "name": "Smooth 3mg",
+      "slug": "pablo-smooth-3mg",
+      "flavor": "Smooth",
+      "flavorCategory": "tobacco",
+      "strengthMg": 3,
+      "format": "slim",
+      "description": "Official Pablo nicotine pouch in smooth with 3mg strength."
+    },
+    {
+      "brandSlug": "pablo",
+      "name": "Freeze 9mg",
+      "slug": "pablo-freeze-9mg",
+      "flavor": "Freeze",
+      "flavorCategory": "mint",
+      "strengthMg": 9,
+      "format": "slim",
+      "description": "Official Pablo nicotine pouch in freeze with 9mg strength."
+    },
+    {
+      "brandSlug": "pablo",
+      "name": "Chill 9mg",
+      "slug": "pablo-chill-9mg",
+      "flavor": "Chill",
+      "flavorCategory": "mint",
+      "strengthMg": 9,
+      "format": "slim",
+      "description": "Official Pablo nicotine pouch in chill with 9mg strength."
+    },
+    {
+      "brandSlug": "pablo",
+      "name": "Chill 6mg",
+      "slug": "pablo-chill-6mg",
+      "flavor": "Chill",
+      "flavorCategory": "mint",
+      "strengthMg": 6,
+      "format": "slim",
+      "description": "Official Pablo nicotine pouch in chill with 6mg strength."
+    },
+    {
+      "brandSlug": "pablo",
+      "name": "Chill 3mg",
+      "slug": "pablo-chill-3mg",
+      "flavor": "Chill",
+      "flavorCategory": "mint",
+      "strengthMg": 3,
+      "format": "slim",
+      "description": "Official Pablo nicotine pouch in chill with 3mg strength."
+    },
+    {
+      "brandSlug": "pablo",
+      "name": "Kiwi 13mg",
+      "slug": "pablo-kiwi-13mg",
+      "flavor": "Kiwi",
+      "flavorCategory": "fruit",
+      "strengthMg": 13,
+      "format": "slim",
+      "description": "Official Pablo nicotine pouch in kiwi with 13mg strength."
+    },
+    {
+      "brandSlug": "pablo",
+      "name": "Kiwi 24mg",
+      "slug": "pablo-kiwi-24mg",
+      "flavor": "Kiwi",
+      "flavorCategory": "fruit",
+      "strengthMg": 24,
+      "format": "slim",
+      "description": "Official Pablo nicotine pouch in kiwi with 24mg strength."
+    },
+    {
+      "brandSlug": "zyn",
+      "name": "Spearmint Mini X-Low 1.5mg",
+      "slug": "zyn-spearmint-mini-1.5mg",
+      "flavor": "Spearmint",
+      "flavorCategory": "mint",
+      "strengthMg": 1.5,
+      "format": "mini",
+      "description": "Official ZYN UK nicotine pouch with spearmint flavour, 1.5mg strength, and 10 pouches per can.",
+      "pouchesPerCan": 10
+    },
+    {
+      "brandSlug": "zyn",
+      "name": "Black Cherry Mini X-Low 1.5mg",
+      "slug": "zyn-black-cherry-mini-1.5mg",
+      "flavor": "Black Cherry",
+      "flavorCategory": "fruit",
+      "strengthMg": 1.5,
+      "format": "mini",
+      "description": "Official ZYN UK nicotine pouch with black cherry flavour, 1.5mg strength, and 10 pouches per can.",
+      "pouchesPerCan": 10
+    },
+    {
+      "brandSlug": "zyn",
+      "name": "Cool Mint Mini X-Low 1.5mg",
+      "slug": "zyn-cool-mint-mini-1.5mg",
+      "flavor": "Cool Mint",
+      "flavorCategory": "mint",
+      "strengthMg": 1.5,
+      "format": "mini",
+      "description": "Official ZYN UK nicotine pouch with cool mint flavour, 1.5mg strength, and 10 pouches per can.",
+      "pouchesPerCan": 10
+    },
+    {
+      "brandSlug": "zyn",
+      "name": "Black Cherry Mini 3mg",
+      "slug": "zyn-black-cherry-mini-3mg",
+      "flavor": "Black Cherry",
+      "flavorCategory": "fruit",
+      "strengthMg": 3,
+      "format": "mini",
+      "description": "Official ZYN UK nicotine pouch with black cherry flavour, 3mg strength, and 20 pouches per can.",
+      "pouchesPerCan": 20
+    },
+    {
+      "brandSlug": "zyn",
+      "name": "Spearmint Mini 3mg",
+      "slug": "zyn-spearmint-mini-3mg",
+      "flavor": "Spearmint",
+      "flavorCategory": "mint",
+      "strengthMg": 3,
+      "format": "mini",
+      "description": "Official ZYN UK nicotine pouch with spearmint flavour, 3mg strength, and 20 pouches per can.",
+      "pouchesPerCan": 20
+    },
+    {
+      "brandSlug": "zyn",
+      "name": "Apple Mint Mini 3mg",
+      "slug": "zyn-apple-mint-mini-3mg",
+      "flavor": "Apple Mint",
+      "flavorCategory": "mint",
+      "strengthMg": 3,
+      "format": "mini",
+      "description": "Official ZYN UK nicotine pouch with apple mint flavour, 3mg strength, and 20 pouches per can.",
+      "pouchesPerCan": 20
+    },
+    {
+      "brandSlug": "zyn",
+      "name": "Citrus Mini 3mg",
+      "slug": "zyn-citrus-mini-3mg",
+      "flavor": "Citrus",
+      "flavorCategory": "fruit",
+      "strengthMg": 3,
+      "format": "mini",
+      "description": "Official ZYN UK nicotine pouch with citrus flavour, 3mg strength, and 20 pouches per can.",
+      "pouchesPerCan": 20
+    },
+    {
+      "brandSlug": "zyn",
+      "name": "Cool Mint Mini 6mg",
+      "slug": "zyn-cool-mint-mini-6mg",
+      "flavor": "Cool Mint",
+      "flavorCategory": "mint",
+      "strengthMg": 6,
+      "format": "mini",
+      "description": "Official ZYN UK nicotine pouch with cool mint flavour, 6mg strength, and 20 pouches per can.",
+      "pouchesPerCan": 20
+    },
+    {
+      "brandSlug": "zyn",
+      "name": "Black Cherry Mini 6mg",
+      "slug": "zyn-black-cherry-mini-6mg",
+      "flavor": "Black Cherry",
+      "flavorCategory": "fruit",
+      "strengthMg": 6,
+      "format": "mini",
+      "description": "Official ZYN UK nicotine pouch with black cherry flavour, 6mg strength, and 20 pouches per can.",
+      "pouchesPerCan": 20
+    },
+    {
+      "brandSlug": "zyn",
+      "name": "Apple Mint Mini 6mg",
+      "slug": "zyn-apple-mint-mini-6mg",
+      "flavor": "Apple Mint",
+      "flavorCategory": "mint",
+      "strengthMg": 6,
+      "format": "mini",
+      "description": "Official ZYN UK nicotine pouch with apple mint flavour, 6mg strength, and 20 pouches per can.",
+      "pouchesPerCan": 20
+    },
+    {
+      "brandSlug": "zyn",
+      "name": "Red Fruits 9mg",
+      "slug": "zyn-red-fruits-9mg",
+      "flavor": "Red Fruits",
+      "flavorCategory": "fruit",
+      "strengthMg": 9,
+      "format": "slim",
+      "description": "Official ZYN UK nicotine pouch with red fruits flavour, 9mg strength, and 20 pouches per can.",
+      "pouchesPerCan": 20
+    },
+    {
+      "brandSlug": "zyn",
+      "name": "Black Cherry 11mg",
+      "slug": "zyn-black-cherry-11mg",
+      "flavor": "Black Cherry",
+      "flavorCategory": "fruit",
+      "strengthMg": 11,
+      "format": "slim",
+      "description": "Official ZYN UK nicotine pouch with black cherry flavour, 11mg strength, and 20 pouches per can.",
+      "pouchesPerCan": 20
+    },
+    {
+      "brandSlug": "zyn",
+      "name": "Blueberry Mint 11mg",
+      "slug": "zyn-blueberry-mint-11mg",
+      "flavor": "Blueberry Mint",
+      "flavorCategory": "fruit",
+      "strengthMg": 11,
+      "format": "slim",
+      "description": "Official ZYN UK nicotine pouch with blueberry mint flavour, 11mg strength, and 20 pouches per can.",
+      "pouchesPerCan": 20
+    },
+    {
+      "brandSlug": "zyn",
+      "name": "Citrus 11mg",
+      "slug": "zyn-citrus-11mg",
+      "flavor": "Citrus",
+      "flavorCategory": "fruit",
+      "strengthMg": 11,
+      "format": "slim",
+      "description": "Official ZYN UK nicotine pouch with citrus flavour, 11mg strength, and 20 pouches per can.",
+      "pouchesPerCan": 20
+    },
+    {
+      "brandSlug": "zyn",
+      "name": "Spearmint 11mg",
+      "slug": "zyn-spearmint-11mg",
+      "flavor": "Spearmint",
+      "flavorCategory": "mint",
+      "strengthMg": 11,
+      "format": "slim",
+      "description": "Official ZYN UK nicotine pouch with spearmint flavour, 11mg strength, and 20 pouches per can.",
+      "pouchesPerCan": 20
+    },
+    {
+      "brandSlug": "zyn",
+      "name": "Coffee 11mg",
+      "slug": "zyn-coffee-11mg",
+      "flavor": "Coffee",
+      "flavorCategory": "coffee",
+      "strengthMg": 11,
+      "format": "slim",
+      "description": "Official ZYN UK nicotine pouch with coffee flavour, 11mg strength, and 20 pouches per can.",
+      "pouchesPerCan": 20
+    },
+    {
+      "brandSlug": "zyn",
+      "name": "Guava Spice 11mg",
+      "slug": "zyn-guava-spice-11mg",
+      "flavor": "Guava Spice",
+      "flavorCategory": "fruit",
+      "strengthMg": 11,
+      "format": "slim",
+      "description": "Official ZYN UK nicotine pouch with guava spice flavour, 11mg strength, and 20 pouches per can.",
+      "pouchesPerCan": 20
+    },
+    {
+      "brandSlug": "zyn",
+      "name": "Cool Mint 11mg",
+      "slug": "zyn-cool-mint-11mg",
+      "flavor": "Cool Mint",
+      "flavorCategory": "mint",
+      "strengthMg": 11,
+      "format": "slim",
+      "description": "Official ZYN UK nicotine pouch with cool mint flavour, 11mg strength, and 20 pouches per can.",
+      "pouchesPerCan": 20
+    },
+    {
+      "brandSlug": "zyn",
+      "name": "Blackcurrant Frost 13.5mg",
+      "slug": "zyn-blackcurrant-frost-13.5mg",
+      "flavor": "Blackcurrant Frost",
+      "flavorCategory": "fruit",
+      "strengthMg": 13.5,
+      "format": "slim",
+      "description": "Official ZYN UK nicotine pouch with blackcurrant frost flavour, 13.5mg strength, and 20 pouches per can.",
+      "pouchesPerCan": 20
+    },
+    {
+      "brandSlug": "zyn",
+      "name": "Menthol Ice 13.5mg",
+      "slug": "zyn-menthol-ice-13.5mg",
+      "flavor": "Menthol Ice",
+      "flavorCategory": "mint",
+      "strengthMg": 13.5,
+      "format": "slim",
+      "description": "Official ZYN UK nicotine pouch with menthol ice flavour, 13.5mg strength, and 20 pouches per can.",
+      "pouchesPerCan": 20
+    },
+    {
+      "brandSlug": "zyn",
+      "name": "Blueberry Frost 13.5mg",
+      "slug": "zyn-blueberry-frost-13.5mg",
+      "flavor": "Blueberry Frost",
+      "flavorCategory": "fruit",
+      "strengthMg": 13.5,
+      "format": "slim",
+      "description": "Official ZYN UK nicotine pouch with blueberry frost flavour, 13.5mg strength, and 20 pouches per can.",
+      "pouchesPerCan": 20
+    },
+    {
+      "brandSlug": "zyn",
+      "name": "Menthol Ice 16.5mg",
+      "slug": "zyn-menthol-ice-16.5mg",
+      "flavor": "Menthol Ice",
+      "flavorCategory": "mint",
+      "strengthMg": 16.5,
+      "format": "slim",
+      "description": "Official ZYN UK nicotine pouch with menthol ice flavour, 16.5mg strength, and 20 pouches per can.",
+      "pouchesPerCan": 20
+    },
+    {
+      "brandSlug": "velo",
+      "name": "Tangy Lime 6mg",
+      "slug": "velo-tangy-lime-6mg",
+      "flavor": "Tangy Lime",
+      "flavorCategory": "fruit",
+      "strengthMg": 6,
+      "format": "slim",
+      "description": "Official VELO UK nicotine pouch in tangy lime with 6mg strength.",
+      "pouchesPerCan": 15
+    },
+    {
+      "brandSlug": "velo",
+      "name": "Icy Berries 10mg",
+      "slug": "velo-icy-berries-10mg",
+      "flavor": "Icy Berries",
+      "flavorCategory": "fruit",
+      "strengthMg": 10,
+      "format": "slim",
+      "description": "Official VELO UK nicotine pouch in icy berries with 10mg strength.",
+      "pouchesPerCan": 20
+    },
+    {
+      "brandSlug": "velo",
+      "name": "Icy Berries 14mg",
+      "slug": "velo-icy-berries-14mg",
+      "flavor": "Icy Berries",
+      "flavorCategory": "fruit",
+      "strengthMg": 14,
+      "format": "slim",
+      "description": "Official VELO UK nicotine pouch in icy berries with 14mg strength.",
+      "pouchesPerCan": 20
+    },
+    {
+      "brandSlug": "velo",
+      "name": "Icy Berries 17mg",
+      "slug": "velo-icy-berries-17mg",
+      "flavor": "Icy Berries",
+      "flavorCategory": "fruit",
+      "strengthMg": 17,
+      "format": "slim",
+      "description": "Official VELO UK nicotine pouch in icy berries with 17mg strength.",
+      "pouchesPerCan": 20
+    },
+    {
+      "brandSlug": "velo",
+      "name": "Purple Grape Nano 6mg",
+      "slug": "velo-purple-grape-6mg",
+      "flavor": "Purple Grape",
+      "flavorCategory": "fruit",
+      "strengthMg": 6,
+      "format": "mini",
+      "description": "Official VELO UK nicotine pouch in purple grape with 6mg strength.",
+      "pouchesPerCan": 15
+    },
+    {
+      "brandSlug": "killa",
+      "name": "Grape Ice",
+      "slug": "killa-grape-ice",
+      "flavor": "Grape Ice",
+      "flavorCategory": "fruit",
+      "strengthMg": 12.8,
+      "format": "slim",
+      "description": "Official KILLA nicotine pouch in grape ice with 12.8mg nicotine per pouch and 20 pouches per can.",
+      "pouchesPerCan": 20
+    },
+    {
+      "brandSlug": "killa",
+      "name": "Mango Ice",
+      "slug": "killa-mango-ice",
+      "flavor": "Mango Ice",
+      "flavorCategory": "fruit",
+      "strengthMg": 12.8,
+      "format": "slim",
+      "description": "Official KILLA nicotine pouch in mango ice with 12.8mg nicotine per pouch and 20 pouches per can.",
+      "pouchesPerCan": 20
+    },
+    {
+      "brandSlug": "killa",
+      "name": "Cola Extreme",
+      "slug": "killa-cola-extreme",
+      "flavor": "Cola",
+      "flavorCategory": "other",
+      "strengthMg": 12.8,
+      "format": "slim",
+      "description": "Official KILLA nicotine pouch in cola with 12.8mg nicotine per pouch and 20 pouches per can.",
+      "pouchesPerCan": 20
+    },
+    {
+      "brandSlug": "cuba",
+      "name": "White Peach",
+      "slug": "cuba-white-peach",
+      "flavor": "Peach",
+      "flavorCategory": "fruit",
+      "strengthMg": 10.4,
+      "format": "slim",
+      "description": "Official Cuba nicotine pouch from Nicotobacco Factory with peach flavour and 10.4mg nicotine per pouch.",
+      "pouchesPerCan": 20
+    },
+    {
+      "brandSlug": "cuba",
+      "name": "White Forest Berries",
+      "slug": "cuba-white-forest-berries",
+      "flavor": "Forest Berries",
+      "flavorCategory": "fruit",
+      "strengthMg": 10.4,
+      "format": "slim",
+      "description": "Official Cuba nicotine pouch from Nicotobacco Factory with forest berries flavour and 10.4mg nicotine per pouch.",
+      "pouchesPerCan": 20
+    },
+    {
+      "brandSlug": "cuba",
+      "name": "White Cherry",
+      "slug": "cuba-white-cherry",
+      "flavor": "Cherry",
+      "flavorCategory": "fruit",
+      "strengthMg": 10.4,
+      "format": "slim",
+      "description": "Official Cuba nicotine pouch from Nicotobacco Factory with cherry flavour and 10.4mg nicotine per pouch.",
+      "pouchesPerCan": 20
+    },
+    {
+      "brandSlug": "cuba",
+      "name": "White Blueberry",
+      "slug": "cuba-white-blueberry",
+      "flavor": "Blueberry",
+      "flavorCategory": "fruit",
+      "strengthMg": 10.4,
+      "format": "slim",
+      "description": "Official Cuba nicotine pouch from Nicotobacco Factory with blueberry flavour and 10.4mg nicotine per pouch.",
+      "pouchesPerCan": 20
+    },
+    {
+      "brandSlug": "cuba",
+      "name": "White Grape",
+      "slug": "cuba-white-grape",
+      "flavor": "Grape",
+      "flavorCategory": "fruit",
+      "strengthMg": 10.4,
+      "format": "slim",
+      "description": "Official Cuba nicotine pouch from Nicotobacco Factory with grape flavour and 10.4mg nicotine per pouch.",
+      "pouchesPerCan": 20
+    },
+    {
+      "brandSlug": "cuba",
+      "name": "White Lollipop",
+      "slug": "cuba-white-lollipop",
+      "flavor": "Lollipop",
+      "flavorCategory": "other",
+      "strengthMg": 10.4,
+      "format": "slim",
+      "description": "Official Cuba nicotine pouch from Nicotobacco Factory with lollipop flavour and 10.4mg nicotine per pouch.",
+      "pouchesPerCan": 20
+    },
+    {
+      "brandSlug": "cuba",
+      "name": "Ninja Bubble Gum",
+      "slug": "cuba-ninja-bubble-gum",
+      "flavor": "Bubble Gum",
+      "flavorCategory": "other",
+      "strengthMg": 15.6,
+      "format": "slim",
+      "description": "Official Cuba nicotine pouch from Nicotobacco Factory with bubble gum flavour and 15.6mg nicotine per pouch.",
+      "pouchesPerCan": 25
+    },
+    {
+      "brandSlug": "cuba",
+      "name": "Ninja Ice Cool",
+      "slug": "cuba-ninja-ice-cool",
+      "flavor": "Ice Cool",
+      "flavorCategory": "mint",
+      "strengthMg": 15.6,
+      "format": "slim",
+      "description": "Official Cuba nicotine pouch from Nicotobacco Factory with ice cool flavour and 15.6mg nicotine per pouch.",
+      "pouchesPerCan": 25
+    }
+  ]
+}

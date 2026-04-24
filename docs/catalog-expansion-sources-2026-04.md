@@ -1,6 +1,12 @@
 # Catalog Expansion Sources — 2026-04
 
-This file documents the official or brand-operated sources used for the mainstream catalog expansion dataset in [data/catalog/mainstream-expansion-2026-04.json](/Users/cb/Downloads/pouchbase/data/catalog/mainstream-expansion-2026-04.json).
+This file documents the official or brand-operated sources used for the mainstream catalog expansion datasets in:
+
+- [mainstream-expansion-2026-04.json](/Users/cb/Downloads/pouchbase/data/catalog/mainstream-expansion-2026-04.json)
+- [mainstream-expansion-2026-04-batch2.json](/Users/cb/Downloads/pouchbase/data/catalog/mainstream-expansion-2026-04-batch2.json)
+- [mainstream-expansion-2026-04-big-six.json](/Users/cb/Downloads/pouchbase/data/catalog/mainstream-expansion-2026-04-big-six.json)
+- [mainstream-expansion-2026-04-iceberg-official.json](/Users/cb/Downloads/pouchbase/data/catalog/mainstream-expansion-2026-04-iceberg-official.json)
+- [mainstream-expansion-2026-04-batch3.json](/Users/cb/Downloads/pouchbase/data/catalog/mainstream-expansion-2026-04-batch3.json)
 
 ## Brand metadata
 
@@ -52,6 +58,67 @@ This file documents the official or brand-operated sources used for the mainstre
   - https://www.roguenicotine.com/products/pouches/nicotine-pouches-5-pack-apple
 - Skruf:
   - https://skruf.se/
+- Pablo:
+  - https://pablopouch.com/
+  - https://pablopouch.com/products.json?limit=250
+- Cuba:
+  - https://nicotobacco.eu/
+  - https://nicotobacco.eu/product/peach/
+  - https://nicotobacco.eu/product/forest-berries/
+  - https://nicotobacco.eu/product/cherry-2/
+  - https://nicotobacco.eu/product/blueberry/
+  - https://nicotobacco.eu/cuba-white/grape/
+  - https://nicotobacco.eu/cuba-white/lollipop-white/
+  - https://nicotobacco.eu/product/bubble-gum/
+  - https://nicotobacco.eu/collection/cuba-ninja/
+- Iceberg:
+  - https://icebergsnus.eu/
+  - https://icebergsnus.eu/iceberg/
+  - https://icebergsnus.eu/iceberg/page/2/
+  - https://icebergsnus.eu/iceberg/page/3/
+  - https://icebergsnus.eu/iceberg/page/4/
+- Additional ZYN UK product sourcing:
+  - https://www.zyn.com/gb/en/discover-zyn/buy-zyn.html
+- Additional XQS UK product sourcing:
+  - https://xqs.com/uk/
+  - https://xqs.com/uk/products/
+  - https://xqs.com/uk/store/
+  - https://xqs.com/uk/produkt/xqs-tropical-4mg-4-cans/
+  - https://xqs.com/uk/produkt/xqs-black-cherry-8mg-4-cans/
+  - https://xqs.com/uk/produkt/xqs-blueberry-mint-8mg-uk-4-cans/
+  - https://xqs.com/uk/produkt/xqs-citrus-cooling-8mg-4-cans/
+  - https://xqs.com/uk/produkt/xqs-raspberry-blackcurrant-8mg-4-cans/
+  - https://xqs.com/uk/produkt/xqs-strawberry-kiwi-8mg/
+- Additional XQS Europe product sourcing:
+  - https://xqs.com/europe/produkt/twin-apple-light-xqs-nicotine-pouches/
+  - https://xqs.com/europe/produkt/cactus-sour-light-xqs-nicotine-pouches/
+  - https://xqs.com/europe/produkt/cactus-sour-strong-xqs-nicotine-pouches/
+  - https://xqs.com/europe/produkt/blueberry-mint-light-xqs-nicotine-pouches/
+  - https://xqs.com/europe/produkt/black-cherry-light-xqs-nicotine-pouches/
+  - https://xqs.com/europe/produkt/fizzy-cola-4mg-light/
+  - https://xqs.com/europe/produkt/fizzy-cola-strong/
+- Additional Nordic Spirit product sourcing:
+  - https://www.nordicspirit.com/fr-fr/a-propos
+  - https://www.nordicspirit.com/fr-fr/nos-gouts
+  - https://www.nordicspirit.com/fr-fr/catalogue/produits/sachets-nicotine-menthe-fraiche-modere
+  - https://www.nordicspirit.com/fr-fr/catalogue/produits/sachets-nicotine-menthe-fraiche-forte
+  - https://www.nordicspirit.com/fr-fr/catalogue/produits/sachets-nicotine-menthe-fraiche-intense
+  - https://www.nordicspirit.com/fr-fr/catalogue/produits/sachets-nicotine-menthe-givree-forte
+  - https://www.nordicspirit.com/fr-fr/catalogue/produits/sachets-nicotine-menthe-givree-intense
+  - https://www.nordicspirit.com/fr-fr/catalogue/produits/sachets-nicotine-fruits-rouges-givres
+- Additional VELO UK product sourcing:
+  - https://www.velo.com/gb/en/our-products/product/tangy-lime
+  - https://www.velo.com/gb/en/our-products/product/icy-berries
+  - https://www.velo.com/gb/en/our-products/product/bright-spearmint
+  - https://www.velo.com/gb/en/our-products/product/watermelon-ice
+  - https://www.velo.com/gb/en/original-nicotine-pouches/product/freezing-peppermint
+  - https://www.velo.com/gb/en/our-products/product/peppermint-storm
+  - https://www.velo.com/gb/en/index-universe-0/product/purple-grape-nano
+- Additional KILLA sourcing:
+  - https://killapods.eu/
+  - https://killapods.eu/product/killa-grape-ice/
+  - https://killapods.eu/product/killa_mango_ice/
+  - https://killapods.eu/product/killa-cola-extreme/
 
 ## Product sourcing approach
 
@@ -63,10 +130,19 @@ This file documents the official or brand-operated sources used for the mainstre
 - Lucy pouch variants were added from the official pouch product page plus the official Lucy help article confirming the 4mg, 8mg, and 12mg strength bands.
 - ZONE products were added from official UK product pages that expose strength, slim format, and 20-pouch count.
 - Rogue products were added from official Rogue pouch pages and product listings that expose 3mg/6mg strengths and 20-pouch can counts.
+- Pablo products were expanded from the official `pablopouch.com` Shopify catalogue feed, which exposes the current official Pablo flavor and strength combinations.
+- Cuba products were expanded from official Nicotobacco Factory product and collection pages covering Cuba White and Cuba Ninja.
+- ZYN UK products were expanded from the official `buy-zyn` page's embedded product list.
+- VELO UK additions were limited to products whose official pages clearly exposed the live strength and size combinations.
+- KILLA additions were limited to official Killapods product pages surfaced through the brand's indexed product URLs.
+- Iceberg products were expanded from the official `icebergsnus.eu` category pages and individual product pages where nicotine values were exposed clearly enough to import conservatively.
+- XQS products were expanded again from the current official UK store and selected official UK and Europe product pages where flavour, pouch count, and nicotine strength were explicit.
+- Nordic Spirit products were expanded from the current official French product catalogue, product pages, and brand information pages that expose the active flavour lineup, pouch count, and nicotine intensities.
 
 ## Curation rules used
 
 - Only official or brand-operated domains were used.
 - Only products with sufficiently explicit flavor, strength, and format details were added.
 - If product sizing or nicotine-per-pouch mapping was ambiguous, the row was omitted rather than guessed.
+- A small number of Iceberg product pages were intentionally omitted when the official page exposed flavor and strength naming but not a dependable nicotine value.
 - Existing routes and slugs were preserved unless a current row could be safely corrected without breaking public path structure.

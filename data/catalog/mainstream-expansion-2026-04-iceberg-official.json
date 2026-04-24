@@ -1,0 +1,543 @@
+{
+  "brands": [
+    {
+      "name": "Iceberg",
+      "slug": "iceberg",
+      "websiteUrl": "https://icebergsnus.eu/",
+      "logoUrl": "https://cdnslyoneglobal-218bc.kxcdn.com/wp-content/uploads/2024/08/Icebergsnus.eu-logo-gta-style.png",
+      "description": "High-strength nicotine pouch brand with a broad candy, fruit, cola, and mint range across classic and extreme profiles."
+    }
+  ],
+  "products": [
+    {
+      "brandSlug": "iceberg",
+      "name": "Apple Lemon Pineapple Extreme 30mg/g",
+      "flavor": "Apple Lemon Pineapple",
+      "flavorCategory": "fruit",
+      "strengthMg": 30,
+      "format": "slim",
+      "pouchesPerCan": 20,
+      "description": "Official Iceberg nicotine pouch in apple lemon pineapple with 30mg/g nicotine strength."
+    },
+    {
+      "brandSlug": "iceberg",
+      "name": "Arasaka Extreme 30mg/g",
+      "flavor": "Arasaka",
+      "flavorCategory": "other",
+      "strengthMg": 30,
+      "format": "slim",
+      "pouchesPerCan": 20,
+      "description": "Official Iceberg nicotine pouch in arasaka with 30mg/g nicotine strength."
+    },
+    {
+      "brandSlug": "iceberg",
+      "name": "Arasaka Medium 12mg/g",
+      "flavor": "Arasaka",
+      "flavorCategory": "other",
+      "strengthMg": 12,
+      "format": "slim",
+      "pouchesPerCan": 20,
+      "description": "Official Iceberg nicotine pouch in arasaka with 12mg/g nicotine strength."
+    },
+    {
+      "brandSlug": "iceberg",
+      "name": "Berries Extreme 30mg/g",
+      "flavor": "Berries",
+      "flavorCategory": "fruit",
+      "strengthMg": 30,
+      "format": "slim",
+      "pouchesPerCan": 20,
+      "description": "Official Iceberg nicotine pouch in berries with 30mg/g nicotine strength."
+    },
+    {
+      "brandSlug": "iceberg",
+      "name": "Black Extreme 30mg/g",
+      "flavor": "Black",
+      "flavorCategory": "other",
+      "strengthMg": 30,
+      "format": "slim",
+      "pouchesPerCan": 20,
+      "description": "Official Iceberg nicotine pouch in black with 30mg/g nicotine strength."
+    },
+    {
+      "brandSlug": "iceberg",
+      "name": "Black Medium 12mg/g",
+      "flavor": "Black",
+      "flavorCategory": "other",
+      "strengthMg": 12,
+      "format": "slim",
+      "pouchesPerCan": 20,
+      "description": "Official Iceberg nicotine pouch in black with 12mg/g nicotine strength."
+    },
+    {
+      "brandSlug": "iceberg",
+      "name": "Blueberry 20mg/g",
+      "flavor": "Blueberry",
+      "flavorCategory": "fruit",
+      "strengthMg": 20,
+      "format": "slim",
+      "pouchesPerCan": 20,
+      "description": "Official Iceberg nicotine pouch in blueberry with 20mg/g nicotine strength."
+    },
+    {
+      "brandSlug": "iceberg",
+      "name": "Bubble Gum 20mg/g",
+      "flavor": "Bubble Gum",
+      "flavorCategory": "fruit",
+      "strengthMg": 20,
+      "format": "slim",
+      "pouchesPerCan": 20,
+      "description": "Official Iceberg nicotine pouch in bubble gum with 20mg/g nicotine strength."
+    },
+    {
+      "brandSlug": "iceberg",
+      "name": "Bubblegum Extreme 30mg/g",
+      "flavor": "Bubblegum",
+      "flavorCategory": "fruit",
+      "strengthMg": 30,
+      "format": "slim",
+      "pouchesPerCan": 20,
+      "description": "Official Iceberg nicotine pouch in bubblegum with 30mg/g nicotine strength."
+    },
+    {
+      "brandSlug": "iceberg",
+      "name": "Cherry 50mg/g",
+      "flavor": "Cherry",
+      "flavorCategory": "fruit",
+      "strengthMg": 50,
+      "format": "slim",
+      "pouchesPerCan": 20,
+      "description": "Official Iceberg nicotine pouch in cherry with 50mg/g nicotine strength."
+    },
+    {
+      "brandSlug": "iceberg",
+      "name": "Cherry Apricot Gum Extreme 30mg/g",
+      "flavor": "Cherry Apricot Gum",
+      "flavorCategory": "fruit",
+      "strengthMg": 30,
+      "format": "slim",
+      "pouchesPerCan": 20,
+      "description": "Official Iceberg nicotine pouch in cherry apricot gum with 30mg/g nicotine strength."
+    },
+    {
+      "brandSlug": "iceberg",
+      "name": "Cherry Apricot Gum Strong 12mg/g",
+      "flavor": "Cherry Apricot Gum",
+      "flavorCategory": "fruit",
+      "strengthMg": 12,
+      "format": "slim",
+      "pouchesPerCan": 20,
+      "description": "Official Iceberg nicotine pouch in cherry apricot gum with 12mg/g nicotine strength."
+    },
+    {
+      "brandSlug": "iceberg",
+      "name": "Coco Jambo Extreme 30mg/g",
+      "flavor": "Coco Jambo",
+      "flavorCategory": "fruit",
+      "strengthMg": 30,
+      "format": "slim",
+      "pouchesPerCan": 20,
+      "description": "Official Iceberg nicotine pouch in coco jambo with 30mg/g nicotine strength."
+    },
+    {
+      "brandSlug": "iceberg",
+      "name": "Cola 20mg/g",
+      "flavor": "Cola",
+      "flavorCategory": "fruit",
+      "strengthMg": 20,
+      "format": "slim",
+      "pouchesPerCan": 20,
+      "description": "Official Iceberg nicotine pouch in cola with 20mg/g nicotine strength."
+    },
+    {
+      "brandSlug": "iceberg",
+      "name": "Cola Strong 50mg/g",
+      "flavor": "Cola",
+      "flavorCategory": "fruit",
+      "strengthMg": 50,
+      "format": "slim",
+      "pouchesPerCan": 20,
+      "description": "Official Iceberg nicotine pouch in cola with 50mg/g nicotine strength."
+    },
+    {
+      "brandSlug": "iceberg",
+      "name": "COOL MINT 20mg/g",
+      "flavor": "COOL MINT",
+      "flavorCategory": "mint",
+      "strengthMg": 20,
+      "format": "slim",
+      "pouchesPerCan": 20,
+      "description": "Official Iceberg nicotine pouch in cool mint with 20mg/g nicotine strength."
+    },
+    {
+      "brandSlug": "iceberg",
+      "name": "Crazy Mix Extreme 30mg/g",
+      "flavor": "Crazy Mix",
+      "flavorCategory": "other",
+      "strengthMg": 30,
+      "format": "slim",
+      "pouchesPerCan": 20,
+      "description": "Official Iceberg nicotine pouch in crazy mix with 30mg/g nicotine strength."
+    },
+    {
+      "brandSlug": "iceberg",
+      "name": "Double Apple Extreme 30mg/g",
+      "flavor": "Double Apple",
+      "flavorCategory": "fruit",
+      "strengthMg": 30,
+      "format": "slim",
+      "pouchesPerCan": 20,
+      "description": "Official Iceberg nicotine pouch in double apple with 30mg/g nicotine strength."
+    },
+    {
+      "brandSlug": "iceberg",
+      "name": "Double Mint Extreme 30mg/g",
+      "flavor": "Double Mint",
+      "flavorCategory": "mint",
+      "strengthMg": 30,
+      "format": "slim",
+      "pouchesPerCan": 20,
+      "description": "Official Iceberg nicotine pouch in double mint with 30mg/g nicotine strength."
+    },
+    {
+      "brandSlug": "iceberg",
+      "name": "Dragon Fire Extreme 30mg/g",
+      "flavor": "Dragon Fire",
+      "flavorCategory": "fruit",
+      "strengthMg": 30,
+      "format": "slim",
+      "pouchesPerCan": 20,
+      "description": "Official Iceberg nicotine pouch in dragon fire with 30mg/g nicotine strength."
+    },
+    {
+      "brandSlug": "iceberg",
+      "name": "Dragon Fruit Extreme 30mg/g",
+      "flavor": "Dragon Fruit",
+      "flavorCategory": "fruit",
+      "strengthMg": 30,
+      "format": "slim",
+      "pouchesPerCan": 20,
+      "description": "Official Iceberg nicotine pouch in dragon fruit with 30mg/g nicotine strength."
+    },
+    {
+      "brandSlug": "iceberg",
+      "name": "Emerald Extreme 30mg/g",
+      "flavor": "Emerald",
+      "flavorCategory": "other",
+      "strengthMg": 30,
+      "format": "slim",
+      "pouchesPerCan": 20,
+      "description": "Official Iceberg nicotine pouch in emerald with 30mg/g nicotine strength."
+    },
+    {
+      "brandSlug": "iceberg",
+      "name": "Energy Extreme 30mg/g",
+      "flavor": "Energy",
+      "flavorCategory": "other",
+      "strengthMg": 30,
+      "format": "slim",
+      "pouchesPerCan": 20,
+      "description": "Official Iceberg nicotine pouch in energy with 30mg/g nicotine strength."
+    },
+    {
+      "brandSlug": "iceberg",
+      "name": "Energy Mango Extreme 30mg/g",
+      "flavor": "Energy Mango",
+      "flavorCategory": "fruit",
+      "strengthMg": 30,
+      "format": "slim",
+      "pouchesPerCan": 20,
+      "description": "Official Iceberg nicotine pouch in energy mango with 30mg/g nicotine strength."
+    },
+    {
+      "brandSlug": "iceberg",
+      "name": "Freeze 20mg/g",
+      "flavor": "Freeze",
+      "flavorCategory": "mint",
+      "strengthMg": 20,
+      "format": "slim",
+      "pouchesPerCan": 20,
+      "description": "Official Iceberg nicotine pouch in freeze with 20mg/g nicotine strength."
+    },
+    {
+      "brandSlug": "iceberg",
+      "name": "Frosty Mint Strong 50mg/g",
+      "flavor": "Frosty Mint",
+      "flavorCategory": "mint",
+      "strengthMg": 50,
+      "format": "slim",
+      "pouchesPerCan": 20,
+      "description": "Official Iceberg nicotine pouch in frosty mint with 50mg/g nicotine strength."
+    },
+    {
+      "brandSlug": "iceberg",
+      "name": "Grape 50mg/g",
+      "flavor": "Grape",
+      "flavorCategory": "fruit",
+      "strengthMg": 50,
+      "format": "slim",
+      "pouchesPerCan": 20,
+      "description": "Official Iceberg nicotine pouch in grape with 50mg/g nicotine strength."
+    },
+    {
+      "brandSlug": "iceberg",
+      "name": "Grape Gum Extreme 30mg/g",
+      "flavor": "Grape Gum",
+      "flavorCategory": "fruit",
+      "strengthMg": 30,
+      "format": "slim",
+      "pouchesPerCan": 20,
+      "description": "Official Iceberg nicotine pouch in grape gum with 30mg/g nicotine strength."
+    },
+    {
+      "brandSlug": "iceberg",
+      "name": "Grape Gum Strong 12mg/g",
+      "flavor": "Grape Gum",
+      "flavorCategory": "fruit",
+      "strengthMg": 12,
+      "format": "slim",
+      "pouchesPerCan": 20,
+      "description": "Official Iceberg nicotine pouch in grape gum with 12mg/g nicotine strength."
+    },
+    {
+      "brandSlug": "iceberg",
+      "name": "Guava Lime Extreme 30mg/g",
+      "flavor": "Guava Lime",
+      "flavorCategory": "fruit",
+      "strengthMg": 30,
+      "format": "slim",
+      "pouchesPerCan": 20,
+      "description": "Official Iceberg nicotine pouch in guava lime with 30mg/g nicotine strength."
+    },
+    {
+      "brandSlug": "iceberg",
+      "name": "Gummy Bears Extreme 30mg/g",
+      "flavor": "Gummy Bears",
+      "flavorCategory": "fruit",
+      "strengthMg": 30,
+      "format": "slim",
+      "pouchesPerCan": 20,
+      "description": "Official Iceberg nicotine pouch in gummy bears with 30mg/g nicotine strength."
+    },
+    {
+      "brandSlug": "iceberg",
+      "name": "Kiwi Strawberry Extreme 30mg/g",
+      "flavor": "Kiwi Strawberry",
+      "flavorCategory": "fruit",
+      "strengthMg": 30,
+      "format": "slim",
+      "pouchesPerCan": 20,
+      "description": "Official Iceberg nicotine pouch in kiwi strawberry with 30mg/g nicotine strength."
+    },
+    {
+      "brandSlug": "iceberg",
+      "name": "Kiwi Strawberry Medium 12mg/g",
+      "flavor": "Kiwi Strawberry",
+      "flavorCategory": "fruit",
+      "strengthMg": 12,
+      "format": "slim",
+      "pouchesPerCan": 20,
+      "description": "Official Iceberg nicotine pouch in kiwi strawberry with 12mg/g nicotine strength."
+    },
+    {
+      "brandSlug": "iceberg",
+      "name": "Mango Banana Extreme 30mg/g",
+      "flavor": "Mango Banana",
+      "flavorCategory": "fruit",
+      "strengthMg": 30,
+      "format": "slim",
+      "pouchesPerCan": 20,
+      "description": "Official Iceberg nicotine pouch in mango banana with 30mg/g nicotine strength."
+    },
+    {
+      "brandSlug": "iceberg",
+      "name": "Mango Banana Medium 12mg/g",
+      "flavor": "Mango Banana",
+      "flavorCategory": "fruit",
+      "strengthMg": 12,
+      "format": "slim",
+      "pouchesPerCan": 20,
+      "description": "Official Iceberg nicotine pouch in mango banana with 12mg/g nicotine strength."
+    },
+    {
+      "brandSlug": "iceberg",
+      "name": "Melon Peach Extreme 30mg/g",
+      "flavor": "Melon Peach",
+      "flavorCategory": "fruit",
+      "strengthMg": 30,
+      "format": "slim",
+      "pouchesPerCan": 20,
+      "description": "Official Iceberg nicotine pouch in melon peach with 30mg/g nicotine strength."
+    },
+    {
+      "brandSlug": "iceberg",
+      "name": "Menthol Extreme 30mg/g",
+      "flavor": "Menthol",
+      "flavorCategory": "mint",
+      "strengthMg": 30,
+      "format": "slim",
+      "pouchesPerCan": 20,
+      "description": "Official Iceberg nicotine pouch in menthol with 30mg/g nicotine strength."
+    },
+    {
+      "brandSlug": "iceberg",
+      "name": "Ninja Orange Extreme 30mg/g",
+      "flavor": "Ninja Orange",
+      "flavorCategory": "fruit",
+      "strengthMg": 30,
+      "format": "slim",
+      "pouchesPerCan": 20,
+      "description": "Official Iceberg nicotine pouch in ninja orange with 30mg/g nicotine strength."
+    },
+    {
+      "brandSlug": "iceberg",
+      "name": "Pineapple Coconut Mango Extreme 30mg/g",
+      "flavor": "Pineapple Coconut Mango",
+      "flavorCategory": "fruit",
+      "strengthMg": 30,
+      "format": "slim",
+      "pouchesPerCan": 20,
+      "description": "Official Iceberg nicotine pouch in pineapple coconut mango with 30mg/g nicotine strength."
+    },
+    {
+      "brandSlug": "iceberg",
+      "name": "Pineapple Extreme 30mg/g",
+      "flavor": "Pineapple",
+      "flavorCategory": "fruit",
+      "strengthMg": 30,
+      "format": "slim",
+      "pouchesPerCan": 20,
+      "description": "Official Iceberg nicotine pouch in pineapple with 30mg/g nicotine strength."
+    },
+    {
+      "brandSlug": "iceberg",
+      "name": "Raspberry Gum Extreme 30mg/g",
+      "flavor": "Raspberry Gum",
+      "flavorCategory": "fruit",
+      "strengthMg": 30,
+      "format": "slim",
+      "pouchesPerCan": 20,
+      "description": "Official Iceberg nicotine pouch in raspberry gum with 30mg/g nicotine strength."
+    },
+    {
+      "brandSlug": "iceberg",
+      "name": "Raspberry Gum Strong 12mg/g",
+      "flavor": "Raspberry Gum",
+      "flavorCategory": "fruit",
+      "strengthMg": 12,
+      "format": "slim",
+      "pouchesPerCan": 20,
+      "description": "Official Iceberg nicotine pouch in raspberry gum with 12mg/g nicotine strength."
+    },
+    {
+      "brandSlug": "iceberg",
+      "name": "Sour Berries Extreme 30mg/g",
+      "flavor": "Sour Berries",
+      "flavorCategory": "fruit",
+      "strengthMg": 30,
+      "format": "slim",
+      "pouchesPerCan": 20,
+      "description": "Official Iceberg nicotine pouch in sour berries with 30mg/g nicotine strength."
+    },
+    {
+      "brandSlug": "iceberg",
+      "name": "Strawberry Banana Gum Extreme 30mg/g",
+      "flavor": "Strawberry Banana Gum",
+      "flavorCategory": "fruit",
+      "strengthMg": 30,
+      "format": "slim",
+      "pouchesPerCan": 20,
+      "description": "Official Iceberg nicotine pouch in strawberry banana gum with 30mg/g nicotine strength."
+    },
+    {
+      "brandSlug": "iceberg",
+      "name": "Strawberry Mango Gum Extreme 30mg/g",
+      "flavor": "Strawberry Mango Gum",
+      "flavorCategory": "fruit",
+      "strengthMg": 30,
+      "format": "slim",
+      "pouchesPerCan": 20,
+      "description": "Official Iceberg nicotine pouch in strawberry mango gum with 30mg/g nicotine strength."
+    },
+    {
+      "brandSlug": "iceberg",
+      "name": "Strawberry Mango Gum Strong 12mg/g",
+      "flavor": "Strawberry Mango Gum",
+      "flavorCategory": "fruit",
+      "strengthMg": 12,
+      "format": "slim",
+      "pouchesPerCan": 20,
+      "description": "Official Iceberg nicotine pouch in strawberry mango gum with 12mg/g nicotine strength."
+    },
+    {
+      "brandSlug": "iceberg",
+      "name": "Strawberry Pomegranate Extreme 30mg/g",
+      "flavor": "Strawberry Pomegranate",
+      "flavorCategory": "fruit",
+      "strengthMg": 30,
+      "format": "slim",
+      "pouchesPerCan": 20,
+      "description": "Official Iceberg nicotine pouch in strawberry pomegranate with 30mg/g nicotine strength."
+    },
+    {
+      "brandSlug": "iceberg",
+      "name": "Sweet Mint Extreme 30mg/g",
+      "flavor": "Sweet Mint",
+      "flavorCategory": "mint",
+      "strengthMg": 30,
+      "format": "slim",
+      "pouchesPerCan": 20,
+      "description": "Official Iceberg nicotine pouch in sweet mint with 30mg/g nicotine strength."
+    },
+    {
+      "brandSlug": "iceberg",
+      "name": "Watermeloen 20mg/g",
+      "flavor": "Watermeloen",
+      "flavorCategory": "fruit",
+      "strengthMg": 20,
+      "format": "slim",
+      "pouchesPerCan": 20,
+      "description": "Official Iceberg nicotine pouch in watermeloen with 20mg/g nicotine strength."
+    },
+    {
+      "brandSlug": "iceberg",
+      "name": "Watermelon Lime Extreme 30mg/g",
+      "flavor": "Watermelon Lime",
+      "flavorCategory": "fruit",
+      "strengthMg": 30,
+      "format": "slim",
+      "pouchesPerCan": 20,
+      "description": "Official Iceberg nicotine pouch in watermelon lime with 30mg/g nicotine strength."
+    },
+    {
+      "brandSlug": "iceberg",
+      "name": "Watermelon Mint Gum Extreme 30mg/g",
+      "flavor": "Watermelon Mint Gum",
+      "flavorCategory": "mint",
+      "strengthMg": 30,
+      "format": "slim",
+      "pouchesPerCan": 20,
+      "description": "Official Iceberg nicotine pouch in watermelon mint gum with 30mg/g nicotine strength."
+    },
+    {
+      "brandSlug": "iceberg",
+      "name": "Watermelon Mint Gum Strong 12mg/g",
+      "flavor": "Watermelon Mint Gum",
+      "flavorCategory": "mint",
+      "strengthMg": 12,
+      "format": "slim",
+      "pouchesPerCan": 20,
+      "description": "Official Iceberg nicotine pouch in watermelon mint gum with 12mg/g nicotine strength."
+    },
+    {
+      "brandSlug": "iceberg",
+      "name": "Wild Berries Extreme 30mg/g",
+      "flavor": "Wild Berries",
+      "flavorCategory": "fruit",
+      "strengthMg": 30,
+      "format": "slim",
+      "pouchesPerCan": 20,
+      "description": "Official Iceberg nicotine pouch in wild berries with 30mg/g nicotine strength."
+    }
+  ]
+}
