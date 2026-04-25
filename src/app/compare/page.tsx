@@ -63,7 +63,7 @@ export default async function ComparePage({ searchParams }: Props) {
         eyebrow="Comparison"
         title="Head-to-head pouch comparison."
         description="Compare two products side by side across burn, nicotine, structured ratings, review depth, and retailer price context where available."
-        meta="Shareable URL state via query params"
+        meta="Share this comparison from your browser URL."
       />
 
       <ComparePicker products={allProducts} leftSlug={params.left} rightSlug={params.right} />

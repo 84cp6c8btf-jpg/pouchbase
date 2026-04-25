@@ -54,7 +54,6 @@ export default async function BrandDetailPage({ params }: Props) {
     .from("products")
     .select(PRODUCT_WITH_BRAND_SELECT)
     .eq("brand_id", brand.id)
-    .eq("is_active", true)
     .order("nicotine_mg", { ascending: false });
 
   const brandProducts = sortProductsByReviewSignal(applyProductsDerivedDefaults(products as ProductWithBrand[]));

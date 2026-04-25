@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { PouchesPageClient } from "./_components/PouchesPageClient";
 
 export const metadata: Metadata = {
@@ -10,5 +11,9 @@ export const metadata: Metadata = {
 };
 
 export default function PouchesPage() {
-  return <PouchesPageClient />;
+  return (
+    <Suspense fallback={<div className="h-96 animate-pulse rounded-xl border border-white/6 bg-white/[0.03]" />}>
+      <PouchesPageClient />
+    </Suspense>
+  );
 }

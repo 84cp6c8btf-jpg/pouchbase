@@ -35,10 +35,10 @@ export function Footer() {
           <div>
             <h3 className="mb-3 text-sm font-semibold text-white/60">By Flavor</h3>
             <ul className="space-y-2 text-sm text-white/48">
-              <li><Link href="/pouches?category=mint" className="transition hover:text-white">Mint</Link></li>
-              <li><Link href="/pouches?category=fruit" className="transition hover:text-white">Fruit</Link></li>
-              <li><Link href="/pouches?category=coffee" className="transition hover:text-white">Coffee</Link></li>
-              <li><Link href="/pouches?category=tobacco" className="transition hover:text-white">Tobacco</Link></li>
+              <li><Link href="/pouches?flavor_family=mint" className="transition hover:text-white">Mint</Link></li>
+              <li><Link href="/pouches?flavor_family=fruit" className="transition hover:text-white">Fruit</Link></li>
+              <li><Link href="/pouches?flavor_family=coffee" className="transition hover:text-white">Coffee</Link></li>
+              <li><Link href="/pouches?flavor_family=tobacco" className="transition hover:text-white">Tobacco</Link></li>
             </ul>
           </div>
 

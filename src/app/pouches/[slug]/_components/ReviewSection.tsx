@@ -38,11 +38,20 @@ export function ReviewSection({ productId }: ReviewSectionProps) {
   const existingReview = user ? reviews.find((review) => review.user_id === user.id) || null : null;
 
   const fetchReviews = useCallback(async () => {
-    const { data } = await supabase
+    setLoading(true);
+    const { data, error } = await supabase
       .from("reviews")
       .select("*, profiles(display_name)")
       .eq("product_id", productId)
       .order("created_at", { ascending: false });
+
+    if (error) {
+      setErrorMessage(`Could not load reviews: ${error.message}`);
+      setReviews([]);
+      setLoading(false);
+      return;
+    }
+
     setReviews((data as typeof reviews) || []);
     setLoading(false);
   }, [productId]);
@@ -100,35 +109,62 @@ export function ReviewSection({ productId }: ReviewSectionProps) {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!user) return;
+    if (!user) {
+      setErrorMessage("You need to be signed in to publish a review.");
+      return;
+    }
     setSubmitting(true);
     setErrorMessage(null);
     setStatusMessage(null);
 
-    const { error } = await supabase.from("reviews").upsert(
-      {
-        product_id: productId,
-        user_id: user.id,
-        burn_rating: burn,
-        flavor_accuracy_rating: flavor,
-        nicotine_feel_rating: nicotineFeel,
-        comfort_rating: comfort,
-        longevity_rating: longevity,
-        value_rating: value,
-        review_text: text || null,
-      },
-      {
-        onConflict: "product_id,user_id",
-      }
+    const {
+      data: { user: currentUser },
+      error: userError,
+    } = await supabase.auth.getUser();
+
+    if (userError || !currentUser) {
+      setErrorMessage(userError?.message || "Your session expired. Please sign in again.");
+      setSubmitting(false);
+      return;
+    }
+
+    const { error: profileError } = await supabase.from("profiles").upsert(
+      { user_id: currentUser.id },
+      { onConflict: "user_id" }
     );
 
-    if (!error) {
+    if (profileError) {
+      setErrorMessage(`Could not prepare your reviewer profile: ${profileError.message}`);
+      setSubmitting(false);
+      return;
+    }
+
+    const reviewPayload = {
+      product_id: productId,
+      user_id: currentUser.id,
+      burn_rating: burn,
+      flavor_accuracy_rating: flavor,
+      nicotine_feel_rating: nicotineFeel,
+      comfort_rating: comfort,
+      longevity_rating: longevity,
+      value_rating: value,
+      review_text: text.trim() || null,
+    };
+
+    const { error } = await supabase
+      .from("reviews")
+      .upsert(reviewPayload, { onConflict: "product_id,user_id" })
+      .select("id")
+      .single();
+
+    if (error) {
+      setErrorMessage(`Could not publish your review: ${error.message}`);
+    } else {
+      setUser({ id: currentUser.id });
       await fetchReviews();
       router.refresh();
       setShowForm(false);
       setStatusMessage(existingReview ? "Your review was updated." : "Your review was published.");
-    } else {
-      setErrorMessage(error.message);
     }
 
     setSubmitting(false);

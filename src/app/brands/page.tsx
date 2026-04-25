@@ -42,8 +42,7 @@ export default async function BrandsPage() {
     supabase.from("brands").select("id, name, slug, country_origin, description, logo_url, website_url").eq("is_active", true).order("name"),
     supabase
       .from("products")
-      .select("brand_id, slug, name, nicotine_mg, strength_mg:nicotine_mg")
-      .eq("is_active", true),
+      .select("brand_id, slug, name, nicotine_mg, strength_mg:nicotine_mg"),
   ]);
 
   const productRows = applyProductsDerivedDefaults(products as unknown as BrandProductRow[]);

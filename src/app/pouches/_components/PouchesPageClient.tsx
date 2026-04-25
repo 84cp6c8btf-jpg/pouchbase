@@ -6,6 +6,7 @@ import { Product, FLAVOR_CATEGORIES, applyProductsDerivedDefaults } from "@/lib/
 import { ProductCard } from "@/components/catalog/ProductCard";
 import { Flame, Search, SlidersHorizontal, X } from "lucide-react";
 import { PageIntro } from "@/components/common/PageIntro";
+import { useSearchParams } from "next/navigation";
 import {
   MIN_PUBLIC_SCORE_REVIEWS,
   compareScoreStates,
@@ -18,12 +19,18 @@ type SortOption = "overall" | "burn" | "strength" | "reviews" | "newest" | "name
 type SignalFilter = "all" | "public" | "early" | "none";
 
 export function PouchesPageClient() {
+  const searchParams = useSearchParams();
+  const initialFlavorFamily = searchParams.get("flavor_family") || searchParams.get("category") || "";
   const [products, setProducts] = useState<Product[]>([]);
   const [brands, setBrands] = useState<{ id: string; name: string; slug: string }[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [selectedBrand, setSelectedBrand] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState(() =>
+    FLAVOR_CATEGORIES.includes(initialFlavorFamily as (typeof FLAVOR_CATEGORIES)[number])
+      ? initialFlavorFamily
+      : ""
+  );
   const [selectedBurnMin, setSelectedBurnMin] = useState(0);
   const [selectedSignal, setSelectedSignal] = useState<SignalFilter>("all");
   const [sortBy, setSortBy] = useState<SortOption>("reviews");
