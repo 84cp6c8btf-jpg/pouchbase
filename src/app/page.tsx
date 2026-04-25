@@ -8,15 +8,13 @@ import { BurnVsStrengthMap } from "@/components/burn/BurnVsStrengthMap";
 import { ProductCard } from "@/components/catalog/ProductCard";
 import { ReviewSignalSection } from "@/components/catalog/ReviewSignalSection";
 import { TrustDisclosure } from "@/components/common/TrustDisclosure";
-import { WeeklyPollCard } from "@/components/polls/WeeklyPollCard";
-import { MIN_PUBLIC_SCORE_REVIEWS } from "@/lib/catalog/burn";
 import { getBrand, type ProductWithBrand } from "@/lib/catalog/discovery";
 import { PRODUCT_WITH_BRAND_SELECT } from "@/lib/catalog/selects";
 import {
   getProductsWithAnyReviews,
   sortProductsByAdjustedMetric,
 } from "@/lib/catalog/intelligence";
-import { getActiveWeeklyPoll } from "@/lib/polls";
+import { applyProductsDerivedDefaults } from "@/lib/types";
 
 export const metadata: Metadata = {
   alternates: {
@@ -30,42 +28,42 @@ async function getTopProducts() {
   const { data } = await supabase
     .from("products")
     .select(PRODUCT_WITH_BRAND_SELECT)
-    .gte("review_count", MIN_PUBLIC_SCORE_REVIEWS)
-    .order("review_count", { ascending: false })
+    .eq("is_active", true)
+    .order("created_at", { ascending: false })
     .limit(80);
-  return sortProductsByAdjustedMetric((data || []) as ProductWithBrand[], "avg_overall", "higher").slice(0, 6);
+  return sortProductsByAdjustedMetric(applyProductsDerivedDefaults(data as ProductWithBrand[]), "avg_overall", "higher").slice(0, 6);
 }
 
 async function getHighestBurn() {
   const { data } = await supabase
     .from("products")
     .select(PRODUCT_WITH_BRAND_SELECT)
-    .gte("review_count", MIN_PUBLIC_SCORE_REVIEWS)
-    .order("review_count", { ascending: false })
+    .eq("is_active", true)
+    .order("created_at", { ascending: false })
     .limit(80);
-  return sortProductsByAdjustedMetric((data || []) as ProductWithBrand[], "avg_burn", "higher").slice(0, 3);
+  return sortProductsByAdjustedMetric(applyProductsDerivedDefaults(data as ProductWithBrand[]), "avg_burn", "higher").slice(0, 3);
 }
 
 async function getBurnPool() {
   const { data } = await supabase
     .from("products")
     .select(PRODUCT_WITH_BRAND_SELECT)
-    .gte("review_count", MIN_PUBLIC_SCORE_REVIEWS)
-    .order("review_count", { ascending: false })
+    .eq("is_active", true)
+    .order("created_at", { ascending: false })
     .limit(120);
 
-  return (data || []) as ProductWithBrand[];
+  return applyProductsDerivedDefaults(data as ProductWithBrand[]);
 }
 
 async function getMostReviewed() {
   const { data } = await supabase
     .from("products")
     .select(PRODUCT_WITH_BRAND_SELECT)
-    .gt("review_count", 0)
-    .order("review_count", { ascending: false })
+    .eq("is_active", true)
+    .order("created_at", { ascending: false })
     .limit(12);
 
-  return getProductsWithAnyReviews((data || []) as ProductWithBrand[]).slice(0, 6);
+  return getProductsWithAnyReviews(applyProductsDerivedDefaults(data as ProductWithBrand[])).slice(0, 6);
 }
 
 async function getStats() {
@@ -114,13 +112,12 @@ const NAV_LINKS = [
 ];
 
 export default async function Home() {
-  const [topProducts, highestBurn, stats, burnPool, mostReviewed, activePoll] = await Promise.all([
+  const [topProducts, highestBurn, stats, burnPool, mostReviewed] = await Promise.all([
     getTopProducts(),
     getHighestBurn(),
     getStats(),
     getBurnPool(),
     getMostReviewed(),
-    getActiveWeeklyPoll(),
   ]);
 
   const burnLeader = highestBurn[0];
@@ -187,30 +184,6 @@ export default async function Home() {
             </div>
             <div className="w-full sm:w-64">
               <BurnMeter rating={burnLeader.avg_burn} size="md" />
-            </div>
-          </div>
-        </section>
-      )}
-
-      {activePoll ? (
-        <WeeklyPollCard poll={activePoll} />
-      ) : (
-        <section className="rounded-xl border border-white/8 bg-card p-5 sm:p-6">
-          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-            <div>
-              <div className="text-[0.68rem] uppercase tracking-[0.18em] text-accent/85">
-                Weekly Burn Battle
-              </div>
-              <h2 className="mt-2 font-display text-2xl font-bold text-white">
-                Next poll incoming.
-              </h2>
-              <p className="mt-2 max-w-xl text-sm leading-6 text-white/50">
-                One editorial head-to-head at a time. The next burn battle will appear here once it goes live.
-              </p>
-            </div>
-            <div className="inline-flex items-center gap-2 self-start rounded-full border border-white/10 bg-black/20 px-3 py-1.5 text-xs text-white/38">
-              <Flame className="h-3.5 w-3.5 text-accent/60" />
-              Between rounds
             </div>
           </div>
         </section>

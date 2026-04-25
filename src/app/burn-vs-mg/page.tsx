@@ -10,6 +10,7 @@ import { supabase } from "@/lib/supabase";
 import type { ProductWithBrand } from "@/lib/catalog/discovery";
 import { PRODUCT_WITH_BRAND_SELECT } from "@/lib/catalog/selects";
 import { getBurnIntelligenceModules, getPublicProducts } from "@/lib/catalog/intelligence";
+import { applyProductsDerivedDefaults } from "@/lib/types";
 
 export const revalidate = 60;
 
@@ -26,10 +27,11 @@ export default async function BurnVsMgPage() {
   const { data } = await supabase
     .from("products")
     .select(PRODUCT_WITH_BRAND_SELECT)
-    .order("review_count", { ascending: false })
+    .eq("is_active", true)
+    .order("created_at", { ascending: false })
     .limit(160);
 
-  const products = (data || []) as ProductWithBrand[];
+  const products = applyProductsDerivedDefaults(data as ProductWithBrand[]);
   const { modules, bandLeaders } = getBurnIntelligenceModules(products);
   const publicProducts = getPublicProducts(products);
 

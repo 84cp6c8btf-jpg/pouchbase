@@ -8,7 +8,7 @@ import {
 } from "@/lib/catalog/burn";
 
 export type ProductBrand = {
-  name: string;
+  name?: string | null;
   slug?: string | null;
   country?: string | null;
 };

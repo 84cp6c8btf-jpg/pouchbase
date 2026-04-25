@@ -21,7 +21,7 @@ export function PriceComparison({ productId, pouchesPerCan }: PriceComparisonPro
         .select("*, shops(name, slug, website_url)")
         .eq("product_id", productId)
         .eq("in_stock", true)
-        .order("price", { ascending: true });
+        .order("price_per_can", { ascending: true });
       setPrices((data as typeof prices) || []);
       setLoading(false);
     }
@@ -65,14 +65,14 @@ export function PriceComparison({ productId, pouchesPerCan }: PriceComparisonPro
 
       <div className="space-y-3">
         {prices.map((price, index) => {
-          const pouchCount = price.pouches_in_can || pouchesPerCan || 20;
-          const pricePerPouch = price.price / pouchCount;
+          const pouchCount = pouchesPerCan || 20;
+          const pricePerPouch = price.price_per_pouch || price.price_per_can / pouchCount;
           const isCheapest = index === 0;
 
           return (
             <a
               key={price.id}
-              href={price.affiliate_url || price.shops?.website_url || "#"}
+              href={price.product_url || price.shops?.website_url || "#"}
               target="_blank"
               rel="noopener noreferrer"
               className={`block rounded-xl border p-4 transition ${
@@ -99,7 +99,7 @@ export function PriceComparison({ productId, pouchesPerCan }: PriceComparisonPro
                 <div className="flex items-center justify-between gap-4 sm:justify-end">
                   <div className="text-right">
                     <div className={`font-display text-4xl font-bold ${isCheapest ? "text-accent" : "text-white"}`}>
-                      {price.currency} {price.price.toFixed(2)}
+                      {price.currency} {price.price_per_can.toFixed(2)}
                     </div>
                     <div className="text-xs uppercase tracking-[0.16em] text-white/34">In stock</div>
                   </div>

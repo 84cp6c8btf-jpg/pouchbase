@@ -8,7 +8,7 @@ import {
   MIN_PUBLIC_SCORE_REVIEWS,
 } from "@/lib/catalog/burn";
 import { PRODUCT_OG_SELECT } from "@/lib/catalog/selects";
-import { unwrapRelation } from "@/lib/types";
+import { applyProductDerivedDefaults, unwrapRelation } from "@/lib/types";
 
 export const runtime = "edge";
 export const alt = "PouchBase — Nicotine Pouch Review";
@@ -46,10 +46,11 @@ export default async function OgImage({ params }: { params: Promise<{ slug: stri
       { ...size }
     );
   }
-  const brandName = unwrapRelation(product.brands as { name: string }[] | { name: string } | null)?.name || "";
-  const burnColor = getBurnUiTone(product.avg_burn).ogColor;
-  const burnLabel = getBurnLabel(product.avg_burn).toUpperCase();
-  const publicScoreVisible = hasPublicScore(product.review_count);
+  const normalizedProduct = applyProductDerivedDefaults(product);
+  const brandName = unwrapRelation(normalizedProduct.brands as { name: string }[] | { name: string } | null)?.name || "";
+  const burnColor = getBurnUiTone(normalizedProduct.avg_burn).ogColor;
+  const burnLabel = getBurnLabel(normalizedProduct.avg_burn).toUpperCase();
+  const publicScoreVisible = hasPublicScore(normalizedProduct.review_count);
 
   return new ImageResponse(
     (
@@ -100,7 +101,7 @@ export default async function OgImage({ params }: { params: Promise<{ slug: stri
               maxWidth: "900px",
             }}
           >
-            {product.name}
+            {normalizedProduct.name}
           </span>
         </div>
 
@@ -124,7 +125,7 @@ export default async function OgImage({ params }: { params: Promise<{ slug: stri
             {publicScoreVisible ? (
               <div style={{ display: "flex", alignItems: "baseline", gap: "8px" }}>
                 <span style={{ color: burnColor, fontSize: "56px", fontWeight: 800, lineHeight: 1 }}>
-                  {formatBurnRating(product.avg_burn)}
+                  {formatBurnRating(normalizedProduct.avg_burn)}
                 </span>
                 <span style={{ color: burnColor, fontSize: "18px", fontWeight: 600, opacity: 0.8 }}>
                   {burnLabel}
@@ -159,7 +160,7 @@ export default async function OgImage({ params }: { params: Promise<{ slug: stri
             </span>
             <div style={{ display: "flex", alignItems: "baseline", gap: "8px" }}>
               <span style={{ color: "#f97316", fontSize: "56px", fontWeight: 800, lineHeight: 1 }}>
-                {publicScoreVisible ? product.avg_overall.toFixed(1) : "—"}
+                {publicScoreVisible ? normalizedProduct.avg_overall.toFixed(1) : "—"}
               </span>
               <span style={{ color: "rgba(255,255,255,0.4)", fontSize: "18px" }}>
                 {publicScoreVisible ? "/10" : `Needs ${MIN_PUBLIC_SCORE_REVIEWS}+ reviews`}
@@ -181,7 +182,7 @@ export default async function OgImage({ params }: { params: Promise<{ slug: stri
               }}
             >
               <span style={{ color: "rgba(255,255,255,0.7)", fontSize: "18px" }}>
-                ⚡ {product.strength_mg}mg · {product.strength_label}
+                ⚡ {normalizedProduct.strength_mg}mg
               </span>
             </div>
             <div
@@ -196,7 +197,7 @@ export default async function OgImage({ params }: { params: Promise<{ slug: stri
               }}
             >
               <span style={{ color: "rgba(255,255,255,0.7)", fontSize: "18px" }}>
-                {product.flavor} · {product.review_count} reviews
+                {normalizedProduct.flavor} · {normalizedProduct.review_count} reviews
               </span>
             </div>
           </div>

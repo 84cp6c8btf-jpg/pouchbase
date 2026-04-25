@@ -6,6 +6,7 @@ import { BrandArtwork } from "@/components/catalog/BrandArtwork";
 import { PageIntro } from "@/components/common/PageIntro";
 import { hasPublicScore } from "@/lib/catalog/burn";
 import { getPublicWebsiteUrl } from "@/lib/site";
+import { applyProductsDerivedDefaults } from "@/lib/types";
 
 export const revalidate = 60;
 export const metadata: Metadata = {
@@ -20,7 +21,7 @@ type BrandRow = {
   id: string;
   name: string;
   slug: string;
-  country: string | null;
+  country_origin: string | null;
   description: string | null;
   logo_url: string | null;
   website_url: string | null;
@@ -38,13 +39,14 @@ type BrandProductRow = {
 
 export default async function BrandsPage() {
   const [{ data: brands }, { data: products }] = await Promise.all([
-    supabase.from("brands").select("id, name, slug, country, description, logo_url, website_url").order("name"),
+    supabase.from("brands").select("id, name, slug, country_origin, description, logo_url, website_url").eq("is_active", true).order("name"),
     supabase
       .from("products")
-      .select("brand_id, slug, name, strength_mg, avg_burn, avg_overall, review_count"),
+      .select("brand_id, slug, name, nicotine_mg, strength_mg:nicotine_mg")
+      .eq("is_active", true),
   ]);
 
-  const productRows = (products || []) as BrandProductRow[];
+  const productRows = applyProductsDerivedDefaults(products as unknown as BrandProductRow[]);
   const brandProducts = new Map<string, BrandProductRow[]>();
 
   for (const product of productRows) {
@@ -88,6 +90,7 @@ export default async function BrandsPage() {
         avgOverall: weightedOverall,
         avgBurn: weightedBurn,
         officialWebsiteUrl: getPublicWebsiteUrl(brand.website_url),
+        country: brand.country_origin,
         strongestProduct,
         mostReviewedProduct,
         bestRatedProduct,

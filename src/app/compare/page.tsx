@@ -8,6 +8,7 @@ import {
 import { PRODUCT_CATALOG_SELECT } from "@/lib/catalog/selects";
 import { ComparePicker } from "./_components/ComparePicker";
 import { ProductComparisonTable } from "./_components/ProductComparisonTable";
+import { applyProductsDerivedDefaults } from "@/lib/types";
 
 export const metadata: Metadata = {
   title: "Compare Nicotine Pouches — PouchBase",
@@ -28,17 +29,19 @@ export default async function ComparePage({ searchParams }: Props) {
     supabase
       .from("products")
       .select(PRODUCT_CATALOG_SELECT)
+      .eq("is_active", true)
       .order("name"),
     params.left && params.right && params.left !== params.right
       ? supabase
           .from("products")
           .select(PRODUCT_CATALOG_SELECT)
+          .eq("is_active", true)
           .in("slug", [params.left, params.right])
       : Promise.resolve({ data: [] as ProductWithBrand[] }),
   ]);
 
-  const allProducts = (allProductsResult.data || []) as ProductWithBrand[];
-  const selectedProducts = (selectedProductsResult.data || []) as ProductWithBrand[];
+  const allProducts = applyProductsDerivedDefaults(allProductsResult.data as ProductWithBrand[]);
+  const selectedProducts = applyProductsDerivedDefaults(selectedProductsResult.data as ProductWithBrand[]);
 
   const left = selectedProducts.find((product) => product.slug === params.left);
   const right = selectedProducts.find((product) => product.slug === params.right);
@@ -47,7 +50,7 @@ export default async function ComparePage({ searchParams }: Props) {
     left && right
       ? await supabase
           .from("prices")
-          .select("product_id, price, currency")
+          .select("product_id, price:price_per_can, currency")
           .in("product_id", [left.id, right.id])
           .eq("in_stock", true)
       : { data: [] };

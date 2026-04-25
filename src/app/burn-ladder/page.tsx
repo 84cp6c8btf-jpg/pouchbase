@@ -8,6 +8,7 @@ import { TrustDisclosure } from "@/components/common/TrustDisclosure";
 import { MIN_PUBLIC_SCORE_REVIEWS } from "@/lib/catalog/burn";
 import type { ProductWithBrand } from "@/lib/catalog/discovery";
 import { PRODUCT_CATALOG_SELECT } from "@/lib/catalog/selects";
+import { applyProductsDerivedDefaults } from "@/lib/types";
 
 export const metadata: Metadata = {
   title: "Burn Ladder — PouchBase",
@@ -23,11 +24,12 @@ export default async function BurnLadderPage() {
   const { data } = await supabase
     .from("products")
     .select(PRODUCT_CATALOG_SELECT)
-    .gte("review_count", MIN_PUBLIC_SCORE_REVIEWS)
-    .order("avg_burn", { ascending: true })
-    .order("avg_overall", { ascending: false });
+    .eq("is_active", true)
+    .order("created_at", { ascending: false });
 
-  const products = (data || []) as ProductWithBrand[];
+  const products = applyProductsDerivedDefaults(data as ProductWithBrand[]).filter(
+    (product) => product.review_count >= MIN_PUBLIC_SCORE_REVIEWS
+  );
 
   return (
     <div className="space-y-6">

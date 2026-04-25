@@ -12,9 +12,11 @@ interface ReviewWithProduct {
   id: string;
   product_id: string;
   burn_rating: number;
-  flavor_rating: number;
+  flavor_accuracy_rating: number;
+  nicotine_feel_rating: number;
+  comfort_rating: number;
   longevity_rating: number;
-  overall_rating: number;
+  value_rating: number;
   review_text: string | null;
   created_at: string;
   products: {
@@ -51,7 +53,7 @@ export function MyReviewsClient() {
     const { data } = await supabase
       .from("reviews")
       .select(
-        "id, product_id, burn_rating, flavor_rating, longevity_rating, overall_rating, review_text, created_at, products(name, slug, flavor, strength_mg, brands(name))"
+        "id, product_id, burn_rating, flavor_accuracy_rating, nicotine_feel_rating, comfort_rating, longevity_rating, value_rating, review_text, created_at, products(name, slug, flavor, strength_mg:nicotine_mg, brands(name))"
       )
       .eq("user_id", userId)
       .order("created_at", { ascending: false });
@@ -62,7 +64,7 @@ export function MyReviewsClient() {
     const { data } = await supabase
       .from("profiles")
       .select("display_name")
-      .eq("id", userId)
+      .eq("user_id", userId)
       .single();
     const name = data?.display_name || "";
     setDisplayName(name);
@@ -105,7 +107,7 @@ export function MyReviewsClient() {
     const { error } = await supabase
       .from("profiles")
       .update({ display_name: trimmed || null })
-      .eq("id", user.id);
+      .eq("user_id", user.id);
 
     if (error) {
       setNameStatus(error.message);
@@ -290,7 +292,7 @@ export function MyReviewsClient() {
                 <div className="mt-4 grid gap-3 sm:grid-cols-3">
                   <RatingBadge
                     label="Flavor"
-                    value={review.flavor_rating}
+                    value={review.flavor_accuracy_rating}
                     size="sm"
                   />
                   <RatingBadge
@@ -299,8 +301,8 @@ export function MyReviewsClient() {
                     size="sm"
                   />
                   <RatingBadge
-                    label="Overall"
-                    value={review.overall_rating}
+                    label="Value"
+                    value={review.value_rating}
                     size="sm"
                   />
                 </div>

@@ -10,6 +10,7 @@ import type { ProductWithBrand } from "@/lib/catalog/discovery";
 import { PRODUCT_WITH_BRAND_SELECT } from "@/lib/catalog/selects";
 import { sortProductsByReviewSignal } from "@/lib/catalog/intelligence";
 import { getPublicWebsiteUrl } from "@/lib/site";
+import { applyProductsDerivedDefaults } from "@/lib/types";
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -41,7 +42,7 @@ export default async function BrandDetailPage({ params }: Props) {
 
   const { data: brand } = await supabase
     .from("brands")
-    .select("id, name, slug, country, description, logo_url, website_url")
+    .select("id, name, slug, country_origin, description, logo_url, website_url")
     .eq("slug", slug)
     .single();
 
@@ -53,10 +54,10 @@ export default async function BrandDetailPage({ params }: Props) {
     .from("products")
     .select(PRODUCT_WITH_BRAND_SELECT)
     .eq("brand_id", brand.id)
-    .order("review_count", { ascending: false })
-    .order("strength_mg", { ascending: false });
+    .eq("is_active", true)
+    .order("nicotine_mg", { ascending: false });
 
-  const brandProducts = sortProductsByReviewSignal((products || []) as ProductWithBrand[]);
+  const brandProducts = sortProductsByReviewSignal(applyProductsDerivedDefaults(products as ProductWithBrand[]));
   const reviewedProducts = brandProducts.filter((product) => hasPublicScore(product.review_count));
   const totalReviews = reviewedProducts.reduce((sum, product) => sum + product.review_count, 0);
   const loggedReviews = brandProducts.reduce((sum, product) => sum + product.review_count, 0);
@@ -90,10 +91,10 @@ export default async function BrandDetailPage({ params }: Props) {
 
       <section className="grid gap-6 rounded-xl border border-white/8 bg-card p-6 sm:p-8 lg:grid-cols-[1fr_18rem] lg:items-end">
         <div className="flex flex-col gap-5 sm:flex-row sm:items-center">
-          <BrandArtwork name={brand.name} slug={brand.slug} country={brand.country} logoUrl={brand.logo_url} size="hero" />
+          <BrandArtwork name={brand.name} slug={brand.slug} country={brand.country_origin} logoUrl={brand.logo_url} size="hero" />
           <div>
             <p className="text-xs uppercase tracking-[0.16em] text-white/35">
-              {brand.country || "Global Brand"}
+              {brand.country_origin || "Global Brand"}
             </p>
             <h1 className="mt-2 font-display text-[clamp(2.8rem,5vw,4.8rem)] font-bold leading-[0.92] text-white">
               {brand.name}

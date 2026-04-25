@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
-import { Product, FLAVOR_CATEGORIES } from "@/lib/types";
+import { Product, FLAVOR_CATEGORIES, applyProductsDerivedDefaults } from "@/lib/types";
 import { ProductCard } from "@/components/catalog/ProductCard";
 import { Flame, Search, SlidersHorizontal, X } from "lucide-react";
 import { PageIntro } from "@/components/common/PageIntro";
@@ -18,7 +18,7 @@ type SortOption = "overall" | "burn" | "strength" | "reviews" | "newest" | "name
 type SignalFilter = "all" | "public" | "early" | "none";
 
 export function PouchesPageClient() {
-  const [products, setProducts] = useState<(Product & { brands: { name: string; slug: string } })[]>([]);
+  const [products, setProducts] = useState<Product[]>([]);
   const [brands, setBrands] = useState<{ id: string; name: string; slug: string }[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
@@ -34,33 +34,32 @@ export function PouchesPageClient() {
 
     async function fetchProducts() {
       setLoading(true);
-      let query = supabase.from("products").select(PRODUCT_WITH_BRAND_SELECT);
+      let query = supabase.from("products").select(PRODUCT_WITH_BRAND_SELECT).eq("is_active", true);
 
       if (selectedBrand) {
         query = query.eq("brand_id", selectedBrand);
       }
       if (selectedCategory) {
-        query = query.eq("flavor_category", selectedCategory);
-      }
-      if (selectedBurnMin > 0) {
-        query = query.gte("avg_burn", selectedBurnMin);
-      }
-      if (selectedSignal === "public") {
-        query = query.gte("review_count", MIN_PUBLIC_SCORE_REVIEWS);
-      } else if (selectedSignal === "early") {
-        query = query.gt("review_count", 0).lt("review_count", MIN_PUBLIC_SCORE_REVIEWS);
-      } else if (selectedSignal === "none") {
-        query = query.eq("review_count", 0);
+        query = query.eq("flavor_family", selectedCategory);
       }
       if (search) {
         query = query.or(`name.ilike.%${search}%,flavor.ilike.%${search}%`);
       }
 
-      const { data } = await query.limit(180);
+      const { data } = await query.order("created_at", { ascending: false }).limit(180);
 
       if (ignore) return;
 
-      setProducts((data as typeof products) || []);
+      const normalizedProducts = applyProductsDerivedDefaults(data as typeof products);
+      setProducts(
+        normalizedProducts.filter((product) => {
+          if (selectedBurnMin > 0 && product.avg_burn < selectedBurnMin) return false;
+          if (selectedSignal === "public") return product.review_count >= MIN_PUBLIC_SCORE_REVIEWS;
+          if (selectedSignal === "early") return product.review_count > 0 && product.review_count < MIN_PUBLIC_SCORE_REVIEWS;
+          if (selectedSignal === "none") return product.review_count === 0;
+          return true;
+        })
+      );
       setLoading(false);
     }
 
@@ -73,7 +72,7 @@ export function PouchesPageClient() {
 
   useEffect(() => {
     async function fetchBrands() {
-      const { data } = await supabase.from("brands").select("id, name, slug").order("name");
+      const { data } = await supabase.from("brands").select("id, name, slug").eq("is_active", true).order("name");
       setBrands(data || []);
     }
     fetchBrands();

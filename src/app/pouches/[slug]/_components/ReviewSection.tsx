@@ -26,8 +26,10 @@ export function ReviewSection({ productId }: ReviewSectionProps) {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [burn, setBurn] = useState(5);
   const [flavor, setFlavor] = useState(5);
+  const [nicotineFeel, setNicotineFeel] = useState(5);
+  const [comfort, setComfort] = useState(5);
   const [longevity, setLongevity] = useState(5);
-  const [overall, setOverall] = useState(5);
+  const [value, setValue] = useState(5);
   const [text, setText] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const router = useRouter();
@@ -68,17 +70,21 @@ export function ReviewSection({ productId }: ReviewSectionProps) {
   function prepareForm() {
     if (existingReview) {
       setBurn(existingReview.burn_rating);
-      setFlavor(existingReview.flavor_rating);
+      setFlavor(existingReview.flavor_accuracy_rating);
+      setNicotineFeel(existingReview.nicotine_feel_rating);
+      setComfort(existingReview.comfort_rating);
       setLongevity(existingReview.longevity_rating);
-      setOverall(existingReview.overall_rating);
+      setValue(existingReview.value_rating);
       setText(existingReview.review_text || "");
       return;
     }
 
     setBurn(5);
     setFlavor(5);
+    setNicotineFeel(5);
+    setComfort(5);
     setLongevity(5);
-    setOverall(5);
+    setValue(5);
     setText("");
   }
 
@@ -104,9 +110,11 @@ export function ReviewSection({ productId }: ReviewSectionProps) {
         product_id: productId,
         user_id: user.id,
         burn_rating: burn,
-        flavor_rating: flavor,
+        flavor_accuracy_rating: flavor,
+        nicotine_feel_rating: nicotineFeel,
+        comfort_rating: comfort,
         longevity_rating: longevity,
-        overall_rating: overall,
+        value_rating: value,
         review_text: text || null,
       },
       {
@@ -168,7 +176,7 @@ export function ReviewSection({ productId }: ReviewSectionProps) {
             <div>
               <div className="text-[0.68rem] uppercase tracking-[0.16em] text-white/40">Structured rating</div>
               <p className="mt-2 text-sm leading-6 text-white/52">
-                Burn, flavor, longevity, and overall are the fields that power public scores and rankings.
+                The six structured ratings use a consistent 1-10 scale. Public summaries stay hidden until enough real reviews exist.
               </p>
             </div>
             <div>
@@ -179,7 +187,7 @@ export function ReviewSection({ productId }: ReviewSectionProps) {
             </div>
           </div>
 
-          <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+          <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
             {[
               {
                 label: "Burn",
@@ -194,16 +202,28 @@ export function ReviewSection({ productId }: ReviewSectionProps) {
                 helper: "How accurate, satisfying, and usable the flavor feels",
               },
               {
+                label: "Nicotine feel",
+                value: nicotineFeel,
+                setter: setNicotineFeel,
+                helper: "How clearly the nicotine effect matches the listed strength",
+              },
+              {
+                label: "Comfort",
+                value: comfort,
+                setter: setComfort,
+                helper: "How comfortable the pouch feels during normal use",
+              },
+              {
                 label: "Longevity",
                 value: longevity,
                 setter: setLongevity,
                 helper: "How long the pouch stays good before dropping off",
               },
               {
-                label: "Overall",
-                value: overall,
-                setter: setOverall,
-                helper: "Your combined take after use, independent of brand reputation",
+                label: "Value",
+                value,
+                setter: setValue,
+                helper: "How fair the product feels for the price and experience",
               },
             ].map((field) => (
               <label key={field.label} className="rounded-lg border border-white/8 bg-black/15 p-3.5">
@@ -285,9 +305,9 @@ export function ReviewSection({ productId }: ReviewSectionProps) {
               </div>
 
               <div className="mt-4 grid gap-3 sm:grid-cols-3">
-                <RatingBadge label="Flavor" value={review.flavor_rating} size="sm" />
+                <RatingBadge label="Flavor" value={review.flavor_accuracy_rating} size="sm" />
                 <RatingBadge label="Longevity" value={review.longevity_rating} size="sm" />
-                <RatingBadge label="Overall" value={review.overall_rating} size="sm" />
+                <RatingBadge label="Value" value={review.value_rating} size="sm" />
               </div>
 
               {review.review_text && (

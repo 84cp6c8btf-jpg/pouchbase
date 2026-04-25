@@ -17,6 +17,7 @@ import {
   getProductsWithAnyReviews,
   sortProductsByAdjustedMetric,
 } from "@/lib/catalog/intelligence";
+import { applyProductsDerivedDefaults } from "@/lib/types";
 
 export const revalidate = 60;
 export const metadata: Metadata = {
@@ -32,20 +33,22 @@ export default async function HighestBurnPage() {
     supabase
       .from("products")
       .select(PRODUCT_WITH_BRAND_SELECT)
-      .gte("review_count", MIN_PUBLIC_SCORE_REVIEWS)
-      .order("review_count", { ascending: false })
+      .eq("is_active", true)
+      .order("created_at", { ascending: false })
       .limit(160),
     supabase
       .from("products")
       .select(PRODUCT_WITH_BRAND_SELECT)
-      .gt("review_count", 0)
-      .order("review_count", { ascending: false })
+      .eq("is_active", true)
+      .order("created_at", { ascending: false })
       .limit(24),
   ]);
 
-  const burnPool = (products || []) as ProductWithBrand[];
+  const burnPool = applyProductsDerivedDefaults(products as ProductWithBrand[]).filter(
+    (product) => product.review_count >= MIN_PUBLIC_SCORE_REVIEWS
+  );
   const hottestProducts = sortProductsByAdjustedMetric(burnPool, "avg_burn", "higher").slice(0, 30);
-  const mostReviewed = getProductsWithAnyReviews((reviewedProductsData || []) as ProductWithBrand[]).slice(0, 6);
+  const mostReviewed = getProductsWithAnyReviews(applyProductsDerivedDefaults(reviewedProductsData as ProductWithBrand[])).slice(0, 6);
   const { modules } = getBurnIntelligenceModules(burnPool);
   const burnAboveStrength = modules.find((module) => module.key === "burn-above-strength");
   const hardButLoved = modules.find((module) => module.key === "hard-but-loved");
