@@ -61,7 +61,7 @@ export function Header() {
         <Link href="/" className="flex items-center gap-2.5">
           <Flame className="h-5 w-5 text-accent" />
           <span className="font-display text-xl font-bold tracking-tight">
-            Pouch<span className="text-accent">Base</span>
+            Pouch<span className="text-accent">Compare</span>
           </span>
         </Link>
 

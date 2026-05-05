@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import { LoginPageClient } from "./_components/LoginPageClient";
 
 export const metadata: Metadata = {
-  title: "Sign In — PouchBase",
-  description: "Sign in to rate and review nicotine pouches on PouchBase.",
+  title: "Sign In — PouchCompare",
+  description: "Sign in to rate and review nicotine pouches on PouchCompare.",
   robots: {
     index: false,
     follow: false,

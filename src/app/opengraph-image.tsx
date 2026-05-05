@@ -1,7 +1,7 @@
 import { ImageResponse } from "next/og";
 
 export const runtime = "edge";
-export const alt = "PouchBase — The Independent Nicotine Pouch Encyclopedia";
+export const alt = "PouchCompare — The Independent Nicotine Pouch Encyclopedia";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -39,7 +39,7 @@ export default function OgImage() {
           </div>
           <div style={{ display: "flex", flexDirection: "column" }}>
             <span style={{ color: "white", fontSize: "56px", fontWeight: 800, lineHeight: 1 }}>
-              Pouch<span style={{ color: "#f97316" }}>Base</span>
+              Pouch<span style={{ color: "#f97316" }}>Compare</span>
             </span>
             <span
               style={{

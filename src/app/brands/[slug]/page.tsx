@@ -11,6 +11,9 @@ import { PRODUCT_WITH_BRAND_SELECT } from "@/lib/catalog/selects";
 import { sortProductsByReviewSignal } from "@/lib/catalog/intelligence";
 import { getPublicWebsiteUrl } from "@/lib/site";
 import { applyProductsDerivedDefaults } from "@/lib/types";
+import { withReviewStats } from "@/lib/catalog/review-stats";
+
+export const dynamic = "force-dynamic";
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -27,7 +30,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!brand) return { title: "Brand Not Found" };
 
   return {
-    title: `${brand.name} Nicotine Pouches — PouchBase`,
+    title: `${brand.name} Nicotine Pouches — PouchCompare`,
     description:
       brand.description ||
       `Browse ${brand.name} nicotine pouches, product facts, public scores where available, and retailer pricing where available.`,
@@ -56,7 +59,10 @@ export default async function BrandDetailPage({ params }: Props) {
     .eq("brand_id", brand.id)
     .order("nicotine_mg", { ascending: false });
 
-  const brandProducts = sortProductsByReviewSignal(applyProductsDerivedDefaults(products as ProductWithBrand[]));
+  // Keep this rule aligned with /brands: all imported products are visible in brand catalog counts.
+  const brandProducts = sortProductsByReviewSignal(
+    await withReviewStats(applyProductsDerivedDefaults(products as ProductWithBrand[]))
+  );
   const reviewedProducts = brandProducts.filter((product) => hasPublicScore(product.review_count));
   const totalReviews = reviewedProducts.reduce((sum, product) => sum + product.review_count, 0);
   const loggedReviews = brandProducts.reduce((sum, product) => sum + product.review_count, 0);
@@ -99,7 +105,7 @@ export default async function BrandDetailPage({ params }: Props) {
               {brand.name}
             </h1>
             <p className="mt-4 max-w-2xl text-base leading-8 text-white/55">
-              {brand.description || `${brand.name} nicotine pouch catalog tracked on PouchBase.`}
+              {brand.description || `${brand.name} nicotine pouch catalog tracked on PouchCompare.`}
             </p>
             <p className="mt-3 text-sm text-white/46">
               Brand-level averages only reflect products with {MIN_PUBLIC_SCORE_REVIEWS}+ structured reviews.

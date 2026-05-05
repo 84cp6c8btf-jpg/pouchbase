@@ -9,9 +9,12 @@ import { PRODUCT_CATALOG_SELECT } from "@/lib/catalog/selects";
 import { ComparePicker } from "./_components/ComparePicker";
 import { ProductComparisonTable } from "./_components/ProductComparisonTable";
 import { applyProductsDerivedDefaults } from "@/lib/types";
+import { withReviewStats } from "@/lib/catalog/review-stats";
+
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "Compare Nicotine Pouches — PouchBase",
+  title: "Compare Nicotine Pouches — PouchCompare",
   description: "Compare two nicotine pouches side by side across burn, ratings, nicotine, and retailer price context where available.",
   robots: {
     index: false,
@@ -41,7 +44,7 @@ export default async function ComparePage({ searchParams }: Props) {
   ]);
 
   const allProducts = applyProductsDerivedDefaults(allProductsResult.data as ProductWithBrand[]);
-  const selectedProducts = applyProductsDerivedDefaults(selectedProductsResult.data as ProductWithBrand[]);
+  const selectedProducts = await withReviewStats(applyProductsDerivedDefaults(selectedProductsResult.data as ProductWithBrand[]));
 
   const left = selectedProducts.find((product) => product.slug === params.left);
   const right = selectedProducts.find((product) => product.slug === params.right);
@@ -63,7 +66,6 @@ export default async function ComparePage({ searchParams }: Props) {
         eyebrow="Comparison"
         title="Head-to-head pouch comparison."
         description="Compare two products side by side across burn, nicotine, structured ratings, review depth, and retailer price context where available."
-        meta="Share this comparison from your browser URL."
       />
 
       <ComparePicker products={allProducts} leftSlug={params.left} rightSlug={params.right} />

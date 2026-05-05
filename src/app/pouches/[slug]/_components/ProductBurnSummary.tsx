@@ -55,7 +55,7 @@ export function ProductBurnSummary({
                 Building burn score
               </div>
               <p className="mt-3 text-sm leading-7 text-white/56">
-                This pouch has {formatReviewCount(reviewCount)} so far. PouchBase publishes a formal
+                This pouch has {formatReviewCount(reviewCount)} so far. PouchCompare publishes a formal
                 burn score after {MIN_PUBLIC_SCORE_REVIEWS} structured reviews to avoid false precision.
                 Until then, lean on flavor, format, strength, and price context first.
               </p>

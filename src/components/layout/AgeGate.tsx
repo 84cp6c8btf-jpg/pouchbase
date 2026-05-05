@@ -40,7 +40,7 @@ export function AgeGate() {
           </div>
 
           <p className="mb-8 max-w-lg leading-relaxed text-white/55">
-            PouchBase covers nicotine pouches and is intended for adults of legal age only. By entering,
+            PouchCompare covers nicotine pouches and is intended for adults of legal age only. By entering,
             you confirm that you are 18+ and that viewing nicotine-related content is lawful where you are.
           </p>
 

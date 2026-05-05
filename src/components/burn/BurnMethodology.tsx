@@ -18,7 +18,7 @@ export function BurnMethodology({ compact = false }: BurnMethodologyProps) {
             Burn tracks felt sting under the lip, not just nicotine milligrams.
           </h2>
           <p className="mt-3 text-sm leading-7 text-white/55">
-            PouchBase burn scores come from community reviews of perceived intensity. Moisture,
+            PouchCompare burn scores come from community reviews of perceived intensity. Moisture,
             flavoring, recipe, and pouch construction can make a lower-mg pouch feel harsher than
             a stronger one. Public burn scores appear once a pouch reaches {MIN_PUBLIC_SCORE_REVIEWS}
             structured reviews.

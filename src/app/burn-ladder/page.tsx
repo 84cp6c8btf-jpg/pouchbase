@@ -9,16 +9,17 @@ import { MIN_PUBLIC_SCORE_REVIEWS } from "@/lib/catalog/burn";
 import type { ProductWithBrand } from "@/lib/catalog/discovery";
 import { PRODUCT_CATALOG_SELECT } from "@/lib/catalog/selects";
 import { applyProductsDerivedDefaults } from "@/lib/types";
+import { withReviewStats } from "@/lib/catalog/review-stats";
+
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "Burn Ladder — PouchBase",
+  title: "Burn Ladder — PouchCompare",
   description: "Explore nicotine pouches by felt intensity once enough real public burn data exists to support step-up and step-down discovery.",
   alternates: {
     canonical: "/burn-ladder",
   },
 };
-
-export const revalidate = 60;
 
 export default async function BurnLadderPage() {
   const { data } = await supabase
@@ -27,7 +28,7 @@ export default async function BurnLadderPage() {
     .eq("is_active", true)
     .order("created_at", { ascending: false });
 
-  const products = applyProductsDerivedDefaults(data as ProductWithBrand[]).filter(
+  const products = (await withReviewStats(applyProductsDerivedDefaults(data as ProductWithBrand[]))).filter(
     (product) => product.review_count >= MIN_PUBLIC_SCORE_REVIEWS
   );
 

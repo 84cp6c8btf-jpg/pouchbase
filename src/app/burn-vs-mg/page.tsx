@@ -11,11 +11,12 @@ import type { ProductWithBrand } from "@/lib/catalog/discovery";
 import { PRODUCT_WITH_BRAND_SELECT } from "@/lib/catalog/selects";
 import { getBurnIntelligenceModules, getPublicProducts } from "@/lib/catalog/intelligence";
 import { applyProductsDerivedDefaults } from "@/lib/types";
+import { withReviewStats } from "@/lib/catalog/review-stats";
 
-export const revalidate = 60;
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "Burn vs Nicotine — PouchBase",
+  title: "Burn vs Nicotine — PouchCompare",
   description:
     "See how felt burn compares with nicotine strength across the pouch catalog once enough real review data exists to support honest burn analysis.",
   alternates: {
@@ -31,7 +32,7 @@ export default async function BurnVsMgPage() {
     .order("created_at", { ascending: false })
     .limit(160);
 
-  const products = applyProductsDerivedDefaults(data as ProductWithBrand[]);
+  const products = await withReviewStats(applyProductsDerivedDefaults(data as ProductWithBrand[]));
   const { modules, bandLeaders } = getBurnIntelligenceModules(products);
   const publicProducts = getPublicProducts(products);
 

@@ -6,6 +6,6 @@ export const PRODUCT_WITH_BRAND_COUNTRY_SELECT =
 export const PRODUCT_CATALOG_SELECT =
   `${PRODUCT_BASE_SELECT}, brands(name, slug)` as const;
 export const PRODUCT_METADATA_SELECT =
-  "name, flavor, nicotine_mg, strength_mg:nicotine_mg, brands(name)" as const;
+  "id, name, flavor, nicotine_mg, strength_mg:nicotine_mg, brands(name)" as const;
 export const PRODUCT_OG_SELECT =
-  "name, flavor, nicotine_mg, strength_mg:nicotine_mg, brands(name)" as const;
+  "id, name, flavor, nicotine_mg, strength_mg:nicotine_mg, brands(name)" as const;

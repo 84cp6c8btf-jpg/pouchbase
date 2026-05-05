@@ -15,6 +15,7 @@ import {
   sortProductsByAdjustedMetric,
 } from "@/lib/catalog/intelligence";
 import { applyProductsDerivedDefaults } from "@/lib/types";
+import { withReviewStats } from "@/lib/catalog/review-stats";
 
 export const metadata: Metadata = {
   alternates: {
@@ -22,7 +23,7 @@ export const metadata: Metadata = {
   },
 };
 
-export const revalidate = 60;
+export const dynamic = "force-dynamic";
 
 async function getTopProducts() {
   const { data } = await supabase
@@ -31,7 +32,11 @@ async function getTopProducts() {
     .eq("is_active", true)
     .order("created_at", { ascending: false })
     .limit(80);
-  return sortProductsByAdjustedMetric(applyProductsDerivedDefaults(data as ProductWithBrand[]), "avg_overall", "higher").slice(0, 6);
+  return sortProductsByAdjustedMetric(
+    await withReviewStats(applyProductsDerivedDefaults(data as ProductWithBrand[])),
+    "avg_overall",
+    "higher"
+  ).slice(0, 6);
 }
 
 async function getHighestBurn() {
@@ -41,7 +46,11 @@ async function getHighestBurn() {
     .eq("is_active", true)
     .order("created_at", { ascending: false })
     .limit(80);
-  return sortProductsByAdjustedMetric(applyProductsDerivedDefaults(data as ProductWithBrand[]), "avg_burn", "higher").slice(0, 3);
+  return sortProductsByAdjustedMetric(
+    await withReviewStats(applyProductsDerivedDefaults(data as ProductWithBrand[])),
+    "avg_burn",
+    "higher"
+  ).slice(0, 3);
 }
 
 async function getBurnPool() {
@@ -52,7 +61,7 @@ async function getBurnPool() {
     .order("created_at", { ascending: false })
     .limit(120);
 
-  return applyProductsDerivedDefaults(data as ProductWithBrand[]);
+  return withReviewStats(applyProductsDerivedDefaults(data as ProductWithBrand[]));
 }
 
 async function getMostReviewed() {
@@ -63,7 +72,7 @@ async function getMostReviewed() {
     .order("created_at", { ascending: false })
     .limit(12);
 
-  return getProductsWithAnyReviews(applyProductsDerivedDefaults(data as ProductWithBrand[])).slice(0, 6);
+  return getProductsWithAnyReviews(await withReviewStats(applyProductsDerivedDefaults(data as ProductWithBrand[]))).slice(0, 6);
 }
 
 async function getStats() {
@@ -88,25 +97,25 @@ const NAV_LINKS = [
   {
     href: "/top-rated",
     title: "Top Rated",
-    description: "The highest-scored pouches once enough real structured reviews exist to rank them honestly.",
+    description: "The highest-scoring pouches based on community reviews.",
     icon: Star,
   },
   {
     href: "/highest-burn",
     title: "Highest Burn",
-    description: "The pouches that hit hardest once there is enough real burn data to compare them credibly.",
+    description: "The pouches that hit hardest. Ranked by real burn ratings.",
     icon: Flame,
   },
   {
     href: "/brands",
     title: "All Brands",
-    description: "Browse every brand we cover — from mainstream giants to cult favorites.",
+    description: "Every brand we cover — mainstream to cult favorites.",
     icon: Tag,
   },
   {
     href: "/burn-vs-mg",
     title: "Burn vs Mg",
-    description: "See where similar-strength pouches split apart on felt burn.",
+    description: "Same strength, different burn. See which ones punch above their mg.",
     icon: Flame,
   },
 ];
@@ -128,14 +137,11 @@ export default async function Home() {
       {/* Hero */}
       <section className="pt-8 sm:pt-14">
         <h1 className="font-display text-[clamp(3rem,7vw,6.5rem)] font-bold leading-[0.88] tracking-[-0.06em] text-white">
-          Every pouch,<br />
-          <span className="text-accent">rated honestly.</span>
+          Find your<br />
+          <span className="text-accent">next pouch.</span>
         </h1>
         <p className="mt-6 max-w-xl text-lg leading-relaxed text-white/56">
-          PouchBase is a review site, not a shop. We track burn, flavor, longevity,
-          and price across every mainstream nicotine pouch so you can compare them
-          properly before you buy. Public scores only appear once enough real
-          structured reviews exist to support them.
+          Not a shop. We compare burn, flavor, and price across {stats.products}+ nicotine pouches so you don&apos;t have to guess.
         </p>
         <div className="mt-8 flex flex-wrap gap-3">
           <Link
@@ -162,7 +168,7 @@ export default async function Home() {
           </div>
           <div>
             <div className="font-display text-3xl font-bold text-white">{stats.reviews}</div>
-            <div className="text-sm text-white/40">Structured reviews</div>
+            <div className="text-sm text-white/40">Reviews</div>
           </div>
           <div>
             <div className="font-display text-3xl font-bold text-white">{stats.brands}</div>
@@ -176,7 +182,7 @@ export default async function Home() {
         <section className="rounded-xl border border-white/8 bg-[#111114] p-5 sm:p-6">
           <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
             <div>
-              <p className="text-xs text-white/35 uppercase tracking-wider">Current public burn leader</p>
+              <p className="text-xs text-white/35 uppercase tracking-wider">Burn leader</p>
               <h2 className="mt-1 font-display text-2xl font-bold text-white">
                 {burnLeader.name}
               </h2>
@@ -216,16 +222,16 @@ export default async function Home() {
       <BurnVsStrengthMap
         products={burnPool}
         compact
-        title="Burn vs nicotine at a glance"
-        description="Some products punch harder than their milligrams suggest, while others stay smoother than nearby-strength peers. This map makes that visible fast."
+        title="Burn vs nicotine strength"
+        description="Some pouches hit way harder than their mg would suggest. This map shows which."
       />
 
       <ReviewSignalSection
-        title="Most reviewed so far"
-        description="Separate from rankings. This is the earliest real community activity in the catalog, useful when public-score leaderboards are still thin."
+        title="Most reviewed"
+        description="The pouches getting the most attention from reviewers right now."
         products={mostReviewed}
         href="/pouches"
-        hrefLabel="Browse the full directory"
+        hrefLabel="Browse all pouches"
       />
 
       {topProducts.length === 0 && highestBurn.length === 0 && (
@@ -235,11 +241,10 @@ export default async function Home() {
               Rankings
             </div>
             <h2 className="mt-2 font-display text-2xl font-bold text-white">
-              Real ranking pages are waiting on real review volume.
+              Rankings unlock with more reviews.
             </h2>
             <p className="mt-2 text-sm leading-6 text-white/54">
-              The catalog, pricing, and product specs are live now. Top Rated and Highest Burn
-              stay quiet until enough authentic structured reviews exist to avoid fake certainty.
+              The full catalog is live. Top Rated and Highest Burn will appear once there are enough reviews to back them up.
             </p>
           </div>
         </section>
@@ -252,7 +257,7 @@ export default async function Home() {
             <div>
               <h2 className="font-display text-3xl font-bold text-white sm:text-4xl">Top Rated</h2>
               <p className="mt-2 text-white/45">
-                The strongest public overall scores once enough real structured review depth exists.
+                Highest overall scores backed by real reviews.
               </p>
             </div>
             <Link
@@ -277,7 +282,7 @@ export default async function Home() {
             <div>
               <h2 className="font-display text-3xl font-bold text-white sm:text-4xl">Highest Burn</h2>
               <p className="mt-2 text-white/45">
-                Burn measures actual lip sting, not just nicotine strength. These are the current public leaders.
+                Lip sting, not just mg. The hardest hitters right now.
               </p>
             </div>
             <Link

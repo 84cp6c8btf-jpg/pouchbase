@@ -100,7 +100,7 @@ export function LoginPageClient({ returnTo }: LoginPageClientProps) {
   if (checkingSession) {
     return (
       <div className="mx-auto max-w-2xl rounded-xl border border-white/8 bg-card p-8 text-center sm:p-10">
-        <p className="mb-3 text-sm uppercase tracking-[0.16em] text-accent">PouchBase Account</p>
+        <p className="mb-3 text-sm uppercase tracking-[0.16em] text-accent">PouchCompare Account</p>
         <h1 className="mb-3 font-display text-3xl font-bold">Checking your sign-in session...</h1>
         <p className="text-white/50">If you just used Google or opened a magic link on this device, we’ll send you back automatically.</p>
       </div>
@@ -112,18 +112,18 @@ export function LoginPageClient({ returnTo }: LoginPageClientProps) {
       <section className="rounded-xl border border-white/8 bg-card p-6 sm:p-8 lg:p-10">
         <div className="mb-4 inline-flex items-center gap-2 text-accent">
           <Flame className="w-5 h-5" />
-          <span className="text-sm uppercase tracking-[0.16em]">PouchBase Account</span>
+          <span className="text-sm uppercase tracking-[0.16em]">PouchCompare Account</span>
         </div>
-        <h1 className="mb-4 font-display text-3xl font-bold sm:text-4xl">Sign in to rate, review, and add trusted signal to the catalog</h1>
+        <h1 className="mb-4 font-display text-3xl font-bold sm:text-4xl">Sign in to leave reviews</h1>
         <p className="max-w-2xl text-white/50">
-          PouchBase keeps scoring trust-first. Signing in lets you leave structured reviews, compare favorites, and help build public scores only when enough real data exists.
+          Rate burn, flavor, and longevity. Your reviews help build scores everyone can trust.
         </p>
 
         <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-3">
           {[
             "Rate burn, flavor, and longevity",
-            "Compare products with your own logged experience",
-            "Help public scores earn credibility over time",
+            "Track your reviewed pouches",
+            "Help build honest public scores",
           ].map((item) => (
             <div key={item} className="rounded-lg border border-white/8 bg-black/20 p-4 text-sm text-white/45">
               {item}

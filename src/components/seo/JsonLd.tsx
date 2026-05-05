@@ -118,10 +118,10 @@ export function OrganizationJsonLd({ siteUrl }: { siteUrl: string }) {
   const data = {
     "@context": "https://schema.org",
     "@type": "Organization",
-    name: "PouchBase",
+    name: "PouchCompare",
     url: siteUrl,
     description:
-      "The independent encyclopedia for nicotine pouches. Compare real product data, retailer pricing where available, and read real community reviews where enough rating volume exists.",
+      "Compare nicotine pouches side by side. Real burn scores, prices, and community reviews.",
     foundingDate: "2026",
   };
 
@@ -137,7 +137,7 @@ export function WebSiteJsonLd({ siteUrl }: { siteUrl: string }) {
   const data = {
     "@context": "https://schema.org",
     "@type": "WebSite",
-    name: "PouchBase",
+    name: "PouchCompare",
     url: siteUrl,
     potentialAction: {
       "@type": "SearchAction",

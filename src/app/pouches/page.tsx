@@ -3,7 +3,7 @@ import { Suspense } from "react";
 import { PouchesPageClient } from "./_components/PouchesPageClient";
 
 export const metadata: Metadata = {
-  title: "Browse Nicotine Pouches — PouchBase",
+  title: "Browse Nicotine Pouches — PouchCompare",
   description: "Browse nicotine pouches by brand, flavor, burn level, and strength.",
   alternates: {
     canonical: "/pouches",

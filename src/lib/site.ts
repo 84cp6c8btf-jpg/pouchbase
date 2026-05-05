@@ -1,6 +1,6 @@
-export const SITE_NAME = "PouchBase";
+export const SITE_NAME = "PouchCompare";
 export const SITE_DESCRIPTION =
-  "The independent encyclopedia for nicotine pouches. Compare real product data, retailer pricing where available, and community reviews where enough rating volume exists.";
+  "Compare nicotine pouches side by side. Real burn scores, prices, and community reviews.";
 
 function normalizeUrl(value: string) {
   return value.startsWith("http://") || value.startsWith("https://") ? value : `https://${value}`;

@@ -9,9 +9,10 @@ import {
 } from "@/lib/catalog/burn";
 import { PRODUCT_OG_SELECT } from "@/lib/catalog/selects";
 import { applyProductDerivedDefaults, unwrapRelation } from "@/lib/types";
+import { applyReviewStatsToProducts, fetchReviewStatsByProductIds } from "@/lib/catalog/review-stats";
 
 export const runtime = "edge";
-export const alt = "PouchBase — Nicotine Pouch Review";
+export const alt = "PouchCompare — Nicotine Pouch Review";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -40,13 +41,14 @@ export default async function OgImage({ params }: { params: Promise<{ slug: stri
             fontWeight: 700,
           }}
         >
-          PouchBase
+          PouchCompare
         </div>
       ),
       { ...size }
     );
   }
-  const normalizedProduct = applyProductDerivedDefaults(product);
+  const statsByProductId = await fetchReviewStatsByProductIds([product.id]);
+  const [normalizedProduct] = applyReviewStatsToProducts([applyProductDerivedDefaults(product)], statsByProductId);
   const brandName = unwrapRelation(normalizedProduct.brands as { name: string }[] | { name: string } | null)?.name || "";
   const burnColor = getBurnUiTone(normalizedProduct.avg_burn).ogColor;
   const burnLabel = getBurnLabel(normalizedProduct.avg_burn).toUpperCase();

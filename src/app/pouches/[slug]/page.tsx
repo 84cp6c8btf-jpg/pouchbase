@@ -27,6 +27,9 @@ import { ProductBurnSummary } from "./_components/ProductBurnSummary";
 import { ReferencePanel } from "./_components/ReferencePanel";
 import { RelatedComparisons } from "./_components/RelatedComparisons";
 import { ReviewSection } from "./_components/ReviewSection";
+import { applyReviewStatsToProducts, fetchReviewStatsByProductIds, withReviewStats } from "@/lib/catalog/review-stats";
+
+export const dynamic = "force-dynamic";
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -42,14 +45,15 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   if (!product) return { title: "Product Not Found" };
 
-  const normalizedProduct = applyProductDerivedDefaults(product);
+  const statsByProductId = await fetchReviewStatsByProductIds([product.id]);
+  const [normalizedProduct] = applyReviewStatsToProducts([applyProductDerivedDefaults(product)], statsByProductId);
   const brandName = unwrapRelation(normalizedProduct.brands as RelationResult<{ name: string }>)?.name || "";
   const publicScoreVisible = hasPublicScore(normalizedProduct.review_count);
   const description = publicScoreVisible
     ? `Read real reviews of ${brandName} ${normalizedProduct.name} (${normalizedProduct.flavor}, ${normalizedProduct.strength_mg}mg). Burn rating, flavor score, and price comparison. Currently ${normalizedProduct.avg_overall.toFixed(1)}/10 from structured community reviews.`
     : `Read product details, retailer pricing where available, and early community feedback for ${brandName} ${normalizedProduct.name} (${normalizedProduct.flavor}, ${normalizedProduct.strength_mg}mg). Public scoring appears after enough real reviews.`;
   return {
-    title: `${brandName} ${normalizedProduct.name} Review — PouchBase`,
+    title: `${brandName} ${normalizedProduct.name} Review — PouchCompare`,
     description,
     alternates: {
       canonical: `/pouches/${slug}`,
@@ -67,7 +71,14 @@ export default async function ProductPage({ params }: Props) {
     .single();
 
   if (!product) notFound();
-  const normalizedProduct = applyProductDerivedDefaults(product);
+  const { data: relatedProductsData } = await supabase
+    .from("products")
+    .select(PRODUCT_CATALOG_SELECT)
+    .eq("is_active", true)
+    .neq("slug", product.slug);
+  const [normalizedProduct, ...relatedProducts] = await withReviewStats(
+    applyProductsDerivedDefaults([product, ...((relatedProductsData || []) as ProductWithBrand[])])
+  );
 
   const brand = unwrapRelation(
     normalizedProduct.brands as RelationResult<{ name: string; slug: string; country: string | null }>
@@ -86,12 +97,6 @@ export default async function ProductPage({ params }: Props) {
   const highestPrice = prices?.[prices.length - 1]?.price_per_can;
   const priceCurrency = prices?.[0]?.currency || "EUR";
   const publicScoreVisible = hasPublicScore(normalizedProduct.review_count);
-  const { data: relatedProductsData } = await supabase
-    .from("products")
-    .select(PRODUCT_CATALOG_SELECT)
-    .eq("is_active", true)
-    .neq("slug", normalizedProduct.slug);
-  const relatedProducts = applyProductsDerivedDefaults(relatedProductsData as ProductWithBrand[]);
   const comparisonGroups = getRelatedDiscoveryGroups(normalizedProduct as ProductWithBrand, relatedProducts);
   const ladderProducts = [normalizedProduct as ProductWithBrand, ...relatedProducts];
 

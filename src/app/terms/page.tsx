@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Terms of Use — PouchBase",
+  title: "Terms of Use — PouchCompare",
   robots: {
     index: false,
     follow: false,

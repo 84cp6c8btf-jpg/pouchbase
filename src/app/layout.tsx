@@ -40,7 +40,7 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: `${SITE_NAME} — Compare Nicotine Pouches`,
-    description: "The independent encyclopedia for nicotine pouches. Real product data, retailer pricing where available, and community reviews where enough rating volume exists.",
+    description: "Compare nicotine pouches side by side. Real burn scores, prices, and community reviews.",
     url: "/",
     siteName: SITE_NAME,
     type: "website",

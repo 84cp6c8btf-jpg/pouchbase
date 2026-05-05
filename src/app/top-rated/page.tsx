@@ -12,10 +12,11 @@ import {
   sortProductsByAdjustedMetric,
 } from "@/lib/catalog/intelligence";
 import { applyProductsDerivedDefaults } from "@/lib/types";
+import { withReviewStats } from "@/lib/catalog/review-stats";
 
-export const revalidate = 60;
+export const dynamic = "force-dynamic";
 export const metadata: Metadata = {
-  title: "Top Rated Nicotine Pouches — PouchBase",
+  title: "Top Rated Nicotine Pouches — PouchCompare",
   description: "See the best-rated nicotine pouches once enough real structured reviews exist to rank them credibly.",
   alternates: {
     canonical: "/top-rated",
@@ -38,12 +39,14 @@ export default async function TopRatedPage() {
       .limit(24),
   ]);
 
+  const productsWithStats = await withReviewStats(applyProductsDerivedDefaults(products as ProductWithBrand[]));
+  const reviewedProducts = await withReviewStats(applyProductsDerivedDefaults(reviewedProductsData as ProductWithBrand[]));
   const rankedProducts = sortProductsByAdjustedMetric(
-    applyProductsDerivedDefaults(products as ProductWithBrand[]).filter((product) => product.review_count >= MIN_PUBLIC_SCORE_REVIEWS),
+    productsWithStats.filter((product) => product.review_count >= MIN_PUBLIC_SCORE_REVIEWS),
     "avg_overall",
     "higher"
   ).slice(0, 30);
-  const mostReviewed = getProductsWithAnyReviews(applyProductsDerivedDefaults(reviewedProductsData as ProductWithBrand[])).slice(0, 6);
+  const mostReviewed = getProductsWithAnyReviews(reviewedProducts).slice(0, 6);
 
   return (
     <div className="space-y-6">

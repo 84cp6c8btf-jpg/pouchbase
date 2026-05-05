@@ -10,12 +10,11 @@ export function Footer() {
             <Link href="/" className="mb-4 inline-flex items-center gap-2">
               <Flame className="h-4 w-4 text-accent" />
               <span className="font-display text-lg font-bold tracking-tight">
-                Pouch<span className="text-accent">Base</span>
+                Pouch<span className="text-accent">Compare</span>
               </span>
             </Link>
             <p className="text-sm leading-relaxed text-white/48">
-              Independent nicotine pouch reviews for adults. We don&apos;t sell pouches — we help
-              you compare them with honest product data, burn scoring, live price info, and real community reviews where available.
+              Independent nicotine pouch reviews for adults. We don&apos;t sell pouches — we help you compare them.
             </p>
           </div>
 
@@ -56,7 +55,7 @@ export function Footer() {
         </div>
 
         <div className="mt-8 border-t border-white/6 pt-5 text-xs text-white/25">
-          <p>&copy; {new Date().getFullYear()} PouchBase</p>
+          <p>&copy; {new Date().getFullYear()} PouchCompare</p>
         </div>
       </div>
     </footer>

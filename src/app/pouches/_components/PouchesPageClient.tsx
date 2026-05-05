@@ -6,7 +6,7 @@ import { Product, FLAVOR_CATEGORIES, applyProductsDerivedDefaults } from "@/lib/
 import { ProductCard } from "@/components/catalog/ProductCard";
 import { Flame, Search, SlidersHorizontal, X } from "lucide-react";
 import { PageIntro } from "@/components/common/PageIntro";
-import { useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import {
   MIN_PUBLIC_SCORE_REVIEWS,
   compareScoreStates,
@@ -14,27 +14,40 @@ import {
 } from "@/lib/catalog/burn";
 import { PRODUCT_WITH_BRAND_SELECT } from "@/lib/catalog/selects";
 import { compareProductsByReviewSignal } from "@/lib/catalog/intelligence";
+import { withReviewStats } from "@/lib/catalog/review-stats";
 
 type SortOption = "overall" | "burn" | "strength" | "reviews" | "newest" | "name";
 type SignalFilter = "all" | "public" | "early" | "none";
 
 export function PouchesPageClient() {
+  const pathname = usePathname();
+  const router = useRouter();
   const searchParams = useSearchParams();
-  const initialFlavorFamily = searchParams.get("flavor_family") || searchParams.get("category") || "";
+  const flavorFamilyParam = searchParams.get("flavor_family") || searchParams.get("category") || "";
+  const selectedCategory = FLAVOR_CATEGORIES.includes(flavorFamilyParam as (typeof FLAVOR_CATEGORIES)[number])
+    ? flavorFamilyParam
+    : "";
   const [products, setProducts] = useState<Product[]>([]);
   const [brands, setBrands] = useState<{ id: string; name: string; slug: string }[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [selectedBrand, setSelectedBrand] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState(() =>
-    FLAVOR_CATEGORIES.includes(initialFlavorFamily as (typeof FLAVOR_CATEGORIES)[number])
-      ? initialFlavorFamily
-      : ""
-  );
   const [selectedBurnMin, setSelectedBurnMin] = useState(0);
   const [selectedSignal, setSelectedSignal] = useState<SignalFilter>("all");
   const [sortBy, setSortBy] = useState<SortOption>("reviews");
   const [showFilters, setShowFilters] = useState(false);
+
+  const updateFlavorFamily = (flavorFamily: string) => {
+    const nextParams = new URLSearchParams(searchParams.toString());
+    nextParams.delete("category");
+    if (flavorFamily) {
+      nextParams.set("flavor_family", flavorFamily);
+    } else {
+      nextParams.delete("flavor_family");
+    }
+    const queryString = nextParams.toString();
+    router.replace(queryString ? `${pathname}?${queryString}` : pathname, { scroll: false });
+  };
 
   useEffect(() => {
     let ignore = false;
@@ -57,7 +70,7 @@ export function PouchesPageClient() {
 
       if (ignore) return;
 
-      const normalizedProducts = applyProductsDerivedDefaults(data as typeof products);
+      const normalizedProducts = await withReviewStats(applyProductsDerivedDefaults(data as typeof products));
       setProducts(
         normalizedProducts.filter((product) => {
           if (selectedBurnMin > 0 && product.avg_burn < selectedBurnMin) return false;
@@ -88,7 +101,7 @@ export function PouchesPageClient() {
   const clearFilters = () => {
     setSearch("");
     setSelectedBrand("");
-    setSelectedCategory("");
+    updateFlavorFamily("");
     setSelectedBurnMin(0);
     setSelectedSignal("all");
     setSortBy("reviews");
@@ -220,7 +233,7 @@ export function PouchesPageClient() {
             <span className="mb-1.5 block text-xs uppercase tracking-[0.14em] text-white/42">Flavor</span>
             <select
               value={selectedCategory}
-              onChange={(e) => setSelectedCategory(e.target.value)}
+              onChange={(e) => updateFlavorFamily(e.target.value)}
               className="pb-select px-3 py-2.5 text-sm"
             >
               <option value="">All flavors</option>

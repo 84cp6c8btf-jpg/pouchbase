@@ -18,10 +18,11 @@ import {
   sortProductsByAdjustedMetric,
 } from "@/lib/catalog/intelligence";
 import { applyProductsDerivedDefaults } from "@/lib/types";
+import { withReviewStats } from "@/lib/catalog/review-stats";
 
-export const revalidate = 60;
+export const dynamic = "force-dynamic";
 export const metadata: Metadata = {
-  title: "Highest Burn Nicotine Pouches — PouchBase",
+  title: "Highest Burn Nicotine Pouches — PouchCompare",
   description: "Discover the nicotine pouches with the highest public burn scores once enough real review data exists.",
   alternates: {
     canonical: "/highest-burn",
@@ -44,11 +45,13 @@ export default async function HighestBurnPage() {
       .limit(24),
   ]);
 
-  const burnPool = applyProductsDerivedDefaults(products as ProductWithBrand[]).filter(
+  const productsWithStats = await withReviewStats(applyProductsDerivedDefaults(products as ProductWithBrand[]));
+  const reviewedProducts = await withReviewStats(applyProductsDerivedDefaults(reviewedProductsData as ProductWithBrand[]));
+  const burnPool = productsWithStats.filter(
     (product) => product.review_count >= MIN_PUBLIC_SCORE_REVIEWS
   );
   const hottestProducts = sortProductsByAdjustedMetric(burnPool, "avg_burn", "higher").slice(0, 30);
-  const mostReviewed = getProductsWithAnyReviews(applyProductsDerivedDefaults(reviewedProductsData as ProductWithBrand[])).slice(0, 6);
+  const mostReviewed = getProductsWithAnyReviews(reviewedProducts).slice(0, 6);
   const { modules } = getBurnIntelligenceModules(burnPool);
   const burnAboveStrength = modules.find((module) => module.key === "burn-above-strength");
   const hardButLoved = modules.find((module) => module.key === "hard-but-loved");

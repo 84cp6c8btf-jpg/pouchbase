@@ -3,7 +3,7 @@ import { PageIntro } from "@/components/common/PageIntro";
 import { MyReviewsClient } from "./_components/MyReviewsClient";
 
 export const metadata: Metadata = {
-  title: "My Reviews — PouchBase",
+  title: "My Reviews — PouchCompare",
   description: "Manage your pouch reviews and public display name.",
   robots: { index: false, follow: false },
 };

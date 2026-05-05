@@ -20,7 +20,7 @@ const COPY = {
         icon: Store,
         label: "Prices come from external shops",
         description:
-          "PouchBase does not sell pouches. Shop availability and prices can change independently of the directory.",
+          "PouchCompare does not sell pouches. Shop availability and prices can change independently of the directory.",
       },
       {
         icon: ShieldCheck,
@@ -68,7 +68,7 @@ const COPY = {
         icon: ListOrdered,
         label: `Public score unlocks at ${MIN_PUBLIC_SCORE_REVIEWS}+ reviews`,
         description:
-          "Until a pouch has enough rating volume, PouchBase treats the signal as early and avoids presenting it like settled authority.",
+          "Until a pouch has enough rating volume, PouchCompare treats the signal as early and avoids presenting it like settled authority.",
       },
       {
         icon: Store,

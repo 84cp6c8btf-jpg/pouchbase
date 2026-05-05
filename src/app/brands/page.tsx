@@ -7,10 +7,11 @@ import { PageIntro } from "@/components/common/PageIntro";
 import { hasPublicScore } from "@/lib/catalog/burn";
 import { getPublicWebsiteUrl } from "@/lib/site";
 import { applyProductsDerivedDefaults } from "@/lib/types";
+import { withReviewStats } from "@/lib/catalog/review-stats";
 
-export const revalidate = 60;
+export const dynamic = "force-dynamic";
 export const metadata: Metadata = {
-  title: "Nicotine Pouch Brands — PouchBase",
+  title: "Nicotine Pouch Brands — PouchCompare",
   description: "Browse nicotine pouch brands, compare catalogs, and discover what each brand is known for.",
   alternates: {
     canonical: "/brands",
@@ -28,6 +29,7 @@ type BrandRow = {
 };
 
 type BrandProductRow = {
+  id: string;
   brand_id: string;
   slug: string;
   name: string;
@@ -42,10 +44,11 @@ export default async function BrandsPage() {
     supabase.from("brands").select("id, name, slug, country_origin, description, logo_url, website_url").eq("is_active", true).order("name"),
     supabase
       .from("products")
-      .select("brand_id, slug, name, nicotine_mg, strength_mg:nicotine_mg"),
+      .select("id, brand_id, slug, name, nicotine_mg, strength_mg:nicotine_mg"),
   ]);
 
-  const productRows = applyProductsDerivedDefaults(products as unknown as BrandProductRow[]);
+  // Brand directory and brand detail intentionally count all imported products, not only active rows.
+  const productRows = await withReviewStats(applyProductsDerivedDefaults(products as unknown as BrandProductRow[]));
   const brandProducts = new Map<string, BrandProductRow[]>();
 
   for (const product of productRows) {
@@ -126,7 +129,7 @@ export default async function BrandsPage() {
             </div>
 
             <p className="mt-3 text-sm leading-relaxed text-white/50 line-clamp-2">
-              {brand.description || `${brand.name} catalog tracked on PouchBase.`}
+              {brand.description || `${brand.name} catalog tracked on PouchCompare.`}
             </p>
 
             <div className="mt-4 grid grid-cols-2 gap-3 border-t border-white/8 pt-4">
