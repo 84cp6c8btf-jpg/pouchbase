@@ -141,7 +141,7 @@ export default async function Home() {
           <span className="text-accent">next pouch.</span>
         </h1>
         <p className="mt-6 max-w-xl text-lg leading-relaxed text-white/56">
-          Not a shop. We compare burn, flavor, and price across {stats.products}+ nicotine pouches so you don&apos;t have to guess.
+          Not a shop. We compare burn, flavor, and price across 1000+ nicotine pouches so you don&apos;t have to guess.
         </p>
         <div className="mt-8 flex flex-wrap gap-3">
           <Link
