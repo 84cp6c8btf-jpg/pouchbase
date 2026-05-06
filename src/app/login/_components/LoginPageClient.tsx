@@ -64,7 +64,7 @@ export function LoginPageClient({ returnTo }: LoginPageClientProps) {
     const { error } = await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
-        redirectTo: `${window.location.origin}/login?next=${encodeURIComponent(nextPath)}`,
+        redirectTo: `${window.location.origin}/auth/callback?next=${encodeURIComponent(nextPath)}`,
       },
     });
 
@@ -83,7 +83,7 @@ export function LoginPageClient({ returnTo }: LoginPageClientProps) {
     const { error } = await supabase.auth.signInWithOtp({
       email,
       options: {
-        emailRedirectTo: `${window.location.origin}/login?next=${encodeURIComponent(nextPath)}`,
+        emailRedirectTo: `${window.location.origin}/auth/callback?next=${encodeURIComponent(nextPath)}`,
       },
     });
 
