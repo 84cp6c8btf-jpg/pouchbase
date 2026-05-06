@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { Suspense, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 import { Flame } from "lucide-react";
@@ -10,7 +10,7 @@ function normalizeNext(value: string | null): string {
   return value;
 }
 
-export default function AuthCallbackPage() {
+function AuthCallbackInner() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -62,5 +62,19 @@ export default function AuthCallbackPage() {
         Just a moment while we complete your sign-in.
       </p>
     </div>
+  );
+}
+
+export default function AuthCallbackPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="mx-auto max-w-2xl rounded-xl border border-white/8 bg-card p-8 text-center sm:p-10">
+          <h1 className="font-display text-3xl font-bold">Signing you in…</h1>
+        </div>
+      }
+    >
+      <AuthCallbackInner />
+    </Suspense>
   );
 }
